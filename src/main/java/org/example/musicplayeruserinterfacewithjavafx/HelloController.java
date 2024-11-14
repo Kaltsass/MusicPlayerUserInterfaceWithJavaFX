@@ -13,39 +13,45 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.scene.control.ListView;
+
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
+
 
 public class HelloController implements Initializable {
     @FXML
     private HBox favoriteContainer;
 
-    List<Song> recentlyPlayed;
-    List<Song> favorites;
-
-
     @FXML
-    private HBox recentlyPlayedContainer;
+    private Label likedSongsLabel;
+    @FXML
+    private ListView<String> likedSongsListView;
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        recentlyPlayed= new ArrayList<>(getRecentlyPlayed());
-        try {
-            for(Song song : recentlyPlayed){
-                FXMLLoader fxmlLoader =new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("song.fxml"));
+    // Method that handles what happens when the "Liked Songs" label is clicked
+    @FXML
+    private void showLikedSongs() {
+        //   Logic to display liked songs
+        System.out.println("Liked Songs");
+        // Here, you could load a list of liked songs, switch to a different pane, or display relevant data.
+        // List of liked songs
+        ObservableList<String> likedSongs = FXCollections.observableArrayList(
+                "Song 1 - Artist A", "Song 2 - Artist B", "Song 3 - Artist C"
+        );
 
-                VBox vBox = fxmlLoader.load();
-                SongController songController =fxmlLoader.getController();
-                songController.setData(song);
-
-                recentlyPlayedContainer.getChildren().add(vBox);
-            }
-
-        }catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+        likedSongsListView.setItems(likedSongs);
     }
+
+    List<Song> recentlyPlayed;
+     List<Song> favorites;
+    // This will be called on initialization
+
     private List<Song> getRecentlyPlayed(){
         List<Song> ls = new ArrayList<>();
 
@@ -89,5 +95,10 @@ public class HelloController implements Initializable {
 
 
         return ls;
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
     }
 }
