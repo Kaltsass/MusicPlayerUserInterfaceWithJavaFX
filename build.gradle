@@ -36,8 +36,14 @@ javafx {
 
 dependencies {
 
-
+  implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
+  implementation 'org.asynchttpclient:async-http-client:2.12.3'
   implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.6.0'
+  implementation 'com.squareup.okhttp3:okhttp:4.9.3'  // Προσθήκη OkHttp στην εφαρμογή
+  implementation 'com.google.code.gson:gson:2.8.8' // Προσθήκη της εξάρτησης Gson
+  implementation 'com.squareup.okhttp:okhttp:2.7.5' // Παλιότερη έκδοση
+  implementation 'com.squareup.okhttp3:okhttp:4.10.0' // Νεότερη έκδοση
+
 
   implementation('org.controlsfx:controlsfx:11.1.2')
   implementation('com.dlsc.formsfx:formsfx-core:11.6.0') {
