@@ -28,25 +28,37 @@ public class HelloController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        recentlyPlayed= new ArrayList<>(getRecentlyPlayed());
+        recentlyPlayed = new ArrayList<>(getRecentlyPlayed());
+        favorites=new ArrayList<>(getFavorites());
         try {
-            for(Song song : recentlyPlayed){
-                FXMLLoader fxmlLoader =new FXMLLoader();
+            for (Song song : recentlyPlayed) {
+                FXMLLoader fxmlLoader = new FXMLLoader();
                 fxmlLoader.setLocation(getClass().getResource("song.fxml"));
 
                 VBox vBox = fxmlLoader.load();
-                SongController songController =fxmlLoader.getController();
+                SongController songController = fxmlLoader.getController();
                 songController.setData(song);
 
                 recentlyPlayedContainer.getChildren().add(vBox);
             }
+            for (Song song : favorites) {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("song.fxml"));
 
-        }catch (IOException e) {
+                VBox vBox = fxmlLoader.load();
+                SongController songController = fxmlLoader.getController();
+                songController.setData(song);
+
+                favoriteContainer.getChildren().add(vBox);
+            }
+
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
     }
-    private List<Song> getRecentlyPlayed(){
+
+    private List<Song> getRecentlyPlayed() {
         List<Song> ls = new ArrayList<>();
 
         Song song = new Song();
@@ -87,7 +99,41 @@ public class HelloController implements Initializable {
         ls.add(song);
 
 
+        return ls;
+    }
+
+    public List<Song> getFavorites() {
+        List<Song> ls = new ArrayList<>();
+        Song song = new Song();
+        song.setName("Top 50");
+        song.setArtist("Global");
+        song.setCover("/img/Top50Charts.png");
+        ls.add(song);
+
+        song = new Song();
+        song.setName("Top 50");
+        song.setArtist("Podcast");
+        song.setCover("/img/Podcast.png");
+        ls.add(song);
+
+        song = new Song();
+        song.setName("Top 50");
+        song.setArtist("Albums");
+        song.setCover("/img/TopAlbums.png");
+        ls.add(song);
+
+        song = new Song();
+        song.setName("Top 50");
+        song.setArtist("Artists");
+        song.setCover("/img/TopArtists1.png");
+        ls.add(song);
+        song = new Song();
+        song.setName("Top 50");
+        song.setArtist("Playlist");
+        song.setCover("/img/TopPlaylist.png");
+        ls.add(song);
 
         return ls;
     }
+
 }
