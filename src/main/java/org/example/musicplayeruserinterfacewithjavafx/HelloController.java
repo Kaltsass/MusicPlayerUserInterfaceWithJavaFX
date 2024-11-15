@@ -13,46 +13,52 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.scene.control.ListView;
-
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-
-
 
 public class HelloController implements Initializable {
     @FXML
     private HBox favoriteContainer;
 
-    @FXML
-    private Label likedSongsLabel;
-    @FXML
-    private ListView<String> likedSongsListView;
+    List<Song> recentlyPlayed;
+    List<Song> favorites;
 
 
-    // Method that handles what happens when the "Liked Songs" label is clicked
     @FXML
-    private void showLikedSongs() {
-        //   Logic to display liked songs
-        System.out.println("Liked Songs");
-        // Here, you could load a list of liked songs, switch to a different pane, or display relevant data.
-        // List of liked songs
-        ObservableList<String> likedSongs = FXCollections.observableArrayList(
-                "Song 1 - Artist A", "Song 2 - Artist B", "Song 3 - Artist C"
-        );
+    private HBox recentlyPlayedContainer;
 
-        likedSongsListView.setItems(likedSongs);
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        recentlyPlayed = new ArrayList<>(getRecentlyPlayed());
+        favorites=new ArrayList<>(getFavorites());
+        try {
+            for (Song song : recentlyPlayed) {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("song.fxml"));
+
+                VBox vBox = fxmlLoader.load();
+                SongController songController = fxmlLoader.getController();
+                songController.setData(song);
+
+                recentlyPlayedContainer.getChildren().add(vBox);
+            }
+            for (Song song : favorites) {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("song.fxml"));
+
+                VBox vBox = fxmlLoader.load();
+                SongController songController = fxmlLoader.getController();
+                songController.setData(song);
+
+                favoriteContainer.getChildren().add(vBox);
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
-    List<Song> recentlyPlayed;
-     List<Song> favorites;
-    // This will be called on initialization
-
-    private List<Song> getRecentlyPlayed(){
+    private List<Song> getRecentlyPlayed() {
         List<Song> ls = new ArrayList<>();
 
         Song song = new Song();
@@ -76,7 +82,7 @@ public class HelloController implements Initializable {
         song = new Song();
         song.setName("Smooth Kai Hardcorila");
         song.setArtist("Thitis,Sadomas,ΔΠΘ,Buzz,MadnessKey");
-        song.setCover("/img/thitis_sado.png");
+        song.setCover("/img/mk_20-20.png");
         ls.add(song);
 
         song = new Song();
@@ -93,12 +99,41 @@ public class HelloController implements Initializable {
         ls.add(song);
 
 
+        return ls;
+    }
+
+    public List<Song> getFavorites() {
+        List<Song> ls = new ArrayList<>();
+        Song song = new Song();
+        song.setName("Top 50");
+        song.setArtist("Global");
+        song.setCover("/img/Top50Charts.png");
+        ls.add(song);
+
+        song = new Song();
+        song.setName("Top 50");
+        song.setArtist("USA");
+        song.setCover("/img/TopUsa.png");
+        ls.add(song);
+
+        song = new Song();
+        song.setName("Top 50");
+        song.setArtist("Italy");
+        song.setCover("/img/TopItaly.png");
+        ls.add(song);
+
+        song = new Song();
+        song.setName("Top 50");
+        song.setArtist("Viral Global");
+        song.setCover("/img/ViralGlobal.png");
+        ls.add(song);
+        song = new Song();
+        song.setName("Top 50");
+        song.setArtist("Greece");
+        song.setCover("/img/TopGreece.png");
+        ls.add(song);
 
         return ls;
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-    }
 }

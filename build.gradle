@@ -36,7 +36,8 @@ javafx {
 
 dependencies {
 
-
+  implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
+  implementation 'org.asynchttpclient:async-http-client:2.12.3'
   implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.6.0'
 
   implementation('org.controlsfx:controlsfx:11.1.2')
