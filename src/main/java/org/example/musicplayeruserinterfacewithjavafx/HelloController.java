@@ -112,25 +112,25 @@ public class HelloController implements Initializable {
 
         song = new Song();
         song.setName("Top 50");
-        song.setArtist("USA");
-        song.setCover("/img/TopUsa.png");
+        song.setArtist("Podcast");
+        song.setCover("/img/Podcast.png");
         ls.add(song);
 
         song = new Song();
         song.setName("Top 50");
-        song.setArtist("Italy");
-        song.setCover("/img/TopItaly.png");
+        song.setArtist("Albums");
+        song.setCover("/img/TopAlbums.png");
         ls.add(song);
 
         song = new Song();
         song.setName("Top 50");
-        song.setArtist("Viral Global");
-        song.setCover("/img/ViralGlobal.png");
+        song.setArtist("Artists");
+        song.setCover("/img/TopArtists1.png");
         ls.add(song);
         song = new Song();
         song.setName("Top 50");
-        song.setArtist("Greece");
-        song.setCover("/img/TopGreece.png");
+        song.setArtist("Playlist");
+        song.setCover("/img/TopPlaylist.png");
         ls.add(song);
 
         return ls;

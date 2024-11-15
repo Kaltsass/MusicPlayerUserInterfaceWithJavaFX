@@ -1,4 +1,5 @@
 module org.example.musicplayeruserinterfacewithjavafx {
+    requires com.google.gson;
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
@@ -10,6 +11,7 @@ module org.example.musicplayeruserinterfacewithjavafx {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires okhttp3;
 
     opens org.example.musicplayeruserinterfacewithjavafx to javafx.fxml;
     exports org.example.musicplayeruserinterfacewithjavafx;
