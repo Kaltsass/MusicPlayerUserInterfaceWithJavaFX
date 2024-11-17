@@ -14,7 +14,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="890.0" prefWidth="1315.0" styleClass="primary_color" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.musicplayeruserinterfacewithjavafx.HelloController">
+
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="890.0" prefWidth="1315.0" styleClass="primary_color" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="org.example.musicplayeruserinterfacewithjavafx.HelloController">
   <left>
     <VBox prefHeight="200.0" prefWidth="235.0" spacing="20.0" stylesheets="@../../../css/style.css" BorderPane.alignment="CENTER">
       <children>
@@ -100,7 +103,7 @@
                 <Insets left="10.0" right="10.0" />
               </padding>
             </Label>
-            <Label prefHeight="40.0" prefWidth="192.0" text="Recently Played" textFill="WHITE">
+            <Label prefHeight="40.0" prefWidth="192.0" text="Recently Played" textFill="WHITE"  onMouseClicked="#refreshRecentlyPlayed" >
               <padding>
                 <Insets left="10.0" right="10.0" />
               </padding>
@@ -223,13 +226,13 @@
           <content>
             <VBox prefHeight="570.0" prefWidth="1680.0" spacing="10.0">
               <children>
-                <Label text="Recently Played" textFill="WHITE">
+                <Label fx:id="refreshLabel" text="Recently Played" textFill="WHITE">
                   <font>
                     <Font size="15.0" />
                   </font>
                 </Label>
                 <ScrollPane fitToWidth="true" minViewportHeight="270.0" prefHeight="264.0" prefWidth="1072.0" style="-fx-background-color: transparent;" stylesheets="@../../../css/style.css">
-                  <content>
+                <content>
                     <HBox fx:id="recentlyPlayedContainer" prefHeight="0.0" prefWidth="0.0" spacing="30.0" />
                   </content>
                 </ScrollPane>

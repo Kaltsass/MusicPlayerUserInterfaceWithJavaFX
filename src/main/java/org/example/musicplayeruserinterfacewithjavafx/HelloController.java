@@ -13,6 +13,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.fxml.FXML;
+import javafx.scene.input.MouseEvent;
+
 
 public class HelloController implements Initializable {
     @FXML
@@ -24,6 +27,16 @@ public class HelloController implements Initializable {
 
     @FXML
     private HBox recentlyPlayedContainer;
+
+
+
+    @FXML
+    private void refreshRecentlyPlayed(MouseEvent event) {
+        System.out.println("Label clicked! Refreshing the recently played songs.");
+        // Your logic to clear and repopulate the recentlyPlayedContainer
+    }
+
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
