@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
+ 9-recently-button-mapping
 
 
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="890.0" prefWidth="1315.0" styleClass="primary_color" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="org.example.musicplayeruserinterfacewithjavafx.HelloController">
+
+
+
   <left>
     <VBox prefHeight="200.0" prefWidth="235.0" spacing="20.0" stylesheets="@../../../css/style.css" BorderPane.alignment="CENTER">
       <children>
@@ -236,14 +233,14 @@
                     <HBox fx:id="recentlyPlayedContainer" prefHeight="0.0" prefWidth="0.0" spacing="30.0" />
                   </content>
                 </ScrollPane>
-                <Label text="Favorites" textFill="WHITE">
+                <Label text="Top Charts" textFill="WHITE">
                   <font>
                     <Font size="15.0" />
                   </font>
                 </Label>
-                <ScrollPane fitToWidth="true" minViewportHeight="250.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;">
+                <ScrollPane fitToWidth="true" minViewportHeight="270.0" prefHeight="264.0" prefWidth="1072.0" style="-fx-background-color: transparent;" stylesheets="@../../../css/style.css">
                   <content>
-                    <HBox prefHeight="100.0" prefWidth="200.0" />
+                    <HBox fx:id="favoriteContainer" prefHeight="0.0" prefWidth="0.0" spacing="30.0" />
                   </content>
                 </ScrollPane>
               </children>
