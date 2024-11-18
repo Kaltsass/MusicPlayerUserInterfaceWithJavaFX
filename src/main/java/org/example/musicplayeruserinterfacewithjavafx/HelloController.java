@@ -3,7 +3,7 @@ package org.example.musicplayeruserinterfacewithjavafx;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.Song;
@@ -29,7 +29,7 @@ public class HelloController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         recentlyPlayed = new ArrayList<>(getRecentlyPlayed());
-        favorites=new ArrayList<>(getFavorites());
+        favorites = new ArrayList<>(getFavorites());
         try {
             for (Song song : recentlyPlayed) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
@@ -136,4 +136,20 @@ public class HelloController implements Initializable {
         return ls;
     }
 
+    public void OnButtonClick() {
+        System.out.println("Pressed");
+
+    }
+    @FXML
+    private Button button1;
+    @FXML
+    private Button button2;
+    @FXML
+    private Button button3;
+    @FXML
+    private Button button4;
+    @FXML
+    private Button button5;
+    @FXML
+    private Button button6;
 }

@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="890.0" prefWidth="1315.0" styleClass="primary_color" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.musicplayeruserinterfacewithjavafx.HelloController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="890.0" prefWidth="1315.0" styleClass="primary_color" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.musicplayeruserinterfacewithjavafx.HelloController">
   <left>
     <VBox prefHeight="200.0" prefWidth="235.0" spacing="20.0" stylesheets="@../../../css/style.css" BorderPane.alignment="CENTER">
       <children>
@@ -78,7 +78,7 @@
             </HBox>
           </children>
         </VBox>
-        <VBox prefHeight="363.0" prefWidth="235.0">
+        <VBox alignment="CENTER_LEFT" prefHeight="363.0" prefWidth="235.0" spacing="20.0">
           <children>
             <Label prefHeight="54.0" prefWidth="193.0" text="YOUR LIBRARY" textFill="#a1a1a1">
               <VBox.margin>
@@ -88,36 +88,12 @@
                 <Insets left="10.0" right="10.0" />
               </padding>
             </Label>
-            <Label prefHeight="40.0" prefWidth="192.0" text="Made For You" textFill="WHITE">
-              <padding>
-                <Insets left="10.0" right="10.0" />
-              </padding>
-            </Label>
-            <Label prefHeight="40.0" prefWidth="192.0" text="Recently Played" textFill="WHITE">
-              <padding>
-                <Insets left="10.0" right="10.0" />
-              </padding>
-            </Label>
-            <Label prefHeight="40.0" prefWidth="192.0" text="Liked Songs" textFill="WHITE">
-              <padding>
-                <Insets left="10.0" right="10.0" />
-              </padding>
-            </Label>
-            <Label prefHeight="40.0" prefWidth="192.0" text="Albums" textFill="WHITE">
-              <padding>
-                <Insets left="10.0" right="10.0" />
-              </padding>
-            </Label>
-            <Label prefHeight="40.0" prefWidth="192.0" text="Artists" textFill="WHITE">
-              <padding>
-                <Insets left="10.0" right="10.0" />
-              </padding>
-            </Label>
-            <Label prefHeight="40.0" prefWidth="192.0" text="Podcasts" textFill="WHITE">
-              <padding>
-                <Insets left="10.0" right="10.0" />
-              </padding>
-            </Label>
+                  <Button fx:id="button1" mnemonicParsing="false" onAction="#OnButtonClick" text="Made For You" textFill="WHITE" />
+                  <Button fx:id="button2" mnemonicParsing="false" text="Recently Played" textFill="WHITE" />
+                  <Button fx:id="button3" mnemonicParsing="false" text="Liked Songs" textFill="WHITE" />
+                  <Button fx:id="button4" mnemonicParsing="false" text="Albums" textFill="WHITE" />
+                  <Button fx:id="button5" mnemonicParsing="false" text="Artists" textFill="WHITE" />
+                  <Button fx:id="button6" mnemonicParsing="false" text="Podcasts" textFill="WHITE" />
           </children>
           <padding>
             <Insets left="20.0" right="20.0" />
