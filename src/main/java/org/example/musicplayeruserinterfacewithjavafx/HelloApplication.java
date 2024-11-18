@@ -25,3 +25,5 @@ public class HelloApplication extends Application {
         launch();
     }
 }
+
+// grapse edw kai tha dw ti tha ginei pws tha mpoune mesto project
