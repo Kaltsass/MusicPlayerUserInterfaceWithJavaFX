@@ -82,7 +82,7 @@ public class HelloController implements Initializable {
         song = new Song();
         song.setName("Smooth Kai Hardcorila");
         song.setArtist("Thitis,Sadomas,ΔΠΘ,Buzz,MadnessKey");
-        song.setCover("/img/thitis_sado.png");
+        song.setCover("/img/mk_20-20.png");
         ls.add(song);
 
         song = new Song();
