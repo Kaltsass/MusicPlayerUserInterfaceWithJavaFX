@@ -8,22 +8,26 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class APITopAlbums {
 
     private static final String API_URL = "https://api.deezer.com/chart/0/albums?limit=50";
+    private static OkHttpClient client = new OkHttpClient();  // Κοινός OkHttpClient για βελτιωμένη απόδοση
 
-    public static void main(String[] args) {
-        OkHttpClient client = new OkHttpClient();
-
+    // Κλήση του API για να πάρουμε τα Top 50 Albums και επιστροφή λίστας με τα albums
+    public static List<String> fetchTopAlbums() {
         Request request = new Request.Builder()
                 .url(API_URL)
                 .build();
 
+        List<String> albumsList = new ArrayList<>();  // Λίστα για τα albums
+
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
                 System.out.println("Σφάλμα κατά τη λήψη των albums: HTTP " + response.code());
-                return;
+                return albumsList;  // Επιστροφή κενής λίστας σε περίπτωση αποτυχίας
             }
 
             String jsonResponse = response.body().string();
@@ -31,23 +35,27 @@ public class APITopAlbums {
             // Εμφάνιση ολόκληρης της απόκρισης για debugging
             System.out.println("Full JSON Response: " + jsonResponse);
 
-            // Parsing JSON
+            // Parsing της JSON απόκρισης
             JsonObject jsonObject = JsonParser.parseString(jsonResponse).getAsJsonObject();
             JsonArray albumsArray = jsonObject.getAsJsonArray("data");
 
             System.out.println("Number of albums received: " + albumsArray.size());
 
-            // Εμφάνιση albums
-            System.out.println("Albums List:");
+            // Επεξεργασία των albums και προσθήκη τους στη λίστα
             for (int i = 0; i < albumsArray.size(); i++) {
                 JsonObject album = albumsArray.get(i).getAsJsonObject();
                 String albumTitle = album.get("title").getAsString();
                 String artistName = album.getAsJsonObject("artist").get("name").getAsString();
 
-                System.out.println((i + 1) + ". Album: " + albumTitle + ", Artist: " + artistName);
+                // Προσθήκη του album στη λίστα
+                albumsList.add("Album: " + albumTitle + ", Artist: " + artistName);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            // Εκτύπωση στοίβας σφαλμάτων για περισσότερες πληροφορίες
+            e.printStackTrace();  // Εκτύπωση της στοίβας σφαλμάτων
+            System.out.println("Σφάλμα στην επικοινωνία με το API: " + e.getMessage());
         }
+
+        return albumsList;  // Επιστροφή της λίστας με τα albums
     }
 }

@@ -117,7 +117,7 @@ public class HelloController implements Initializable {
         ls.add(song);
 
         song = new Song();
-        song.setName("Top 50");
+        song.setName("Top ");
         song.setArtist("Albums");
         song.setCover("/img/TopAlbums.png");
         ls.add(song);
