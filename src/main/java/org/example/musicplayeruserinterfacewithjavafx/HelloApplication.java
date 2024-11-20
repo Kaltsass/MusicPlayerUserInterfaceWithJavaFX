@@ -2,7 +2,9 @@ package org.example.musicplayeruserinterfacewithjavafx;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -17,13 +19,10 @@ public class HelloApplication extends Application {
         stage.setTitle("Music Player");
         stage.setScene(scene);
         stage.show();
-
-
+        
     }
 
     public static void main(String[] args) {
         launch();
     }
 }
-
-// grapse edw kai tha dw ti tha ginei pws tha mpoune mesto project
