@@ -31,7 +31,7 @@ application {
 
 javafx {
   //17.0.6 νομιζω ειναι η αλλη version
-  version = '23.0.1'
+  version = '17.0.6'
   modules = ['javafx.controls', 'javafx.fxml', 'javafx.web', 'javafx.swing' , 'javafx.media']
 }
 
