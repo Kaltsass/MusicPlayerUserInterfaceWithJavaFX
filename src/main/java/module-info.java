@@ -12,6 +12,7 @@ module org.example.musicplayeruserinterfacewithjavafx {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires okhttp3;
+    requires java.net.http;
 
     opens org.example.musicplayeruserinterfacewithjavafx to javafx.fxml;
     exports org.example.musicplayeruserinterfacewithjavafx;

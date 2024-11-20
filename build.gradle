@@ -30,7 +30,8 @@ application {
 }
 
 javafx {
-  version = '17.0.6'
+  //17.0.6 νομιζω ειναι η αλλη version
+  version = '23.0.1'
   modules = ['javafx.controls', 'javafx.fxml', 'javafx.web', 'javafx.swing' , 'javafx.media']
 }
 
@@ -61,6 +62,8 @@ dependencies {
     exclude(group: 'org.openjfx')
     exclude(group: 'org.jetbrains.kotlin')
   }
+  implementation 'com.squareup.okhttp3:okhttp:4.11.0'
+  implementation 'com.google.code.gson:gson:2.10.1'
 
   testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
