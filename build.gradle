@@ -31,7 +31,7 @@ application {
 
 javafx {
   //17.0.6 νομιζω ειναι η αλλη version
-  version = '23.0.1'
+  version = '17.0.6'
   modules = ['javafx.controls', 'javafx.fxml', 'javafx.web', 'javafx.swing' , 'javafx.media']
 }
 
@@ -41,8 +41,7 @@ dependencies {
   implementation 'org.asynchttpclient:async-http-client:2.12.3'
   implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.6.0'
   implementation 'com.squareup.okhttp3:okhttp:4.9.3'  // Προσθήκη OkHttp στην εφαρμογή
-  implementation 'com.google.code.gson:gson:2.8.8' // Προσθήκη της εξάρτησης Gson
-  implementation 'com.squareup.okhttp:okhttp:2.7.5' // Παλιότερη έκδοση
+  implementation 'com.google.code.gson:gson:2.10.1' // Προσθήκη της εξάρτησης Gson
   implementation 'com.squareup.okhttp3:okhttp:4.10.0' // Νεότερη έκδοση
 
 
@@ -70,7 +69,7 @@ dependencies {
 }
 
 test {
-useJUnitPlatform()}
+  useJUnitPlatform()}
 
 jlink {
   imageZip = project.file("${buildDir}/distributions/app-${javafx.platform.classifier}.zip")
