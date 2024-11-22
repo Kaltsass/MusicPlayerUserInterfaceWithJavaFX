@@ -13,6 +13,7 @@ module org.example.musicplayeruserinterfacewithjavafx {
     requires com.almasb.fxgl.all;
     requires okhttp3;
     requires java.net.http;
+    requires java.desktop;
 
     opens org.example.musicplayeruserinterfacewithjavafx to javafx.fxml;
     exports org.example.musicplayeruserinterfacewithjavafx;

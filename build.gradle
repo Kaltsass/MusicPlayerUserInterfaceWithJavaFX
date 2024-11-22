@@ -45,6 +45,8 @@ dependencies {
   implementation 'com.squareup.okhttp:okhttp:2.7.5' // Παλιότερη έκδοση
   implementation 'com.squareup.okhttp3:okhttp:4.10.0' // Νεότερη έκδοση
 
+  implementation 'org.openjfx:javafx-controls:19'
+  implementation 'org.openjfx:javafx-fxml:19'
 
   implementation('org.controlsfx:controlsfx:11.1.2')
   implementation('com.dlsc.formsfx:formsfx-core:11.6.0') {
@@ -53,15 +55,18 @@ dependencies {
   implementation('net.synedra:validatorfx:0.4.0') {
     exclude(group: 'org.openjfx')
   }
+
   implementation('org.kordamp.ikonli:ikonli-javafx:12.3.1')
   implementation('org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0')
   implementation('eu.hansolo:tilesfx:11.48') {
     exclude(group: 'org.openjfx')
   }
+
   implementation('com.github.almasb:fxgl:17.3') {
     exclude(group: 'org.openjfx')
     exclude(group: 'org.jetbrains.kotlin')
   }
+
   implementation 'com.squareup.okhttp3:okhttp:4.11.0'
   implementation 'com.google.code.gson:gson:2.10.1'
 
@@ -82,4 +87,7 @@ jlink {
 
 jlinkZip {
   group = 'distribution'
+}
+run {
+  jvmArgs = ['--module-path', '--module-path "C:\\javafx-sdk-23.0.1\\lib" --add-modules javafx.controls,javafx.fxml ','javafx.controls,javafx.fxml']
 }

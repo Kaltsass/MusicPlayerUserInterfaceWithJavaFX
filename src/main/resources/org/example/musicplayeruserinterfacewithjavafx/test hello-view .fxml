@@ -95,12 +95,12 @@
                 <Insets left="10.0" right="10.0" />
               </padding>
             </Label>
-            <Button fx:id="button1" mnemonicParsing="false" onAction="#OnButtonClick" text="Made For You" textFill="WHITE" />
-            <Button fx:id="button2" mnemonicParsing="false" text="Recently Played" textFill="WHITE" />
-            <Button fx:id="button3" mnemonicParsing="false" text="Liked Songs" textFill="WHITE" />
-            <Button fx:id="button4" mnemonicParsing="false" text="Albums" textFill="WHITE" />
-            <Button fx:id="button5" mnemonicParsing="false" text="Artists" textFill="WHITE" />
-            <Button fx:id="button6" mnemonicParsing="false" text="Podcasts" textFill="WHITE" />
+                  <Button fx:id="button1" mnemonicParsing="false" onAction="#OnButtonClick" text="Made For You" textFill="WHITE" />
+                  <Button fx:id="button2" mnemonicParsing="false" text="Recently Played" textFill="WHITE" />
+                  <Button fx:id="button3" mnemonicParsing="false" text="Liked Songs" textFill="WHITE" />
+                  <Button fx:id="button4" mnemonicParsing="false" text="Albums" textFill="WHITE" />
+                  <Button fx:id="button5" mnemonicParsing="false" text="Artists" textFill="WHITE" />
+                  <Button fx:id="button6" mnemonicParsing="false" text="Podcasts" textFill="WHITE" />
           </children>
           <padding>
             <Insets left="20.0" right="20.0" />
@@ -122,7 +122,7 @@
                 <Image url="@../../../img/new_playlist.png" />
               </image>
             </ImageView>
-            <Button fx:id="button7" mnemonicParsing="false" onAction="#openPlaylistPopup" text="New Playlist" textFill="WHITE" />
+                  <Button mnemonicParsing="false" text="New Playlist" textFill="WHITE" />
           </children>
         </HBox>
       </children>

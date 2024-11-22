@@ -3,9 +3,14 @@ package org.example.musicplayeruserinterfacewithjavafx;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import model.Song;
 
 import java.io.IOException;
@@ -13,8 +18,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.fxml.FXML;
-import javafx.scene.input.MouseEvent;
 
 
 public class HelloController implements Initializable {
@@ -27,6 +30,9 @@ public class HelloController implements Initializable {
 
     @FXML
     private HBox recentlyPlayedContainer;
+
+    @FXML
+    private TextField playlistNameField;
 
 
 
@@ -151,8 +157,16 @@ public class HelloController implements Initializable {
 
     public void OnButtonClick() {
         System.out.println("Pressed");
-
     }
+
+    // Μέθοδος που καλείται όταν πατηθεί το κουμπί button7
+    @FXML
+    private void openPlaylistPopup() {
+        // Show the popup when button7 is clicked
+        PopupControl popupControl = new PopupControl();
+        popupControl.openPlaylistPopup();
+    }
+
     @FXML
     private Button button1;
     @FXML
@@ -165,4 +179,6 @@ public class HelloController implements Initializable {
     private Button button5;
     @FXML
     private Button button6;
+    @FXML
+    private Button button7;
 }
