@@ -8,10 +8,7 @@
 <?import javafx.scene.text.*?>
 
 
-
-
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="890.0" prefWidth="1315.0" styleClass="primary_color" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="org.example.musicplayeruserinterfacewithjavafx.HelloController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="890.0" prefWidth="1315.0" styleClass="primary_color" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.musicplayeruserinterfacewithjavafx.HelloController">
 
 
 
@@ -59,13 +56,15 @@
                     <Insets />
                   </HBox.margin>
                 </ImageView>
-                <Label prefHeight="17.0" prefWidth="96.0" text="Explore" textFill="#a1a1a1">
+                <Button fx:id="exploreButton" mnemonicParsing="false" text="Explore" onAction="#handleExploreButtonClick">
                   <font>
-                    <Font name="System Bold Italic" size="18.0" />
+                    <Font name="System Bold" size="18.0" />
                   </font>
-                </Label>
+                </Button>
+
               </children>
             </HBox>
+
             <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="20.0">
               <children>
                 <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
@@ -95,17 +94,17 @@
                 <Insets left="10.0" right="10.0" />
               </padding>
             </Label>
-            <Label prefHeight="40.0" prefWidth="192.0" text="Made For You" textFill="WHITE">
-              <padding>
-                <Insets left="10.0" right="10.0" />
-              </padding>
-            </Label>
-            <Label prefHeight="40.0" prefWidth="192.0" text="Recently Played" textFill="WHITE"  onMouseClicked="#refreshRecentlyPlayed" >
+            <Label onMouseClicked="#refreshRecentlyPlayed" prefHeight="40.0" prefWidth="192.0" text="Recently Played" textFill="WHITE">
               <padding>
                 <Insets left="10.0" right="10.0" />
               </padding>
             </Label>
             <Label prefHeight="40.0" prefWidth="192.0" text="Liked Songs" textFill="WHITE">
+              <padding>
+                <Insets left="10.0" right="10.0" />
+              </padding>
+            </Label>
+            <Label prefHeight="40.0" prefWidth="192.0" text="Made For You" textFill="WHITE">
               <padding>
                 <Insets left="10.0" right="10.0" />
               </padding>
