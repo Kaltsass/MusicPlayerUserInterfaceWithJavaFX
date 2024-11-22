@@ -4,17 +4,18 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import com.google.gson.Gson;
+
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RapidAPIExample {
 
-    public static void main(String[] args) {
+    // Κάνουμε τη μέθοδο static για να την καλέσουμε χωρίς να δημιουργήσουμε αντικείμενο
+    public static List<String> fetchTopCharts() throws IOException {
         OkHttpClient client = new OkHttpClient();
-
-        // Ενημέρωση URL για να ζητήσουμε τα Top 50 τραγούδια
         Request request = new Request.Builder()
-                .url("https://api.deezer.com/chart?limit=50")  // Εδώ ζητάμε 50 τραγούδια από το Deezer API
+                .url("https://api.deezer.com/chart?limit=50")  // Deezer API για τα top 50 charts
                 .get()
                 .build();
 
@@ -23,25 +24,20 @@ public class RapidAPIExample {
                 throw new IOException("Unexpected code " + response);
             }
 
-            // Ανάγνωση της απόκρισης σε μορφή JSON
             String jsonResponse = response.body().string();
-
-            // Ανάλυση του JSON με Gson
             Gson gson = new Gson();
-
-            // Ανάλυση της απόκρισης στο αντικείμενο ResponseData
             ResponseData responseData = gson.fromJson(jsonResponse, ResponseData.class);
 
-            // Εκτύπωση των τραγουδιών και των καλλιτεχνών χωρίς την πλήρη απόκριση
+            List<String> topCharts = new ArrayList<>();
             for (Track track : responseData.tracks.data) {
-                System.out.println("Song Name: " + track.title + ", Artist: " + track.artist.name);
+                topCharts.add("Song: " + track.title + " | Artist: " + track.artist.name);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+
+            return topCharts;
         }
     }
 
-    // Κλάση που περιέχει τα δεδομένα του Deezer response για το chart
+    // Κλάση που περιέχει τα δεδομένα της απόκρισης του API
     public static class ResponseData {
         public Tracks tracks; // Τα τραγούδια του chart
     }

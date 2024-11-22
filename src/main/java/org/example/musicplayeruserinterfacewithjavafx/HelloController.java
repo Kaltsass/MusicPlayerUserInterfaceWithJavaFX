@@ -7,9 +7,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
-
-
 import javafx.scene.layout.VBox;
 import model.Song;
 import okhttp3.OkHttpClient;
@@ -20,60 +19,80 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 
-public class HelloController {
+public class HelloController implements Initializable {
 
-    @FXML
-    private HBox favoriteContainer;
-
-    @FXML
-    private HBox recentlyPlayedContainer; // Reference to the recentlyPlayedContainer
-
-    @FXML
-    private TextField searchBar; // Search input field from FXML
-
-    @FXML
-    private VBox searchResultsContainer; // Container for search results
+    @FXML private HBox favoriteContainer;
+    @FXML private HBox recentlyPlayedContainer;
+    @FXML private TextField searchBar;
+    @FXML private VBox searchResultsContainer;
+    @FXML private Slider playbackSlider;
+    @FXML private Button playPauseButton;
+    @FXML private Button nextButton;
+    @FXML private Button prevButton;
 
     private List<Song> recentlyPlayed;
     private List<Song> favorites;
+    private List<Song> allSongs;
+    private boolean isPlaying = false;
+    private int currentSongIndex = 0;
 
-    // Toggles visibility of recently played section
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        allSongs = new ArrayList<>();
+        recentlyPlayed = new ArrayList<>(getRecentlyPlayed());
+        favorites = new ArrayList<>(getFavorites());
 
-    @FXML
-    private void toggleRecentlyPlayedVisibility(MouseEvent event) {
-        boolean isVisible = recentlyPlayedContainer.isVisible();
-        recentlyPlayedContainer.setVisible(!isVisible); // Toggle visibility
-        System.out.println("Recently Played section is now " + (isVisible ? "hidden" : "visible"));
+        // Combine lists into one for all songs
+        allSongs.addAll(recentlyPlayed);
+        allSongs.addAll(favorites);
+
+        // Initialize the playback slider
+        playbackSlider.setMin(0);
+        playbackSlider.setMax(100);
+        playbackSlider.setValue(0);
+
+        // Add listener to the playback slider
+        playbackSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            System.out.println("Slider moved to: " + newVal.doubleValue());
+        });
+
+        // Load and display the recently played songs
+        loadSongs(recentlyPlayed, recentlyPlayedContainer);
+        // Load and display the favorite songs
+        loadSongs(favorites, favoriteContainer);
     }
 
+    private void loadSongs(List<Song> songList, HBox container) {
+        try {
+            for (Song song : songList) {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("song.fxml"));
+                VBox vBox = fxmlLoader.load();
+                SongController songController = fxmlLoader.getController();
+                songController.setData(song);
+                container.getChildren().add(vBox);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-    // Handle search action when the user clicks search button
     @FXML
     private void handleSearch(ActionEvent event) {
-        String query = searchBar.getText(); // Get the search query
-
+        String query = searchBar.getText();
         if (query.isEmpty()) {
-            return; // Don't search if the query is empty
+            return;
         }
-
-        // Perform the search and get the results from Deezer API
         searchSongs(query);
     }
 
-    // Simulated search function (replace with your actual search logic)
-    private List<String> performSearch(String query) {
-        List<String> results = new ArrayList<>();
-        results.add("Song 1 - " + query);
-        results.add("Song 2 - " + query);
-        results.add("Song 3 - " + query);
-        return results;
-    }
-    @FXML
-    private ListView<String> searchResultsListView;
-    // Perform the song search using Deezer API
     private void searchSongs(String query) {
         OkHttpClient client = new OkHttpClient();
         String apiUrl = "https://api.deezer.com/search/track?q=" + query;
@@ -99,15 +118,12 @@ public class HelloController {
                 String songTitle = track.get("title").getAsString();
                 String artistName = track.getAsJsonObject("artist").get("name").getAsString();
 
-                // Create a new Label for each song and add it to the searchResultsContainer
                 Label resultLabel = new Label((i + 1) + ". " + songTitle + " by " + artistName);
-                resultLabel.setStyle("-fx-text-fill: white;"); // Style for the label
-
-                // Add the result to the searchResultsContainer VBox
+                resultLabel.setStyle("-fx-text-fill: white;");
                 searchResultsContainer.getChildren().add(resultLabel);
             }
 
-            // Make the results container visible after adding the results
+            // Make the results container visible
             searchResultsContainer.setVisible(true);
 
         } catch (IOException e) {
@@ -115,43 +131,43 @@ public class HelloController {
         }
     }
 
-    // Initialize method for setting up initial data
-    public void initialize() {
-        recentlyPlayed = new ArrayList<>(getRecentlyPlayed());
-        favorites = new ArrayList<>(getFavorites());
+    @FXML
+    private void toggleRecentlyPlayedVisibility(MouseEvent event) {
+        boolean isVisible = recentlyPlayedContainer.isVisible();
+        recentlyPlayedContainer.setVisible(!isVisible);
+        System.out.println("Recently Played section is now " + (isVisible ? "hidden" : "visible"));
+    }
 
-        // Load and display the recently played songs
-        try {
-            for (Song song : recentlyPlayed) {
-                FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("song.fxml"));
+    // Playback controls
+    @FXML
+    private void handlePlayPauseAction(MouseEvent event) {
+        isPlaying = !isPlaying;
+        playPauseButton.setText(isPlaying ? "⏸ Pause" : "▶ Play");
+        System.out.println(isPlaying ? "Playing song..." : "Paused song.");
+    }
 
-                VBox vBox = fxmlLoader.load();
-                SongController songController = fxmlLoader.getController();
-                songController.setData(song);
-
-                recentlyPlayedContainer.getChildren().add(vBox);
-            }
-
-            // Load and display the favorite songs
-            for (Song song : favorites) {
-                FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("song.fxml"));
-
-                VBox vBox = fxmlLoader.load();
-                SongController songController = fxmlLoader.getController();
-                songController.setData(song);
-
-                favoriteContainer.getChildren().add(vBox);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    @FXML
+    private void handleNextAction(MouseEvent event) {
+        if (allSongs != null && !allSongs.isEmpty()) {
+            currentSongIndex = (currentSongIndex + 1) % allSongs.size();
+            playSong(allSongs.get(currentSongIndex));
         }
     }
 
+    @FXML
+    private void handlePreviousAction(MouseEvent event) {
+        if (allSongs != null && !allSongs.isEmpty()) {
+            currentSongIndex = (currentSongIndex - 1 + allSongs.size()) % allSongs.size();
+            playSong(allSongs.get(currentSongIndex));
+        }
+    }
 
+    private void playSong(Song song) {
+        System.out.println("Playing song: " + song.getName() + " by " + song.getArtist());
+        // Implement actual song playing logic here
+    }
 
-    private List<Song> getRecentlyPlayed() {
+    public List<Song> getRecentlyPlayed() {
         List<Song> ls = new ArrayList<>();
 
         Song song = new Song();
@@ -195,6 +211,7 @@ public class HelloController {
 
     public List<Song> getFavorites() {
         List<Song> ls = new ArrayList<>();
+
         Song song = new Song();
         song.setName("Top 50");
         song.setArtist("Global");
@@ -208,7 +225,7 @@ public class HelloController {
         ls.add(song);
 
         song = new Song();
-        song.setName("Top 50");
+        song.setName("Top ");
         song.setArtist("Albums");
         song.setCover("/img/TopAlbums.png");
         ls.add(song);
@@ -218,6 +235,7 @@ public class HelloController {
         song.setArtist("Artists");
         song.setCover("/img/TopArtists1.png");
         ls.add(song);
+
         song = new Song();
         song.setName("Top 50");
         song.setArtist("Playlist");
@@ -226,4 +244,4 @@ public class HelloController {
 
         return ls;
     }
-    }
+}

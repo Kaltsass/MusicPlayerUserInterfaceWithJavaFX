@@ -257,4 +257,34 @@
       </children>
     </VBox>
   </center>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="890.0" prefWidth="1315.0" styleClass="primary_color" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.musicplayeruserinterfacewithjavafx.HelloController">
+  <left>
+    <!-- Left section content -->
+  </left>
+  <center>
+    <!-- Center section content -->
+  </center>
+  <bottom>
+    <!-- Bottom (Playback Controls Section) -->
+    <VBox alignment="CENTER" prefHeight="120.0" spacing="10.0" styleClass="playback-controls" stylesheets="@../../../css/style.css" BorderPane.alignment="CENTER">
+      <children>
+        <!-- Slider for playback progress -->
+        <Slider fx:id="playbackSlider" prefWidth="800.0" styleClass="slider-style" />
+
+        <!-- Playback Controls -->
+        <HBox alignment="CENTER" spacing="20.0">
+          <children>
+            <!-- Previous Button -->
+            <Button fx:id="prevButton" text="⏮ Previous" styleClass="control-button" onAction="#handlePreviousAction" />
+
+            <!-- Play/Pause Button -->
+            <Button fx:id="playPauseButton" text="⏯ Play" styleClass="control-button" onAction="#handlePlayPauseAction" />
+
+            <!-- Next Button -->
+            <Button fx:id="nextButton" text="⏭ Next" styleClass="control-button" onAction="#handleNextAction" />
+          </children>
+        </HBox>
+      </children>
+    </VBox>
+  </bottom>
 </BorderPane>
