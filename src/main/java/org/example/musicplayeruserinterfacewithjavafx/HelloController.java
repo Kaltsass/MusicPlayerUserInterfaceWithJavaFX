@@ -52,6 +52,9 @@ public class HelloController implements Initializable {
     private Button exploreButton;
 
     @FXML
+    private Button radioButton;
+
+    @FXML
     public void initialize() {
         // Optional: Initialize your controller here if needed
     }
@@ -71,6 +74,28 @@ public class HelloController implements Initializable {
 
             // Set the new scene to the current stage
             stage.setScene(exploreScene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleRadioButtonClick() {
+        try {
+            // Load the radio page FXML file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("RadioView.fxml"));
+            AnchorPane radioPage = loader.load();
+
+            // Create a new Scene for the radio page
+            Scene radioScene = new Scene(radioPage);
+
+            // Get the current stage (the window)
+            Stage stage = (Stage) radioButton.getScene().getWindow();
+
+            // Set the new scene to the current stage
+            stage.setScene(radioScene);
             stage.show();
 
         } catch (IOException e) {
@@ -103,12 +128,6 @@ public class HelloController implements Initializable {
             e.printStackTrace();
         }
     }
-
-
-
-
-
-
 
 
     @FXML

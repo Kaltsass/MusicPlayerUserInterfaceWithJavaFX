@@ -5,16 +5,16 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<!-- ExploreView.fxml -->
+<!-- RadioView.fxml -->
 
 <AnchorPane fx:id="explorePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             prefHeight="890.0" prefWidth="1315.0"
             style="-fx-background-color: black;"
             stylesheets="@../../../css/style.css"
             xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.example.musicplayeruserinterfacewithjavafx.ExploreController">
+            fx:controller="org.example.musicplayeruserinterfacewithjavafx.RadioController">
 
-    <VBox layoutY="8.0" prefHeight="270.0" prefWidth="950.0">
+    <VBox layoutY="7.0" prefHeight="270.0" prefWidth="950.0">
         <children>
             <Button fx:id="backButton" onAction="#handleBackButtonClick" styleClass="custom-button" text="Back">
                 <font>
