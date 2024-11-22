@@ -34,6 +34,6 @@ public class SongController {
         img.setImage(image);
         songName.setText(song.getName());
         artist.setText(song.getArtist());
-
+        addToPlaylist.onMouseClickedProperty();
     }
 }

@@ -3,20 +3,22 @@ package org.example.musicplayeruserinterfacewithjavafx;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import model.Song;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 
@@ -159,12 +161,25 @@ public class HelloController implements Initializable {
         System.out.println("Pressed");
     }
 
-    // Μέθοδος που καλείται όταν πατηθεί το κουμπί button7
+    // Λειτουργία κουμπιού New Playlist
+    public void OnButtonClick7() {
+        System.out.println("Pressed"); // Εμφανίζει στο τερματικό οτι πατήθηκε το κουμπί - Να το σβήσουμε μετά
+        openPlaylistPopup();
+
+    }
+    // Μέθοδος που καλείται όταν πατηθεί το κουμπί btnnewplaylist ανοίγει αναδυόμενο παράθυρο για να καταχωρηθεί το όνομα του νέου Playlist
     @FXML
     private void openPlaylistPopup() {
-        // Show the popup when button7 is clicked
-        PopupControl popupControl = new PopupControl();
-        popupControl.openPlaylistPopup();
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource("new-playlist-popup.fxml"));
+            Stage popupplaylist = new Stage();
+            popupplaylist.initStyle(StageStyle.UNDECORATED);
+            popupplaylist.setScene(new Scene(root, 600, 401));
+            popupplaylist.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            e.getCause();
+        }
     }
 
     @FXML
@@ -180,5 +195,5 @@ public class HelloController implements Initializable {
     @FXML
     private Button button6;
     @FXML
-    private Button button7;
+    private Button btnnewplaylist; // Button για το
 }
