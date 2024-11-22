@@ -33,7 +33,7 @@ public class SongController {
         artist.setText(song.getArtist());
 
         // Προσθήκη ακροατή κλικ για την εικόνα
-        img.setOnMouseClicked(this::handleImageClick);  // Καλούμε την handleImageClick όταν πατηθεί η εικόνα
+        img.setOnMouseClicked(this::handleImageClick);
     }
 
     // Μέθοδος που καλείται όταν γίνεται κλικ στην εικόνα

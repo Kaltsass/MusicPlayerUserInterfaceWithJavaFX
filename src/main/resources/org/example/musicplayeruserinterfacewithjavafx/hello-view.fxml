@@ -1,20 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-        <?import java.lang.*?>
-        <?import javafx.geometry.*?>
-        <?import javafx.scene.control.*?>
-        <?import javafx.scene.image.*?>
-        <?import javafx.scene.layout.*?>
-        <?import javafx.scene.text.*?>
-
-
-
-
-
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="890.0" prefWidth="1315.0" styleClass="primary_color" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="org.example.musicplayeruserinterfacewithjavafx.HelloController">
-
-
-
 <left>
   <VBox prefHeight="200.0" prefWidth="235.0" spacing="20.0" stylesheets="@../../../css/style.css" BorderPane.alignment="CENTER">
     <children>
@@ -193,7 +184,8 @@
                   <Image url="@../../../img/search_icon.png" />
                 </image>
               </ImageView>
-              <TextField prefHeight="26.0" prefWidth="134.0" promptText="Search" style="-fx-background-color: transparent;" />
+              <TextField fx:id="searchBar" prefHeight="26.0" prefWidth="180.0" promptText="Search for songs..." style="-fx-background-color: transparent;" />
+              <Button text="Search" fx:id="searchButton" onAction="#handleSearch" style="-fx-background-color: #1DB954; -fx-text-fill: white;" />
             </children>
           </HBox>
           <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
@@ -250,6 +242,7 @@
     </children>
   </VBox>
 </center>
+
 <!-- Bottom (Playback Controls Section) -->
 <bottom>
   <VBox alignment="CENTER" prefHeight="120.0" spacing="10.0" styleClass="playback-controls" stylesheets="@../../../css/style.css" BorderPane.alignment="CENTER">
@@ -273,4 +266,9 @@
     </children>
   </VBox>
 </bottom>
+  <right>
+    <VBox fx:id="searchResultsContainer" prefWidth="300" spacing="10.0" visible="false">
+      <!-- Dynamically added results will go here -->
+    </VBox>
+  </right>
 </BorderPane>
