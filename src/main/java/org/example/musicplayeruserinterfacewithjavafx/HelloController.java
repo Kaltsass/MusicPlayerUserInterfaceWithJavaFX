@@ -138,6 +138,16 @@ public class HelloController implements Initializable {
         System.out.println("Recently Played section is now " + (isVisible ? "hidden" : "visible"));
     }
 
+    @FXML
+    private void refreshRecentlyPlayed(MouseEvent event) {
+        System.out.println("Refreshing Recently Played list...");
+        recentlyPlayed = getRecentlyPlayed();  // Ανανεώνουμε τα πρόσφατα τραγούδια
+
+        // Καθαρίζουμε το container και ξαναφορτώνουμε τα τραγούδια
+        recentlyPlayedContainer.getChildren().clear();
+        loadSongs(recentlyPlayed, recentlyPlayedContainer);  // Επαναφορά της λίστας των τραγουδιών
+    }
+
     // Playback controls
     @FXML
     private void handlePlayPauseAction(MouseEvent event) {
