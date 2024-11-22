@@ -1,62 +1,149 @@
 package org.example.musicplayeruserinterfacewithjavafx;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.Song;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
 
 public class HelloController implements Initializable {
-    @FXML
-    private HBox favoriteContainer;
-    List<Song> recentlyPlayed;
-    List<Song> favorites;
 
+    @FXML private HBox favoriteContainer;
+    @FXML private HBox recentlyPlayedContainer;
+    @FXML private TextField searchBar;
+    @FXML private VBox searchResultsContainer;
+    @FXML private Slider playbackSlider;
+    @FXML private Button playPauseButton;
+    @FXML private Button nextButton;
+    @FXML private Button prevButton;
 
+    private List<Song> recentlyPlayed;
+    private List<Song> favorites;
+    private List<Song> allSongs;
+    private boolean isPlaying = false;
+    private int currentSongIndex = 0;
 
-    @FXML
-    private HBox recentlyPlayedContainer;
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        allSongs = new ArrayList<>();
+        recentlyPlayed = new ArrayList<>(getRecentlyPlayed());
+        favorites = new ArrayList<>(getFavorites());
 
-    @FXML
-    private Slider playbackSlider;
+        // Combine lists into one for all songs
+        allSongs.addAll(recentlyPlayed);
+        allSongs.addAll(favorites);
 
-    @FXML
-    private Button playPauseButton;
+        // Initialize the playback slider
+        playbackSlider.setMin(0);
+        playbackSlider.setMax(100);
+        playbackSlider.setValue(0);
 
-    @FXML
-    private Button nextButton;
+        // Add listener to the playback slider
+        playbackSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            System.out.println("Slider moved to: " + newVal.doubleValue());
+        });
 
-    @FXML
-    private Button prevButton;
-
-    private boolean isPlaying = false; // Κατάσταση αναπαραγωγής (true=παίζει, false=παύση)
-    private int currentSongIndex = 0; // Δείκτης για το τρέχον τραγούδι
-
-    private List<Song> allSongs; // Λίστα όλων των τραγουδιών για αναπαραγωγή
-
-    @FXML
-    private void refreshRecentlyPlayed(MouseEvent event) {
-        System.out.println("Label clicked! Refreshing the recently played songs.");
-        // Λογική για να ανανεώσεις το πρόσφατα παιγμένο περιεχόμενο
+        // Load and display the recently played songs
+        loadSongs(recentlyPlayed, recentlyPlayedContainer);
+        // Load and display the favorite songs
+        loadSongs(favorites, favoriteContainer);
     }
 
+    private void loadSongs(List<Song> songList, HBox container) {
+        try {
+            for (Song song : songList) {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("song.fxml"));
+                VBox vBox = fxmlLoader.load();
+                SongController songController = fxmlLoader.getController();
+                songController.setData(song);
+                container.getChildren().add(vBox);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleSearch(ActionEvent event) {
+        String query = searchBar.getText();
+        if (query.isEmpty()) {
+            return;
+        }
+        searchSongs(query);
+    }
+
+    private void searchSongs(String query) {
+        OkHttpClient client = new OkHttpClient();
+        String apiUrl = "https://api.deezer.com/search/track?q=" + query;
+
+        Request request = new Request.Builder().url(apiUrl).build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                System.out.println("Error fetching songs: HTTP " + response.code());
+                return;
+            }
+
+            String jsonResponse = response.body().string();
+            JsonObject jsonObject = JsonParser.parseString(jsonResponse).getAsJsonObject();
+            JsonArray tracksArray = jsonObject.getAsJsonArray("data");
+
+            // Clear previous search results
+            searchResultsContainer.getChildren().clear();
+
+            // Populate the UI with new search results
+            for (int i = 0; i < tracksArray.size(); i++) {
+                JsonObject track = tracksArray.get(i).getAsJsonObject();
+                String songTitle = track.get("title").getAsString();
+                String artistName = track.getAsJsonObject("artist").get("name").getAsString();
+
+                Label resultLabel = new Label((i + 1) + ". " + songTitle + " by " + artistName);
+                resultLabel.setStyle("-fx-text-fill: white;");
+                searchResultsContainer.getChildren().add(resultLabel);
+            }
+
+            // Make the results container visible
+            searchResultsContainer.setVisible(true);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void toggleRecentlyPlayedVisibility(MouseEvent event) {
+        boolean isVisible = recentlyPlayedContainer.isVisible();
+        recentlyPlayedContainer.setVisible(!isVisible);
+        System.out.println("Recently Played section is now " + (isVisible ? "hidden" : "visible"));
+    }
+
+    // Playback controls
     @FXML
     private void handlePlayPauseAction(MouseEvent event) {
         isPlaying = !isPlaying;
         playPauseButton.setText(isPlaying ? "⏸ Pause" : "▶ Play");
         System.out.println(isPlaying ? "Playing song..." : "Paused song.");
-        // Προσθήκη λογικής για την αναπαραγωγή/παύση του τραγουδιού
     }
 
     @FXML
@@ -76,58 +163,11 @@ public class HelloController implements Initializable {
     }
 
     private void playSong(Song song) {
-        System.out.println("Playing: " + song.getName() + " by " + song.getArtist());
-        // Λογική αναπαραγωγής τραγουδιού
+        System.out.println("Playing song: " + song.getName() + " by " + song.getArtist());
+        // Implement actual song playing logic here
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        allSongs = new ArrayList<>();
-        recentlyPlayed = new ArrayList<>(getRecentlyPlayed());
-        favorites = new ArrayList<>(getFavorites());
-
-        // Συνδυασμός λιστών σε μία λίστα (π.χ., όλα τα τραγούδια)
-        allSongs.addAll(recentlyPlayed);
-        allSongs.addAll(favorites);
-
-        try {
-            for (Song song : recentlyPlayed) {
-                FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("song.fxml"));
-
-                VBox vBox = fxmlLoader.load();
-                SongController songController = fxmlLoader.getController();
-                songController.setData(song);
-
-                recentlyPlayedContainer.getChildren().add(vBox);
-            }
-            for (Song song : favorites) {
-                FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("song.fxml"));
-
-                VBox vBox = fxmlLoader.load();
-                SongController songController = fxmlLoader.getController();
-                songController.setData(song);
-
-                favoriteContainer.getChildren().add(vBox);
-            }
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        // Αρχική ρύθμιση του slider
-        playbackSlider.setMin(0);
-        playbackSlider.setMax(100); // Δείκτης χρόνου τραγουδιού (π.χ., δευτερόλεπτα)
-        playbackSlider.setValue(0);
-
-        playbackSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
-            System.out.println("Slider moved to: " + newVal.doubleValue());
-            // Προσθήκη λογικής για την αλλαγή θέσης στο τραγούδι
-        });
-    }
-
-    private List<Song> getRecentlyPlayed() {
+    public List<Song> getRecentlyPlayed() {
         List<Song> ls = new ArrayList<>();
 
         Song song = new Song();
@@ -151,7 +191,7 @@ public class HelloController implements Initializable {
         song = new Song();
         song.setName("Smooth Kai Hardcorila");
         song.setArtist("Thitis,Sadomas,ΔΠΘ,Buzz,MadnessKey");
-        song.setCover("/img/mk_20-20.png");
+        song.setCover("/img/thitis_sado.png");
         ls.add(song);
 
         song = new Song();
@@ -171,6 +211,7 @@ public class HelloController implements Initializable {
 
     public List<Song> getFavorites() {
         List<Song> ls = new ArrayList<>();
+
         Song song = new Song();
         song.setName("Top 50");
         song.setArtist("Global");
@@ -194,6 +235,7 @@ public class HelloController implements Initializable {
         song.setArtist("Artists");
         song.setCover("/img/TopArtists1.png");
         ls.add(song);
+
         song = new Song();
         song.setName("Top 50");
         song.setArtist("Playlist");
