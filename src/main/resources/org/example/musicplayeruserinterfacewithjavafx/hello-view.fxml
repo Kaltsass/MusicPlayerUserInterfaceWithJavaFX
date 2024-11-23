@@ -221,56 +221,242 @@
                 </padding>
               </Label>
 
-              <ScrollPane fitToWidth="true" minViewportHeight="270.0" prefHeight="264.0" prefWidth="1072.0" style="-fx-background-color: transparent;" stylesheets="@../../../css/style.css">
-                <content>
-                  <HBox fx:id="recentlyPlayedContainer" prefHeight="0.0" prefWidth="0.0" spacing="30.0" visible="true" />
-                </content>
-              </ScrollPane>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="890.0" prefWidth="1315.0" styleClass="primary_color" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.musicplayeruserinterfacewithjavafx.HelloController">
 
-              <Label text="Top Charts" textFill="WHITE">
-                <font>
-                  <Font size="15.0" />
-                </font>
-              </Label>
-              <ScrollPane fitToWidth="true" minViewportHeight="270.0" prefHeight="264.0" prefWidth="1072.0" style="-fx-background-color: transparent;" stylesheets="@../../../css/style.css">
-                <content>
-                  <HBox fx:id="favoriteContainer" prefHeight="0.0" prefWidth="0.0" spacing="30.0" />
-                </content>
-              </ScrollPane>
+    <!-- Center section: Content goes here -->
+    <center>
+        <VBox>
+            <children>
+                <!-- ScrollPane for Recently Played -->
+                <ScrollPane fitToWidth="true" minViewportHeight="270.0" prefHeight="264.0" prefWidth="1072.0" style="-fx-background-color: transparent;" stylesheets="@../../../css/style.css">
+                    <content>
+                        <HBox fx:id="recentlyPlayedContainer" prefHeight="0.0" prefWidth="0.0" spacing="30.0" visible="true" />
+                    </content>
+                </ScrollPane>
+
+                <!-- Label for Top Charts -->
+                <Label text="Top Charts" textFill="WHITE">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </Label>
+
+                <!-- ScrollPane for Favorites -->
+                <ScrollPane fitToWidth="true" minViewportHeight="270.0" prefHeight="264.0" prefWidth="1072.0" style="-fx-background-color: transparent;" stylesheets="@../../../css/style.css">
+                    <content>
+                        <HBox fx:id="favoriteContainer" prefHeight="0.0" prefWidth="0.0" spacing="30.0" />
+                    </content>
+                </ScrollPane>
             </children>
-          </VBox>
-        </content>
-      </ScrollPane>
-    </children>
-  </VBox>
-</center>
+        </VBox>
+    </center>
 
-<!-- Bottom (Playback Controls Section) -->
-<bottom>
-  <VBox alignment="CENTER" prefHeight="120.0" spacing="10.0" styleClass="playback-controls" stylesheets="@../../../css/style.css" BorderPane.alignment="CENTER">
-    <children>
-      <!-- Slider for playback progress -->
-      <Slider fx:id="playbackSlider" prefWidth="800.0" styleClass="slider-style" />
+    <!-- Bottom section: Playback controls -->
+    <bottom>
+        <VBox alignment="CENTER" prefHeight="120.0" spacing="10.0" styleClass="playback-controls" stylesheets="@../../../css/style.css" BorderPane.alignment="CENTER">
+            <children>
+                <!-- Slider for playback progress -->
+                <Slider fx:id="playbackSlider" prefWidth="800.0" styleClass="slider-style" />
 
-      <!-- Playback Controls -->
-      <HBox alignment="CENTER" spacing="20.0">
-        <children>
-          <!-- Previous Button -->
-          <Button fx:id="prevButton" text="⏮ Previous" styleClass="control-button" onAction="#handlePreviousAction" />
+                <!-- Playback Controls (buttons) -->
+                <HBox alignment="CENTER" spacing="20.0">
+                    <children>
+                        <!-- Previous Button -->
+                        <Button fx:id="prevButton" text="⏮ Previous" styleClass="control-button" onAction="#handlePreviousAction" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </bottom>
+
+</BorderPane>
+
 
           <!-- Play/Pause Button -->
           <Button fx:id="playPauseButton" text="⏯ Play" styleClass="control-button" onAction="#handlePlayPauseAction" />
 
-          <!-- Next Button -->
-          <Button fx:id="nextButton" text="⏭ Next" styleClass="control-button" onAction="#handleNextAction" />
-        </children>
-      </HBox>
-    </children>
-  </VBox>
-</bottom>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="890.0" prefWidth="1315.0" styleClass="primary_color" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.musicplayeruserinterfacewithjavafx.HelloController">
+  
+  <!-- Left Section -->
+  <left>
+    <VBox prefHeight="200.0" prefWidth="235.0" spacing="20.0" stylesheets="@../../../css/style.css" BorderPane.alignment="CENTER">
+      <children>
+        <ImageView fitHeight="39.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+          <image>
+            <Image url="@../../../img/dots_menu.png" />
+          </image>
+          <VBox.margin>
+            <Insets left="20.0" top="20.0" />
+          </VBox.margin>
+        </ImageView>
+        
+        <VBox prefHeight="152.0" prefWidth="235.0" spacing="7.0">
+          <children>
+            <!-- Home Section -->
+            <VBox prefHeight="50.0" prefWidth="235.0">
+              <children>
+                <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="20.0" styleClass="selected">
+                  <children>
+                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                      <image>
+                        <Image url="@../../../img/home_png.png" />
+                      </image>
+                    </ImageView>
+                    <Label prefHeight="17.0" prefWidth="96.0" text="Home" textFill="WHITE">
+                      <font>
+                        <Font name="System Bold Italic" size="18.0" />
+                      </font>
+                    </Label>
+                  </children>
+                </HBox>
+              </children>
+            </VBox>
+            
+            <!-- Explore Button Section -->
+            <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="20.0" stylesheets="@../../../css/style.css">
+              <children>
+                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                    <Image url="@../../../img/compass.png" />
+                  </image>
+                </ImageView>
+                <Button fx:id="exploreButton" mnemonicParsing="false" onAction="#handleExploreButtonClick" styleClass="custom-button" text="Explore">
+                  <font>
+                    <Font name="System Bold" size="18.0" />
+                  </font>
+                </Button>
+              </children>
+            </HBox>
+
+            <!-- Radio Button Section -->
+            <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="20.0">
+              <children>
+                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                    <Image url="@../../../img/radio_png.png" />
+                  </image>
+                </ImageView>
+                <Button fx:id="radioButton" onAction="#handleRadioButtonClick" prefHeight="50.0" prefWidth="105.0" styleClass="custom-button" text="Radio">
+                  <font>
+                    <Font name="System Bold Italic" size="17.0" />
+                  </font>
+                </Button>
+              </children>
+            </HBox>
+          </children>
+        </VBox>
+        
+        <!-- Library Section -->
+        <VBox prefHeight="363.0" prefWidth="235.0">
+          <children>
+            <Label prefHeight="54.0" prefWidth="193.0" text="YOUR LIBRARY" textFill="#a1a1a1">
+              <VBox.margin>
+                <Insets />
+              </VBox.margin>
+              <padding>
+                <Insets left="10.0" right="10.0" />
+              </padding>
+            </Label>
+            <Label onMouseClicked="#refreshRecentlyPlayed" prefHeight="40.0" prefWidth="192.0" text="Recently Played" textFill="WHITE">
+              <padding>
+                <Insets left="10.0" right="10.0" />
+              </padding>
+            </Label>
+            <Label prefHeight="40.0" prefWidth="192.0" text="Liked Songs" textFill="WHITE">
+              <padding>
+                <Insets left="10.0" right="10.0" />
+              </padding>
+            </Label>
+            <Label prefHeight="40.0" prefWidth="192.0" text="Made For You" textFill="WHITE">
+              <padding>
+                <Insets left="10.0" right="10.0" />
+              </padding>
+            </Label>
+            <Label prefHeight="40.0" prefWidth="192.0" text="Albums" textFill="WHITE">
+              <padding>
+                <Insets left="10.0" right="10.0" />
+              </padding>
+            </Label>
+            <Label prefHeight="40.0" prefWidth="192.0" text="Artists" textFill="WHITE">
+              <padding>
+                <Insets left="10.0" right="10.0" />
+              </padding>
+            </Label>
+            <Label prefHeight="40.0" prefWidth="192.0" text="Podcasts" textFill="WHITE">
+              <padding>
+                <Insets left="10.0" right="10.0" />
+              </padding>
+            </Label>
+          </children>
+          <padding>
+            <Insets left="20.0" right="20.0" />
+          </padding>
+        </VBox>
+
+        <Label prefHeight="40.0" prefWidth="192.0" text="Playlists" textFill="#a1a1a1">
+          <padding>
+            <Insets left="20.0" right="10.0" />
+          </padding>
+          <font>
+            <Font size="14.0" />
+          </font>
+        </Label>
+
+        <Pane prefHeight="134.0" prefWidth="235.0" VBox.vgrow="ALWAYS" />
+        <HBox alignment="CENTER" prefHeight="75.0" prefWidth="235.0" spacing="20.0" styleClass="top-border" stylesheets="@../../../css/style.css">
+          <children>
+            <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+              <image>
+                <Image url="@../../../img/new_playlist.png" />
+              </image>
+            </ImageView>
+            <Label prefHeight="40.0" prefWidth="108.0" text="New Playlist" textFill="#a1a1a1">
+              <padding>
+                <Insets left="10.0" right="10.0" />
+              </padding>
+              <font>
+                <Font size="14.0" />
+              </font>
+            </Label>
+          </children>
+        </HBox>
+      </children>
+      <styleClass>
+        <String fx:value="primary_color" />
+        <String fx:value="secondary-color" />
+      </styleClass>
+    </VBox>
+  </left>
+
+  <!-- Center Section (content like search, profile) -->
+  <center>
+    <!-- Add your center content here -->
+  </center>
+
+  <!-- Bottom Section (Playback Controls) -->
+  <bottom>
+    <VBox alignment="CENTER" prefHeight="120.0" spacing="10.0" styleClass="playback-controls" stylesheets="@../../../css/style.css" BorderPane.alignment="CENTER">
+      <children>
+        <!-- Slider for playback progress -->
+        <Slider fx:id="playbackSlider" prefWidth="800.0" styleClass="slider-style" />
+        <!-- Playback Controls (buttons) -->
+        <HBox alignment="CENTER" spacing="20.0">
+          <children>
+            <!-- Next Button -->
+            <Button fx:id="nextButton" text="⏭ Next" styleClass="control-button" onAction="#handleNextAction" />
+          </children>
+        </HBox>
+      </children>
+    </VBox>
+  </bottom>
+
+  <!-- Right Section (Search Results) -->
   <right>
     <VBox fx:id="searchResultsContainer" prefWidth="300" spacing="10.0" visible="false">
       <!-- Dynamically added results will go here -->
+    </VBox>
+  </right>
+</BorderPane>
     </VBox>
   </right>
 </BorderPane>

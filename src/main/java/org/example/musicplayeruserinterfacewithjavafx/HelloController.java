@@ -18,14 +18,238 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import javafx.fxml.Initializable;
+import javafx.application.Platform;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.application.Platform;
+
+public class HelloController implements Initializable {
+
+    @FXML private HBox favoriteContainer;
+    @FXML private HBox recentlyPlayedContainer;
+    @FXML private TextField searchBar;
+    @FXML private VBox searchResultsContainer;
+    @FXML private Slider playbackSlider;
+    @FXML private Button playPauseButton;
+    @FXML private Button nextButton;
+    @FXML private Button prevButton;
+    @FXML private Button exploreButton;
+    @FXML private Button radioButton;
+    @FXML private Button backButton;
+
+    private List<Song> recentlyPlayed;
+    private List<Song> favorites;
+    private List<Song> allSongs;
+    private boolean isPlaying = false;
+    private int currentSongIndex = 0;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        allSongs = new ArrayList<>();
+        recentlyPlayed = new ArrayList<>(getRecentlyPlayed());
+        favorites = new ArrayList<>(getFavorites());
+
+        // Combine lists into one for all songs
+        allSongs.addAll(recentlyPlayed);
+        allSongs.addAll(favorites);
+
+        // Initialize the playback slider
+        playbackSlider.setMin(0);
+        playbackSlider.setMax(100);
+        playbackSlider.setValue(0);
+
+        // Add listener to the playback slider
+        playbackSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            System.out.println("Slider moved to: " + newVal.doubleValue());
+        });
+
+        // Load and display the recently played songs
+        loadSongs(recentlyPlayed, recentlyPlayedContainer);
+        // Load and display the favorite songs
+        loadSongs(favorites, favoriteContainer);
+    }
+
+    // Load songs into a container (e.g., recently played or favorites)
+    private void loadSongs(List<Song> songList, HBox container) {
+        try {
+            for (Song song : songList) {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("song.fxml"));
+                VBox vBox = fxmlLoader.load();
+                SongController songController = fxmlLoader.getController();
+                songController.setData(song);
+                container.getChildren().add(vBox);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Toggle visibility of the recently played container
+    @FXML
+    private void toggleRecentlyPlayedVisibility(MouseEvent event) {
+        Platform.runLater(() -> {
+            boolean isVisible = recentlyPlayedContainer.isVisible();
+            recentlyPlayedContainer.setVisible(!isVisible);
+            System.out.println("Recently Played section is now " + (isVisible ? "hidden" : "visible"));
+        });
+    }
+
+    @FXML
+    private void handleExploreButtonClick() {
+        try {
+            // Load the Explore page FXML file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ExploreView.fxml"));
+            Parent explorePage = loader.load();
+
+            // Create a new Scene for the Explore page
+            Scene exploreScene = new Scene(explorePage);
+
+            // Get the current stage (the window)
+            Stage stage = (Stage) exploreButton.getScene().getWindow();
+
+            // Set the new scene to the current stage
+            stage.setScene(exploreScene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleRadioButtonClick() {
+        try {
+            // Load the radio page FXML file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("RadioView.fxml"));
+            Parent radioPage = loader.load();
+
+            // Create a new Scene for the radio page
+            Scene radioScene = new Scene(radioPage);
+
+            // Get the current stage (the window)
+            Stage stage = (Stage) radioButton.getScene().getWindow();
+
+            // Set the new scene to the current stage
+            stage.setScene(radioScene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleBackButtonClick() {
+        try {
+            // Load the HelloView.fxml file (the main page)
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("hello-view.fxml"));
+            Parent helloPage = loader.load();
+
+            // Create a new Scene for the Hello page
+            Scene helloScene = new Scene(helloPage);
+
+            // Get the current stage (the window) where the Explore scene is being shown
+            Stage stage = (Stage) backButton.getScene().getWindow();
+
+            // Set the new scene to the current stage (back to the Hello page)
+            stage.setScene(helloScene);
+            stage.show();
+
+        } catch (IOException e) {
+            System.out.println(getClass().getResource("hello-view.fxml"));
+            e.printStackTrace();
+        }
+    }
+
+    // Search for songs when the search button is pressed
+    @FXML
+    private void handleSearch(ActionEvent event) {
+        String query = searchBar.getText();
+        if (query.isEmpty()) {
+            return;
+        }
+        searchSongs(query);
+    }
+
+    // Make a request to Deezer API to search for songs
+    private void searchSongs(String query) {
+        OkHttpClient client = new OkHttpClient();
+        String apiUrl = "https://api.deezer.com/search/track?q=" + query;
+
+        Request request = new Request.Builder().url(apiUrl).build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                System.out.println("Error fetching songs: HTTP " + response.code());
+                return;
+            }
+
+            String jsonResponse = response.body().string();
+            JsonObject jsonObject = JsonParser.parseString(jsonResponse).getAsJsonObject();
+            JsonArray tracksArray = jsonObject.getAsJsonArray("data");
+
+            // Clear previous search results
+            searchResultsContainer.getChildren().clear();
+
+            // Populate the UI with new search results
+            for (int i = 0; i < tracksArray.size(); i++) {
+                JsonObject track = tracksArray.get(i).getAsJsonObject();
+                String songTitle = track.get("title").getAsString();
+                String artistName = track.getAsJsonObject("artist").get("name").getAsString();
+
+                Label resultLabel = new Label((i + 1) + ". " + songTitle + " by " + artistName);
+                resultLabel.setStyle("-fx-text-fill: white;");
+                searchResultsContainer.getChildren().add(resultLabel);
+            }
+
+            // Make the results container visible
+            searchResultsContainer.setVisible(true);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Refresh the recently played list
+    @FXML
+    private void refreshRecentlyPlayed(MouseEvent event) {
+        System.out.println("Refreshing Recently Played Songs");
+        recentlyPlayedContainer.getChildren().clear(); // Clear the container
+        try {
+            for (Song song : getRecentlyPlayed()) {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("song.fxml"));
+                VBox vBox = fxmlLoader.load();
+                SongController songController = fxmlLoader.getController();
+                songController.setData(song);
+                recentlyPlayedContainer.getChildren().add(vBox);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Play/pause song
+    @FXML
+    private void handlePlayPauseAction(MouseEvent event) {
+        isPlaying = !isPlaying;
+        playPauseButton.setText(isPlaying ? "⏸ Pause" : "▶ Play");
+        System.out.println(isPlaying ? "Playing song..." : "Paused song.");
+    }
+
+    // Play the next song
+    @FXML
+    private void handleNextAction(MouseEvent event) {
+        if (allSongs != null && !allSongs.isEmpty()) {
+            currentSongIndex = (currentSongIndex + 1
+
 
 public class HelloController implements Initializable {
 
@@ -80,17 +304,55 @@ public class HelloController implements Initializable {
         });
     }
 
-    // Load songs into a container (e.g., recently played or favorites)
-    private void loadSongs(List<Song> songList, HBox container) {
+ // Handle Explore button click to change scene
+    @FXML
+    private Button exploreButton;
+
+    @FXML
+    private void handleExploreButtonClick() {
         try {
-            for (Song song : songList) {
-                FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("song.fxml"));
-                VBox vBox = fxmlLoader.load();
-                SongController songController = fxmlLoader.getController();
-                songController.setData(song);
-                container.getChildren().add(vBox);
-            }
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ExploreView.fxml"));
+            AnchorPane explorePage = loader.load();
+            Scene exploreScene = new Scene(explorePage);
+            Stage stage = (Stage) exploreButton.getScene().getWindow();
+            stage.setScene(exploreScene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Handle Radio button click to change scene
+    @FXML
+    private Button radioButton;
+
+    @FXML
+    private void handleRadioButtonClick() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("RadioView.fxml"));
+            AnchorPane radioPage = loader.load();
+            Scene radioScene = new Scene(radioPage);
+            Stage stage = (Stage) radioButton.getScene().getWindow();
+            stage.setScene(radioScene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Handle Back button click to return to the main page
+    @FXML
+    private Button backButton;
+
+    @FXML
+    private void handleBackButtonClick() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("hello-view.fxml"));
+            AnchorPane helloPage = loader.load();
+            Scene helloScene = new Scene(helloPage);
+            Stage stage = (Stage) backButton.getScene().getWindow();
+            stage.setScene(helloScene);
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -110,14 +372,6 @@ public class HelloController implements Initializable {
     private void searchSongs(String query) {
         OkHttpClient client = new OkHttpClient();
         String apiUrl = "https://api.deezer.com/search/track?q=" + query;
-
-        Request request = new Request.Builder().url(apiUrl).build();
-
-        try (Response response = client.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                System.out.println("Error fetching songs: HTTP " + response.code());
-                return;
-            }
 
             String jsonResponse = response.body().string();
             JsonObject jsonObject = JsonParser.parseString(jsonResponse).getAsJsonObject();

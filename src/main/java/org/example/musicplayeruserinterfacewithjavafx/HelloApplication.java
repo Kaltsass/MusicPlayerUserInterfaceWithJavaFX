@@ -8,6 +8,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
+import javafx.scene.Parent;
+
+
 public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
@@ -17,7 +20,6 @@ public class HelloApplication extends Application {
         stage.setTitle("Music Player");
         stage.setScene(scene);
         stage.show();
-
 
     }
 

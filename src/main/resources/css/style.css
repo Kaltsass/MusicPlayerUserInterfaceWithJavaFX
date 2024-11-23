@@ -99,6 +99,50 @@
     -fx-font-weight: bold;
 }
 
+/* Scrollpane */
+.scroll-pane > .viewport {
+    -fx-background-color: #101010; /* from Explore_Button */
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: #181818; /* from master, or you can adjust based on preference */
+}
+
+.scroll-pane .thumb {
+    -fx-background-color: #444;
+}
+
+.scroll-pane .thumb:hover {
+    -fx-background-color: #52A447;
+}
+
+/* Custom Button Styles */
+.custom-button {
+    -fx-background-color: black; /* Button background color */
+    -fx-text-fill: white; /* Text color */
+    -fx-border-color: white; /* Border color */
+    -fx-border-width: 2px; /* Border thickness */
+    -fx-border-radius: 5px; /* Rounded corners for the border */
+    -fx-background-radius: 5px; /* Rounded corners for the button */
+    -fx-padding: 10 20; /* Padding inside the button */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 0, 0, 0, 0); /* No shadow initially */
+    -fx-font-size: 16px; /* Font size */
+    -fx-font-weight: bold; /* Font weight */
+    -fx-cursor: hand; /* Changes the cursor to a hand on hover */
+}
+
+.custom-button:hover {
+    -fx-background-color: black; /* Maintain the background color on hover */
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 255, 0.8), 10, 0, 0, 0); /* White glow effect */
+    -fx-translate-y: -2px; /* Simulate a "pop-up" effect */
+}
+
+.custom-button:pressed {
+    -fx-translate-y: 0; /* Reset position when clicked */
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 255, 0.5), 5, 0, 0, 0); /* Reduce glow on press */
+}
+
+/* Label Artist Style */
 .label.artist {
     -fx-text-fill: #a1a1a1;
     -fx-font-size: 12px;
@@ -129,26 +173,9 @@
     -fx-border-color: #52A447;
 }
 
-/* Scrollpane */
-.scroll-pane {
-    -fx-background-color: #181818;
-    -fx-border-color: #121212;
-}
-
-.scroll-pane .viewport {
-    -fx-background-color: #181818;
-}
-
-.scroll-pane .thumb {
-    -fx-background-color: #444;
-}
-
-.scroll-pane .thumb:hover {
-    -fx-background-color: #52A447;
-}
-
 /* Miscellaneous */
 .root {
     -fx-background-color: #181818;
     -fx-font-family: 'Arial', sans-serif;
 }
+
