@@ -6,8 +6,10 @@ plugins {
   id 'org.beryx.jlink' version '2.25.0'
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+
+mainClassName = 'org.example.musicplayeruserinterfacewithjavafx.Main'
+group = 'org.example'
+version = '1.0-SNAPSHOT'
 
 repositories {
   mavenCentral()
@@ -17,17 +19,22 @@ ext {
   junitVersion = '5.10.0'
 }
 
-sourceCompatibility = '17'
-targetCompatibility = '17'
+java {
+  // Using Java Toolchain (recommended for modern Gradle builds)
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(17)
+  }
+}
 
 tasks.withType(JavaCompile) {
   options.encoding = 'UTF-8'
+  // Removed --release since toolchain handles it automatically
 }
-
 application {
   mainModule = 'org.example.musicplayeruserinterfacewithjavafx'
   mainClass = 'org.example.musicplayeruserinterfacewithjavafx.HelloApplication'
 }
+
 
 javafx {
   //17.0.6 νομιζω ειναι η αλλη version
@@ -35,7 +42,21 @@ javafx {
   modules = ['javafx.controls', 'javafx.fxml', 'javafx.web', 'javafx.swing' , 'javafx.media']
 }
 
+
+
+
 dependencies {
+
+  // SQLite JDBC Library
+  implementation 'org.xerial:sqlite-jdbc:3.42.0.0'
+
+  // Use JavaFX 16 for Java 11 compatibility (make sure this matches your JavaFX version)
+  implementation 'org.openjfx:javafx-controls:16'
+  implementation 'org.openjfx:javafx-fxml:16'
+
+  // JSON libraries
+  implementation 'com.google.code.gson:gson:2.10.1'
+
 
   implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
   implementation 'org.asynchttpclient:async-http-client:2.12.3'
@@ -67,6 +88,21 @@ dependencies {
 
   testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+
+  // Other Dependencies...
+  implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
+  implementation 'org.controlsfx:controlsfx:11.1.2'
+  implementation 'com.dlsc.formsfx:formsfx-core:11.6.0'
+  implementation 'net.synedra:validatorfx:0.4.0'
+  implementation 'org.kordamp.ikonli:ikonli-javafx:12.3.1'
+  implementation 'org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0'
+  implementation 'eu.hansolo:tilesfx:11.48'
+  implementation 'com.github.almasb:fxgl:17.3'
+
+  // JUnit for Testing
+  testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+
 }
 
 test {
