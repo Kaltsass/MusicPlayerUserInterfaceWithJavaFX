@@ -101,7 +101,11 @@
               <Insets left="10.0" right="10.0" />
             </padding>
           </Label>
-          <Label onMouseClicked="#refreshRecentlyPlayed" prefHeight="40.0" prefWidth="192.0" text="Recently Played" textFill="WHITE">
+
+          <Label onMouseClicked="#toggleRecentlyPlayedVisibility" prefHeight="40.0" prefWidth="192.0" text="Recently Played" textFill="WHITE">
+
+          <Label prefHeight="40.0" prefWidth="192.0" text="Recently Played" textFill="WHITE" onMouseClicked="#toggleRecentlyPlayedVisibility">
+
             <padding>
               <Insets left="10.0" right="10.0" />
             </padding>
@@ -180,7 +184,7 @@
               </ImageView>
             </children>
           </HBox>
-          <HBox alignment="CENTER" maxHeight="-Infinity" prefHeight="35.0" prefWidth="215.0" spacing="10.0" styleClass="search-container" stylesheets="@../../../css/style.css">
+          <HBox alignment="CENTER" maxHeight="-Infinity" prefHeight="35.0" prefWidth="380.0" spacing="10.0" styleClass="search-container" stylesheets="@../../../css/style.css">
             <children>
               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                 <image>
@@ -218,16 +222,18 @@
         <content>
           <VBox prefHeight="570.0" prefWidth="1680.0" spacing="10.0">
             <children>
-              <Label fx:id="refreshLabel" text="Recently Played" textFill="WHITE">
-                <font>
-                  <Font size="15.0" />
-                </font>
+              <Label prefHeight="40.0" prefWidth="192.0" text="Recently Played" textFill="WHITE" onMouseClicked="#toggleRecentlyPlayedVisibility">
+                <padding>
+                  <Insets left="10.0" right="10.0" />
+                </padding>
               </Label>
+
               <ScrollPane fitToWidth="true" minViewportHeight="270.0" prefHeight="264.0" prefWidth="1072.0" style="-fx-background-color: transparent;" stylesheets="@../../../css/style.css">
                 <content>
-                  <HBox fx:id="recentlyPlayedContainer" prefHeight="0.0" prefWidth="0.0" spacing="30.0" />
+                  <HBox fx:id="recentlyPlayedContainer" prefHeight="0.0" prefWidth="0.0" spacing="30.0" visible="true" />
                 </content>
               </ScrollPane>
+
               <Label text="Top Charts" textFill="WHITE">
                 <font>
                   <Font size="15.0" />

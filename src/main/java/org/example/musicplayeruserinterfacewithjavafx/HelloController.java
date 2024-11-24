@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.application.Platform;
 
 public class HelloController implements Initializable {
 
@@ -74,6 +75,17 @@ public class HelloController implements Initializable {
         loadSongs(favorites, favoriteContainer);
     }
 
+    // Toggle visibility of the recently played container
+    @FXML
+    private void toggleRecentlyPlayedVisibility(MouseEvent event) {
+        Platform.runLater(() -> {
+            boolean isVisible = recentlyPlayedContainer.isVisible();
+            recentlyPlayedContainer.setVisible(!isVisible);
+            System.out.println("Recently Played section is now " + (isVisible ? "hidden" : "visible"));
+        });
+    }
+
+    // Load songs into a container (e.g., recently played or favorites)
     private void loadSongs(List<Song> songList, HBox container) {
         try {
             for (Song song : songList) {
@@ -89,6 +101,7 @@ public class HelloController implements Initializable {
         }
     }
 
+    // Search for songs when the search button is pressed
     @FXML
     private void handleSearch(ActionEvent event) {
         String query = searchBar.getText();
@@ -98,6 +111,7 @@ public class HelloController implements Initializable {
         searchSongs(query);
     }
 
+    // Make a request to Deezer API to search for songs
     private void searchSongs(String query) {
         OkHttpClient client = new OkHttpClient();
         String apiUrl = "https://api.deezer.com/search/track?q=" + query;
@@ -136,24 +150,40 @@ public class HelloController implements Initializable {
         }
     }
 
-    @FXML
-    private void toggleRecentlyPlayedVisibility(MouseEvent event) {
-        boolean isVisible = recentlyPlayedContainer.isVisible();
-        recentlyPlayedContainer.setVisible(!isVisible);
-        System.out.println("Recently Played section is now " + (isVisible ? "hidden" : "visible"));
-    }
-
+    // Refresh the recently played list
     @FXML
     private void refreshRecentlyPlayed(MouseEvent event) {
-        System.out.println("Refreshing Recently Played list...");
-        recentlyPlayed = getRecentlyPlayed();  // Ανανεώνουμε τα πρόσφατα τραγούδια
-
-        // Καθαρίζουμε το container και ξαναφορτώνουμε τα τραγούδια
-        recentlyPlayedContainer.getChildren().clear();
-        loadSongs(recentlyPlayed, recentlyPlayedContainer);  // Επαναφορά της λίστας των τραγουδιών
+        System.out.println("Refreshing Recently Played Songs");
+        recentlyPlayedContainer.getChildren().clear(); // Αδειάζει το container
+        try {
+            for (Song song : getRecentlyPlayed()) { // Επαναλαμβάνει τη φόρτωση
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("song.fxml"));
+                VBox vBox = fxmlLoader.load();
+                SongController songController = fxmlLoader.getController();
+                songController.setData(song);
+                recentlyPlayedContainer.getChildren().add(vBox);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    // Playback controls
+    private void populateContainer(HBox container, List<Song> songs) {
+        container.getChildren().clear();
+        try {
+            for (Song song : songs) {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("song.fxml"));
+                VBox vBox = fxmlLoader.load();
+                SongController songController = fxmlLoader.getController();
+                songController.setData(song);
+                container.getChildren().add(vBox);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Play/pause song
     @FXML
     private void handlePlayPauseAction(MouseEvent event) {
         isPlaying = !isPlaying;
@@ -161,6 +191,7 @@ public class HelloController implements Initializable {
         System.out.println(isPlaying ? "Playing song..." : "Paused song.");
     }
 
+    // Play the next song
     @FXML
     private void handleNextAction(MouseEvent event) {
         if (allSongs != null && !allSongs.isEmpty()) {
@@ -169,6 +200,7 @@ public class HelloController implements Initializable {
         }
     }
 
+    // Play the previous song
     @FXML
     private void handlePreviousAction(MouseEvent event) {
         if (allSongs != null && !allSongs.isEmpty()) {
@@ -177,11 +209,13 @@ public class HelloController implements Initializable {
         }
     }
 
+    // Function to simulate playing a song
     private void playSong(Song song) {
         System.out.println("Playing song: " + song.getName() + " by " + song.getArtist());
         // Implement actual song playing logic here
     }
 
+    // Method to return a list of recently played songs (dummy data for now)
     public List<Song> getRecentlyPlayed() {
         List<Song> ls = new ArrayList<>();
 
@@ -224,6 +258,10 @@ public class HelloController implements Initializable {
         return ls;
     }
 
+
+
+
+    // Method to return a list of favorite songs (dummy data for now)
     public List<Song> getFavorites() {
         List<Song> ls = new ArrayList<>();
 
