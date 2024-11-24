@@ -2,6 +2,7 @@ package org.example.musicplayeruserinterfacewithjavafx;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,6 +24,16 @@ public class SongController {
     private Label songName;
 
     private Song song;
+
+    @FXML
+    private Button addToPlaylist;
+
+    @FXML
+    private Button likedSong;
+
+    public void OnButtonClick() {
+        System.out.println("Pressed");
+    }
 
     // Μέθοδος για να ορίσετε τα δεδομένα του τραγουδιού
     public void setData(Song song) {

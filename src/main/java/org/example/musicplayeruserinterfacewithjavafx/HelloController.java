@@ -3,6 +3,8 @@ package org.example.musicplayeruserinterfacewithjavafx;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -10,6 +12,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import model.Song;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -36,6 +40,7 @@ public class HelloController implements Initializable {
     @FXML private Button playPauseButton;
     @FXML private Button nextButton;
     @FXML private Button prevButton;
+    @FXML private Button btnnewplaylist;
 
     private List<Song> recentlyPlayed;
     private List<Song> favorites;
@@ -254,4 +259,25 @@ public class HelloController implements Initializable {
 
         return ls;
     }
+
+    // Λειτουργία κουμπιού New Playlist
+    public void OnButtonClick7() {
+        System.out.println("Pressed");  //
+        openPlaylistPopup();
+    }
+
+    private void openPlaylistPopup() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("new-playlist-popup.fxml"));
+            Stage popupplaylist = new Stage();
+            popupplaylist.initStyle(StageStyle.UNDECORATED);
+            popupplaylist.setScene(new Scene(root, 600, 401));
+            popupplaylist.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            e.getCause();
+        }
+    }
+
+
 }
