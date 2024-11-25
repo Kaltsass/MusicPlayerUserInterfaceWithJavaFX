@@ -246,28 +246,43 @@
 </center>
 
 <!-- Bottom (Playback Controls Section) -->
-<bottom>
-  <VBox alignment="CENTER" prefHeight="120.0" spacing="10.0" styleClass="playback-controls" stylesheets="@../../../css/style.css" BorderPane.alignment="CENTER">
-    <children>
-      <!-- Slider for playback progress -->
-      <Slider fx:id="playbackSlider" prefWidth="800.0" styleClass="slider-style" />
+  <bottom>
+    <VBox alignment="CENTER" prefHeight="120.0" spacing="10.0" styleClass="playback-controls" stylesheets="@../../../css/style.css" BorderPane.alignment="CENTER">
+      <children>
+        <!-- HBox for song details and slider -->
+        <HBox alignment="CENTER" spacing="20.0">
+          <children>
+            <!-- Album Cover Image and Song Name -->
+            <HBox spacing="10.0">
+              <!-- ImageView for album cover -->
+              <ImageView fx:id="albumCoverImage" fitHeight="50.0" fitWidth="50.0" />
+              <!-- Label for song title -->
+              <Label fx:id="songTitleLabel" text="Song Title" styleClass="song-title-label" />
+            </HBox>
 
-      <!-- Playback Controls -->
-      <HBox alignment="CENTER" spacing="20.0">
-        <children>
-          <!-- Previous Button -->
-          <Button fx:id="prevButton" text="⏮ Previous" styleClass="control-button" onAction="#handlePreviousAction" />
+            <!-- Slider for playback progress -->
+            <Slider fx:id="playbackSlider" prefWidth="600.0" styleClass="slider-style" />
+          </children>
+        </HBox>
 
-          <!-- Play/Pause Button -->
-          <Button fx:id="playPauseButton" text="⏯ Play" styleClass="control-button" onAction="#handlePlayPauseAction" />
+        <!-- Playback Controls -->
+        <HBox alignment="CENTER" spacing="20.0">
+          <children>
+            <!-- Previous Button -->
+            <Button fx:id="prevButton" text="⏮ Previous" styleClass="control-button" onAction="#handlePreviousAction" />
 
-          <!-- Next Button -->
-          <Button fx:id="nextButton" text="⏭ Next" styleClass="control-button" onAction="#handleNextAction" />
-        </children>
-      </HBox>
-    </children>
-  </VBox>
-</bottom>
+            <!-- Play/Pause Button -->
+            <Button fx:id="playPauseButton" text="▶ Play" onMouseClicked="#handlePlayPauseAction" />
+
+            <!-- Next Button -->
+            <Button fx:id="nextButton" text="⏭ Next" styleClass="control-button" onAction="#handleNextAction" />
+          </children>
+        </HBox>
+      </children>
+    </VBox>
+  </bottom>
+
+
   <right>
     <VBox fx:id="searchResultsContainer" prefWidth="300" spacing="10.0" visible="false">
       <!-- Dynamically added results will go here -->
