@@ -14,24 +14,18 @@ import javafx.scene.Scene;        // Import Scene to change the current scene
 import javafx.stage.Stage;        // Import Stage for window management
 import java.io.IOException;       // Import IOException for handling loading errors
 
-import java.io.IOException;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.fxml.FXML;
+
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Button;
-import javafx.fxml.FXML;
-
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 
-import java.io.IOException;
+import java.awt.Desktop;
+import java.net.URI;
 
 
 
@@ -129,6 +123,16 @@ public class HelloController implements Initializable {
         }
     }
 
+
+    public void handleUpgrade(ActionEvent event) {
+        try {
+            // Open the Spotify Premium URL
+            Desktop.getDesktop().browse(new URI("https://www.spotify.com/gr/premium/"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle exceptions such as unsupported Desktop or invalid URI
+        }
+    }
 
     @FXML
     private void refreshRecentlyPlayed(MouseEvent event) {

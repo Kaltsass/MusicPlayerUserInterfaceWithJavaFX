@@ -3,6 +3,8 @@ module org.example.musicplayeruserinterfacewithjavafx {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
+    requires java.desktop;
+
 
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
