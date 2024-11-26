@@ -1,11 +1,17 @@
 module org.example.musicplayeruserinterfacewithjavafx {
-    requires com.google.gson;
+
+    exports org.example.musicplayeruserinterfacewithjavafx;
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
     requires java.desktop;
 
+    requires javafx.base;
+    requires java.sql;
+    requires com.google.gson;
 
+    requires javafx.web;
+    requires com.fasterxml.jackson.databind;
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
     requires net.synedra.validatorfx;
@@ -16,6 +22,8 @@ module org.example.musicplayeruserinterfacewithjavafx {
     requires okhttp3;
     requires java.net.http;
 
+    // Open package to javafx.fxml for reflection access
     opens org.example.musicplayeruserinterfacewithjavafx to javafx.fxml;
-    exports org.example.musicplayeruserinterfacewithjavafx;
+
+    opens model to javafx.base;
 }

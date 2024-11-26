@@ -1,27 +1,97 @@
-.primary_color{
-    -fx-background-color :#181818;
+/* Γενικά Χρώματα */
+.primary_color {
+    -fx-background-color: #181818;
 }
 
-.secondary-color{
+.secondary-color {
     -fx-background-color: #121212;
 }
 
-.selected{
+.selected {
     -fx-border-color: #52A447;
     -fx-border-width: 0 0 0 5;
 }
 
-.top-border{
+.top-border {
     -fx-border-color: #a1a1a1;
     -fx-border-width: 1 0 0 0;
 }
 
-.search-container{
+/* Search Bar */
+.search-container {
     -fx-background-color: #fff;
     -fx-background-radius: 100;
-
+    -fx-padding: 5px 10px;
+    -fx-border-color: #ccc;
+    -fx-border-width: 1;
 }
 
+.search-container:focused {
+    -fx-border-color: #52A447;
+    -fx-border-width: 2;
+}
+
+/* Buttons */
+.button {
+    -fx-background-color: #52A447;
+    -fx-text-fill: #fff;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-padding: 8px 15px;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #3c7a33;
+}
+
+.button:pressed {
+    -fx-background-color: #2e5c27;
+}
+
+/* Play/Pause/Next/Previous Buttons */
+.play-button, .pause-button, .next-button, .prev-button {
+    -fx-background-color: #282828;
+    -fx-text-fill: #fff;
+    -fx-font-size: 16px;
+    -fx-background-radius: 50%;
+    -fx-padding: 10px;
+    -fx-border-color: #444;
+    -fx-border-width: 2;
+    -fx-cursor: hand;
+}
+
+.play-button:hover, .pause-button:hover, .next-button:hover, .prev-button:hover {
+    -fx-background-color: #3c3c3c;
+    -fx-border-color: #52A447;
+}
+
+/* Playback Slider */
+.slider .track {
+    -fx-background-color: #444;
+    -fx-background-radius: 3;
+}
+
+.slider .thumb {
+    -fx-background-color: #52A447;
+    -fx-background-radius: 50%;
+    -fx-padding: 5px;
+}
+
+.slider .track:hover {
+    -fx-background-color: #555;
+}
+
+.slider .thumb:hover {
+    -fx-background-color: #3c7a33;
+}
+
+/* Labels */
+.label {
+    -fx-text-fill: #ccc;
+    -fx-font-size: 14px;
+}
 
 .upgrade-button {
     -fx-background-color: black; /* Button background color */
@@ -51,8 +121,32 @@
 
 .scroll-pane > .viewport{
     -fx-background-color: #101010;
+
+.label.title {
+    -fx-text-fill: #fff;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
 }
 
+/* Scrollpane */
+.scroll-pane > .viewport {
+    -fx-background-color: #101010; /* from Explore_Button */
+
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: #181818; /* from master, or you can adjust based on preference */
+}
+
+.scroll-pane .thumb {
+    -fx-background-color: #444;
+}
+
+.scroll-pane .thumb:hover {
+    -fx-background-color: #52A447;
+}
+
+/* Custom Button Styles */
 .custom-button {
     -fx-background-color: black; /* Button background color */
     -fx-text-fill: white; /* Text color */
@@ -77,3 +171,41 @@
     -fx-translate-y: 0; /* Reset position when clicked */
     -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 255, 0.5), 5, 0, 0, 0); /* Reduce glow on press */
 }
+
+/* Label Artist Style */
+.label.artist {
+    -fx-text-fill: #a1a1a1;
+    -fx-font-size: 12px;
+}
+
+/* Containers */
+.hbox {
+    -fx-spacing: 10px;
+    -fx-padding: 15px;
+}
+
+.vbox {
+    -fx-spacing: 8px;
+    -fx-padding: 10px;
+}
+
+.song-container {
+    -fx-background-color: #121212;
+    -fx-background-radius: 8px;
+    -fx-padding: 10px;
+    -fx-border-color: #333;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+}
+
+.song-container:hover {
+    -fx-background-color: #1e1e1e;
+    -fx-border-color: #52A447;
+}
+
+/* Miscellaneous */
+.root {
+    -fx-background-color: #181818;
+    -fx-font-family: 'Arial', sans-serif;
+}
+

@@ -8,12 +8,16 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class APITopPlaylists {
 
     private static final String API_URL = "https://api.deezer.com/chart/0/playlists?limit=50";
 
-    public static void main(String[] args) {
+    // Μέθοδος που επιστρέφει τη λίστα των top playlists
+    public static List<String> fetchTopPlaylists() throws IOException {
+        List<String> playlists = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
@@ -22,8 +26,7 @@ public class APITopPlaylists {
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                System.out.println("Σφάλμα κατά τη λήψη των playlists: HTTP " + response.code());
-                return;
+                throw new IOException("Σφάλμα κατά τη λήψη των playlists: HTTP " + response.code());
             }
 
             String jsonResponse = response.body().string();
@@ -32,17 +35,14 @@ public class APITopPlaylists {
             JsonObject jsonObject = JsonParser.parseString(jsonResponse).getAsJsonObject();
             JsonArray playlistsArray = jsonObject.getAsJsonArray("data");
 
-            System.out.println("Top Playlists List:");
+            // Προσθήκη των playlists στη λίστα
             for (int i = 0; i < playlistsArray.size(); i++) {
                 JsonObject playlist = playlistsArray.get(i).getAsJsonObject();
                 String playlistName = playlist.get("title").getAsString();
-                String playlistLink = playlist.get("link").getAsString();
-
-                System.out.println((i + 1) + ". Playlist Name: " + playlistName);
-                System.out.println("   Link: " + playlistLink);
+                playlists.add(playlistName);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+
+        return playlists;
     }
 }
