@@ -24,11 +24,20 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.IOException;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import javafx.scene.input.MouseEvent;
+import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
+
+import java.awt.Desktop;
+import java.net.URI;
+
+
 
 public class HelloController implements Initializable {
 
@@ -210,15 +219,18 @@ public class HelloController implements Initializable {
                 searchResultsContainer.getChildren().add(resultLabel);
             }
 
-            // Make the results container visible
-            searchResultsContainer.setVisible(true);
+public void handleUpgrade(ActionEvent event) {
+    try {
+        // Open the Spotify Premium URL
+        Desktop.getDesktop().browse(new URI("https://www.spotify.com/gr/premium/"));
+        
+        // Make the results container visible
+        searchResultsContainer.setVisible(true);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    } catch (IOException | URISyntaxException e) {
+        e.printStackTrace();
     }
-
-    // Refresh the recently played list
+}
     @FXML
     private void refreshRecentlyPlayed(MouseEvent event) {
         System.out.println("Refreshing Recently Played Songs");

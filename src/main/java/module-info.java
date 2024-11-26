@@ -3,6 +3,9 @@ module org.example.musicplayeruserinterfacewithjavafx {
     exports org.example.musicplayeruserinterfacewithjavafx;
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.web;
+    requires java.desktop;
+
     requires javafx.base;
     requires java.sql;
     requires com.google.gson;
