@@ -37,11 +37,9 @@ application {
 
 
 javafx {
-  //17.0.6 νομιζω ειναι η αλλη version
-  version = '17.0.6'
-  modules = ['javafx.controls', 'javafx.fxml', 'javafx.web', 'javafx.swing' , 'javafx.media']
+  version = '21.0.5'  // Adjust to your version
+  modules = ['javafx.controls', 'javafx.fxml', 'javafx.web', 'javafx.swing', 'javafx.media']
 }
-
 
 
 
@@ -106,7 +104,7 @@ dependencies {
 }
 
 test {
-useJUnitPlatform()}
+  useJUnitPlatform()}
 
 jlink {
   imageZip = project.file("${buildDir}/distributions/app-${javafx.platform.classifier}.zip")
