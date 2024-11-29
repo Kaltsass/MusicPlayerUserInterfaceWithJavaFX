@@ -19,6 +19,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 
 
 import java.io.IOException;
@@ -30,6 +32,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class HelloController implements Initializable {
 
@@ -43,7 +47,9 @@ public class HelloController implements Initializable {
     @FXML private Button playPauseButton;
     @FXML private Button nextButton;
     @FXML private Button prevButton;
+    @FXML private Button btnnewplaylist;
     private MediaPlayerManager mediaPlayerManager;
+
 
 
 
@@ -337,6 +343,24 @@ public class HelloController implements Initializable {
         ls.add(song);
 
         return ls;
+    }
+    // Λειτουργία κουμπιού New Playlist
+    public void OnButtonClick7() {
+        System.out.println("Pressed");  //
+        openPlaylistPopup();
+    }
+
+    private void openPlaylistPopup() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("new-playlist-popup.fxml"));
+            Stage popupplaylist = new Stage();
+            popupplaylist.initStyle(StageStyle.UNDECORATED);
+            popupplaylist.setScene(new Scene(root, 600, 401));
+            popupplaylist.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            e.getCause();
+        }
     }
 
     private Song createSong(String name, String artist, String cover) {

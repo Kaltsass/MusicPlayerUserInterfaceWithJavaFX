@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import model.Song;
+import javafx.scene.control.Button;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,6 +22,17 @@ public class SongController {
 
     @FXML
     private Label songName;
+
+    @FXML
+    private Button addToPlaylist;
+
+    @FXML
+    private Button likedSong;
+
+    public void OnButtonClick() {
+        System.out.println("Pressed");
+    }
+
 
     private Song song;
 
