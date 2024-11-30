@@ -26,8 +26,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 
 
+import java.sql.*;
+
+
 import java.io.IOException;
 import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -56,42 +62,62 @@ public class HelloController implements Initializable {
     @FXML private Button button_account; // Account button in the main window
 
     // Handle Account button click
+
+
     @FXML
     private void handleAccountButtonClick() {
         try {
-            // Load the AccountPopup.fxml file
             FXMLLoader loader = new FXMLLoader(getClass().getResource("account.fxml"));
             Parent root = loader.load();
 
             // Create a new scene for the popup
+            Stage stage = new Stage();
             Scene scene = new Scene(root);
-            Stage popupStage = new Stage();
-            popupStage.setScene(scene);
-            popupStage.setTitle("Account Settings");
+            stage.setScene(scene);
 
-            // Optionally, make the popup non-resizable
-            popupStage.setResizable(false);
+            // Optionally, set a title for the popup
+            stage.setTitle("Account Details");
 
-            // Get the controller of the popup
-            AccountPopupController popupController = loader.getController();
-
-            // Optionally, pass any data to the popup controller
-            // Example: popupController.setAccountInfo("User12345");
-
-            // Show the popup stage
-            popupStage.show();
-
+            // Show the popup window
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     @FXML
-    private void handleClosePopup() {
-        // You can close the pop-up by hiding the stage:
-        // This assumes that the popup is shown in a separate stage
-        Stage popupStage = (Stage) button_account.getScene().getWindow();
-        popupStage.close();
+    private Label statusLabel; // A label in your UI to show connection status
+
+    // Event handler for button click or some action that interacts with the database
+    @FXML
+    private void handleDatabaseAction() {
+        try (Connection connection = DataBaseUtilityPleaseWork.getConnection()) {
+            if (connection != null) {
+                statusLabel.setText("Connection successful!");
+
+                // You can run queries here, for example:
+                String query = "SELECT * FROM users"; // Replace with your actual table
+                try (Statement statement = ((java.sql.Connection) connection).createStatement();
+                     ResultSet resultSet = statement.executeQuery(query)) {
+
+                    // Process the result
+                    while (resultSet.next()) {
+                        String username = resultSet.getString("username");
+                        System.out.println("Username: " + username);
+                    }
+                } catch (SQLException e) {
+                    // Handle query-specific errors
+                    e.printStackTrace();
+                    statusLabel.setText("Error executing query.");
+                }
+            } else {
+                statusLabel.setText("Connection failed!");
+            }
+        } catch (SQLException e) {
+            // Handle connection errors
+            e.printStackTrace();
+            statusLabel.setText("Error connecting to the database.");
+        }
     }
 
 

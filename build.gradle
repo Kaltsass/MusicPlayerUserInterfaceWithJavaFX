@@ -45,8 +45,7 @@ javafx {
 
 dependencies {
 
-  implementation 'mysql:mysql-connector-java:8.0.29'
-
+  implementation 'mysql:mysql-connector-java:8.0.30'
   // SQLite JDBC Library
   implementation 'org.xerial:sqlite-jdbc:3.42.0.0'
 

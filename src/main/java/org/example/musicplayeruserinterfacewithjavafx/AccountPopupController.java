@@ -1,35 +1,43 @@
 package org.example.musicplayeruserinterfacewithjavafx;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.Button;
-import javafx.stage.Stage;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
 
 public class AccountPopupController {
 
-    @FXML
-    private Label accountLabel; // Reference to the Label from FXML
+    // Matching fx:id fields
+    @FXML private Label label_username;
+    @FXML private TextField tf_newUsername;
+    @FXML private Label label_password;
+    @FXML private TextField tf_newPassword;
+    @FXML private RadioButton rb_favNewSong;
+    @FXML private RadioButton rb_favNewSong2;
+    @FXML private Button button_saveChanges;
+    @FXML private Button button_cancel;
 
-    @FXML
-    private Button closeButton; // Reference to the Button from FXML
-
-    // This method will be called when the close button is clicked
-    @FXML
-    private void handleCloseButtonAction() {
-        // Close the popup window
-        Stage stage = (Stage) closeButton.getScene().getWindow();
-        stage.close();
-    }
-
-    // This method can be used to set account information dynamically if needed
-    public void setAccountInfo(String accountInfo) {
-        accountLabel.setText(accountInfo);
-    }
-
-    // Initialization method for setting up the UI (if necessary)
+    // Initialize method
     @FXML
     private void initialize() {
-        // Example: Setting a default message or account info
-        accountLabel.setText("Account Info: User12345");
+        // Example initialization code
+        label_username.setText("Enter your username:");
+        label_password.setText("Enter your password:");
+
+        button_saveChanges.setOnAction(event -> saveChanges());
+        button_cancel.setOnAction(event -> cancelChanges());
+    }
+
+    // Method for saving changes
+    private void saveChanges() {
+        // Logic for saving changes (could update UI or save data)
+        System.out.println("Logging in");
+    }
+
+    // Method for cancelling
+    private void cancelChanges() {
+        // Logic for canceling (e.g., close the window)
+        System.out.println("Closing");
     }
 }
