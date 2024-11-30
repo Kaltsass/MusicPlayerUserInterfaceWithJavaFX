@@ -4,11 +4,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.control.Slider;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -38,7 +35,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
@@ -57,6 +53,11 @@ public class HelloController implements Initializable {
     @FXML private Button nextButton;
     @FXML private Button prevButton;
     @FXML private Button btnnewplaylist;
+    @FXML
+    private TextField tf_newUsername;
+
+    @FXML
+    private PasswordField tf_newPassword;
     private MediaPlayerManager mediaPlayerManager;
 
     @FXML private Button button_account; // Account button in the main window
@@ -85,40 +86,7 @@ public class HelloController implements Initializable {
         }
     }
 
-    @FXML
-    private Label statusLabel; // A label in your UI to show connection status
 
-    // Event handler for button click or some action that interacts with the database
-    @FXML
-    private void handleDatabaseAction() {
-        try (Connection connection = DataBaseUtilityPleaseWork.getConnection()) {
-            if (connection != null) {
-                statusLabel.setText("Connection successful!");
-
-                // You can run queries here, for example:
-                String query = "SELECT * FROM users"; // Replace with your actual table
-                try (Statement statement = ((java.sql.Connection) connection).createStatement();
-                     ResultSet resultSet = statement.executeQuery(query)) {
-
-                    // Process the result
-                    while (resultSet.next()) {
-                        String username = resultSet.getString("username");
-                        System.out.println("Username: " + username);
-                    }
-                } catch (SQLException e) {
-                    // Handle query-specific errors
-                    e.printStackTrace();
-                    statusLabel.setText("Error executing query.");
-                }
-            } else {
-                statusLabel.setText("Connection failed!");
-            }
-        } catch (SQLException e) {
-            // Handle connection errors
-            e.printStackTrace();
-            statusLabel.setText("Error connecting to the database.");
-        }
-    }
 
 
     private List<Song> recentlyPlayed;

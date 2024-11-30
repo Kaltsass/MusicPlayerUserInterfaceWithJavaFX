@@ -51,11 +51,13 @@
                     </font>
                 </RadioButton>
 
-                <Button fx:id="button_saveChanges" layoutX="190.0" layoutY="278.0" mnemonicParsing="false" text="Log In">
+                <Button fx:id="button_saveChanges" layoutX="190.0" layoutY="278.0" mnemonicParsing="false" text="Log In" onAction="#handleLogin">
                     <font>
                         <Font name="Candara Bold" size="12.0" />
                     </font>
                 </Button>
+
+
 
                 <Button fx:id="button_cancel" layoutX="250.0" layoutY="278.0" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Close" textFill="#64b3e8">
                     <font>
