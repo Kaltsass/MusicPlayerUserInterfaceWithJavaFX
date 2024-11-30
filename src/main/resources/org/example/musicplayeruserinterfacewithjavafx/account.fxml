@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="primary_color" stylesheets="@../../../css/style.css">
+            <children>
+                <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="25.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../../img/spotlog.png" />
+                    </image>
+                </ImageView>
+                <Label layoutX="67.0" layoutY="190.0" text="Account Settings">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Label>
+            </children>
+        </AnchorPane>
+        <AnchorPane prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: #3F704D;">
+            <children>
+                <Label layoutX="12.0" layoutY="40.0" text="Username">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="tf_newUsername" layoutX="150.0" layoutY="36.0" promptText="New Username" />
+
+                <Label layoutX="12.0" layoutY="75.0" text="Password">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="tf_newPassword" accessibleRole="PASSWORD_FIELD" layoutX="150.0" layoutY="71.0" promptText="New Password" />
+
+                <Label layoutX="12.0" layoutY="110.0" text="Favorite Song">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Label>
+
+                <RadioButton fx:id="rb_favNewSong" layoutX="150.0" layoutY="113.0" mnemonicParsing="false" text="Favorite New Song">
+                    <font>
+                        <Font name="System Bold Italic" size="12.0" />
+                    </font>
+                </RadioButton>
+                <RadioButton fx:id="rb_favNewSong2" layoutX="150.0" layoutY="138.0" mnemonicParsing="false" text="Favorite New Song 2">
+                    <font>
+                        <Font name="System Bold Italic" size="12.0" />
+                    </font>
+                </RadioButton>
+
+                <Button fx:id="button_saveChanges" layoutX="174.0" layoutY="277.0" mnemonicParsing="false" text="Save Changes">
+                    <font>
+                        <Font name="Candara Bold" size="12.0" />
+                    </font>
+                </Button>
+
+                <Button fx:id="button_cancel" layoutX="274.0" layoutY="277.0" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Cancel" textFill="#64b3e8">
+                    <font>
+                        <Font name="System Bold Italic" size="12.0" />
+                    </font>
+                </Button>
+            </children>
+        </AnchorPane>
+    </children>
+</HBox>

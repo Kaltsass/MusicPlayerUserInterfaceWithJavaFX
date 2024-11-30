@@ -3,12 +3,15 @@ package org.example.musicplayeruserinterfacewithjavafx;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Slider;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import model.Song;
 import okhttp3.OkHttpClient;
@@ -50,7 +53,46 @@ public class HelloController implements Initializable {
     @FXML private Button btnnewplaylist;
     private MediaPlayerManager mediaPlayerManager;
 
+    @FXML private Button button_account; // Account button in the main window
 
+    // Handle Account button click
+    @FXML
+    private void handleAccountButtonClick() {
+        try {
+            // Load the AccountPopup.fxml file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("account.fxml"));
+            Parent root = loader.load();
+
+            // Create a new scene for the popup
+            Scene scene = new Scene(root);
+            Stage popupStage = new Stage();
+            popupStage.setScene(scene);
+            popupStage.setTitle("Account Settings");
+
+            // Optionally, make the popup non-resizable
+            popupStage.setResizable(false);
+
+            // Get the controller of the popup
+            AccountPopupController popupController = loader.getController();
+
+            // Optionally, pass any data to the popup controller
+            // Example: popupController.setAccountInfo("User12345");
+
+            // Show the popup stage
+            popupStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleClosePopup() {
+        // You can close the pop-up by hiding the stage:
+        // This assumes that the popup is shown in a separate stage
+        Stage popupStage = (Stage) button_account.getScene().getWindow();
+        popupStage.close();
+    }
 
 
     private List<Song> recentlyPlayed;

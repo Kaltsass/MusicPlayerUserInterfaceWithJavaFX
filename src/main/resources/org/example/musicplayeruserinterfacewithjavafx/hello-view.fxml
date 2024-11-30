@@ -15,6 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.layout.AnchorPane?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="890.0" prefWidth="1315.0" styleClass="primary_color" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.musicplayeruserinterfacewithjavafx.HelloController">
 <left>
   <VBox prefHeight="200.0" prefWidth="235.0" spacing="20.0" stylesheets="@../../../css/style.css" BorderPane.alignment="CENTER">
@@ -205,14 +206,20 @@
           </HBox>
           <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
           <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" styleClass="upgrade-button" stylesheets="@../../../css/style.css" text="Upgrade" textFill="WHITE" />
-          <HBox alignment="CENTER" prefHeight="50.0" prefWidth="256.0">
+          <HBox alignment="CENTER_LEFT" spacing="10" prefHeight="50.0" prefWidth="256.0"
+                xmlns:fx="http://javafx.com/fxml/1">
             <children>
-              <ImageView fitHeight="50.0" fitWidth="157.0" pickOnBounds="true" preserveRatio="true">
+              <!-- Profile Icon -->
+              <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                 <image>
                   <Image url="@../../../img/profile_icon.png" />
                 </image>
               </ImageView>
-                        <Button fx:id="button_account" mnemonicParsing="false" text="Account" />
+
+              <!-- Account Button -->
+              <Button fx:id="button_account" text="Account" onAction="#handleAccountButtonClick"
+                      prefWidth="200" prefHeight="40" />
+
             </children>
           </HBox>
         </children>
