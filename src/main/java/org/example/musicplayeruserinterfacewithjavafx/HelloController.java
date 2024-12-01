@@ -136,6 +136,60 @@ public class HelloController implements Initializable {
     }
 
 
+    @FXML
+    private Button radioButton;
+
+    @FXML
+    private void handleRadioButtonClick() {
+        try {
+            // Load the radio page FXML file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("RadioView.fxml"));
+            AnchorPane radioPage = loader.load();
+
+            // Create a new Scene for the radio page
+            Scene radioScene = new Scene(radioPage);
+
+            // Get the current stage (the window)
+            Stage stage = (Stage) radioButton.getScene().getWindow();
+
+            // Set the new scene to the current stage
+            stage.setScene(radioScene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @FXML
+    private Button backButton;  // Ensure you have a reference to the Back button in your controller
+
+    @FXML
+    private void handleBackButtonClick() {
+        try {
+            // Load the HelloView.fxml file (the main page)
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("hello-view.fxml"));
+            AnchorPane helloPage = loader.load();
+
+            // Create a new Scene for the Hello page
+            Scene helloScene = new Scene(helloPage);
+
+            // Get the current stage (the window) where the Explore scene is being shown
+            Stage stage = (Stage) backButton.getScene().getWindow();  // Using the Back button here
+
+            // Set the new scene to the current stage (back to the Hello page)
+            stage.setScene(helloScene);
+            stage.show();
+
+        } catch (IOException e) {
+            System.out.println(getClass().getResource("hello-view.fxml"));
+            e.printStackTrace();
+        }
+    }
+
+
+
     public void handleUpgrade(ActionEvent event) {
         try {
             // Open the Spotify Premium URL

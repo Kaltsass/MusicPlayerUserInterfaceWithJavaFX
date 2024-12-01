@@ -77,11 +77,11 @@
                   <Insets />
                 </HBox.margin>
               </ImageView>
-              <Label prefHeight="17.0" prefWidth="96.0" text="Radio" textFill="#a1a1a1">
+              <Button fx:id="radioButton" onAction="#handleRadioButtonClick" prefHeight="50.0" prefWidth="105.0" styleClass="custom-button" text="Radio">
                 <font>
-                  <Font name="System Bold Italic" size="18.0" />
+                  <Font name="System Bold Italic" size="17.0" />
                 </font>
-              </Label>
+              </Button>
             </children>
           </HBox>
         </children>
