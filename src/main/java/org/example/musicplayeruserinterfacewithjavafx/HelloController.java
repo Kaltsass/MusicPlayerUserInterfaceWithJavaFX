@@ -109,6 +109,24 @@ public class HelloController implements Initializable {
         }
     }
 
+    public void openMapLink() {
+        try {
+            Desktop.getDesktop().browse(new URI("https://www.bing.com/maps?q=ihu+serres&FORM=HDRSC6&cp=41.075631%7E23.553572&lvl=16.0"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openWebsite() {
+        try {
+            Desktop.getDesktop().browse(new URI("https://www.ihu.gr/"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
     @FXML
     public void handleDotsClick() {
         // Create a new Stage for the modal window
