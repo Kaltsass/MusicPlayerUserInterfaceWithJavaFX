@@ -3,11 +3,8 @@ package org.example.musicplayeruserinterfacewithjavafx;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.Song;
@@ -21,26 +18,28 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-
-
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Label;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.scene.Node;
 
 public class HelloController implements Initializable {
 
+    public Label likedLabel;
     @FXML private ImageView albumCoverImage;
     @FXML private Label songTitleLabel;
     @FXML private HBox favoriteContainer;
     @FXML private HBox recentlyPlayedContainer;
+    @FXML private HBox likedContainer;
     @FXML private TextField searchBar;
     @FXML private VBox searchResultsContainer;
     @FXML private Slider playbackSlider;
@@ -48,27 +47,61 @@ public class HelloController implements Initializable {
     @FXML private Button nextButton;
     @FXML private Button prevButton;
     @FXML private Button btnnewplaylist;
+    @FXML private ScrollPane likedScrollPane;
+
+
     private MediaPlayerManager mediaPlayerManager;
+
+    @FXML
+    private VBox mainContentContainer; // The VBox containing all the scroll panes
+
+    @FXML
+    private void scrollToLikedSongs() {
+        Node likedScrollPane = mainContentContainer.getChildren()
+                .stream()
+                .filter(node -> "likedScrollPane".equals(node.getId()))
+                .findFirst()
+                .orElse(null);
+
+        Node likedLabel = mainContentContainer.getChildren()
+                .stream()
+                .filter(node -> node instanceof Label && "likedLabel".equals(node.getId()))
+                .findFirst()
+                .orElse(null);
+
+        if (likedScrollPane != null && likedLabel != null) {
+            // Remove both the Label and ScrollPane from the VBox
+            mainContentContainer.getChildren().removeAll(likedScrollPane, likedLabel);
+
+            // Add the Label first, then the ScrollPane at the top of the VBox
+            mainContentContainer.getChildren().add(0, likedScrollPane);
+            mainContentContainer.getChildren().add(0, likedLabel);
+        }
+    }
 
 
 
 
     private List<Song> recentlyPlayed;
     private List<Song> favorites;
+    private List<Song> liked;
     private List<Song> allSongs;
     private boolean isPlaying = false;
     private int currentSongIndex = 0;
     private MediaPlayer mediaPlayer;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         allSongs = new ArrayList<>();
         recentlyPlayed = new ArrayList<>(getRecentlyPlayed());
         favorites = new ArrayList<>(getFavorites());
+        liked = new ArrayList<>(getLiked());
 
         // Combine lists into one for all songs
         allSongs.addAll(recentlyPlayed);
         allSongs.addAll(favorites);
+        allSongs.addAll(liked);
 
         // Δημιουργία αντικειμένου MediaPlayerManager
         mediaPlayerManager = new MediaPlayerManager();
@@ -87,6 +120,8 @@ public class HelloController implements Initializable {
         loadSongs(recentlyPlayed, recentlyPlayedContainer);
         // Load and display the favorite songs
         loadSongs(favorites, favoriteContainer);
+        // Load and display the liked song
+        loadSongs(liked, likedContainer);
     }
 
 
@@ -181,7 +216,6 @@ public class HelloController implements Initializable {
             e.printStackTrace();
         }
     }
-
 
 
 
@@ -344,6 +378,49 @@ public class HelloController implements Initializable {
 
         return ls;
     }
+
+    public List<Song> getLiked() {
+        List<Song> ls = new ArrayList<>();
+
+        Song song = new Song();
+        song.setName("Liked Song1");
+        song.setArtist("Mpelafon");
+        song.setCover("/img/Mpelafon.png");
+        ls.add(song);
+
+        song = new Song();
+        song.setName("Liked Song2");
+        song.setArtist("Mikros Kleftis,Dof Twogee");
+        song.setCover("/img/mk_pelegrino.png");
+        ls.add(song);
+
+        song = new Song();
+        song.setName("Liked Song3");
+        song.setArtist("Mikros Kleftis,LEX");
+        song.setCover("/img/mk_20-20.png");
+        ls.add(song);
+
+        song = new Song();
+        song.setName("Liked Song4");
+        song.setArtist("Thitis,Sadomas,ΔΠΘ,Buzz,MadnessKey");
+        song.setCover("/img/thitis_sado.png");
+        ls.add(song);
+
+        song = new Song();
+        song.setName("Liked Song5");
+        song.setArtist("Sadam,LEX,Dof Twogee");
+        song.setCover("/img/sadam.png");
+        ls.add(song);
+
+        song = new Song();
+        song.setName("Liked Song6");
+        song.setArtist("Immune");
+        song.setCover("/img/Gioconda-Immune.png");
+        ls.add(song);
+
+        return ls;
+    }
+
     // Λειτουργία κουμπιού New Playlist
     public void OnButtonClick7() {
         System.out.println("Pressed");  //

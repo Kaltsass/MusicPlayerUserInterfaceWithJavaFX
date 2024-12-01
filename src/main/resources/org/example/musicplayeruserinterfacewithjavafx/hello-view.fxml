@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.Label?>
+<?import javafx.geometry.Insets?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="890.0" prefWidth="1315.0" styleClass="primary_color" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.musicplayeruserinterfacewithjavafx.HelloController">
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="890.0" prefWidth="1315.0" styleClass="primary_color" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.musicplayeruserinterfacewithjavafx.HelloController">
 <left>
   <VBox prefHeight="200.0" prefWidth="235.0" spacing="20.0" stylesheets="@../../../css/style.css" BorderPane.alignment="CENTER">
     <children>
@@ -86,7 +83,7 @@
           </HBox>
         </children>
       </VBox>
-      <VBox prefHeight="363.0" prefWidth="235.0">
+      <VBox prefHeight="363.0" prefWidth="235.0" spacing="10.0">
         <children>
           <Label prefHeight="54.0" prefWidth="193.0" text="YOUR LIBRARY" textFill="#a1a1a1">
             <VBox.margin>
@@ -96,40 +93,40 @@
               <Insets left="10.0" right="10.0" />
             </padding>
           </Label>
-          <Label prefHeight="40.0" prefWidth="192.0" text="Made For You" textFill="WHITE">
+          <Button prefHeight="40.0" prefWidth="150.0" text="Made For You" textFill="WHITE">
             <padding>
               <Insets left="10.0" right="10.0" />
             </padding>
-          </Label>
+          </Button>
 
-          <Label onMouseClicked="#toggleRecentlyPlayedVisibility" prefHeight="40.0" prefWidth="192.0" text="Recently Played" textFill="WHITE">
+          <Button onMouseClicked="#toggleRecentlyPlayedVisibility" prefHeight="40.0" prefWidth="150.0" text="Recently Played" textFill="WHITE">
             <padding>
               <Insets left="10.0" right="10.0" />
             </padding>
-          </Label>
-          <Label prefHeight="40.0" prefWidth="192.0" text="Liked Songs" textFill="WHITE">
+          </Button>
+          <Button onMouseClicked="#scrollToLikedSongs" prefHeight="40.0" prefWidth="150.0" text="Liked Songs" textFill="WHITE" fx:id="likedSongsButton"  >
             <padding>
               <Insets left="10.0" right="10.0" />
             </padding>
-          </Label>
+          </Button>
 
 
 
-          <Label prefHeight="40.0" prefWidth="192.0" text="Albums" textFill="WHITE">
+          <Button prefHeight="40.0" prefWidth="150.0" text="Albums" textFill="WHITE">
             <padding>
               <Insets left="10.0" right="10.0" />
             </padding>
-          </Label>
-          <Label prefHeight="40.0" prefWidth="192.0" text="Artists" textFill="WHITE">
+          </Button>
+          <Button prefHeight="40.0" prefWidth="150.0" text="Artists" textFill="WHITE">
             <padding>
               <Insets left="10.0" right="10.0" />
             </padding>
-          </Label>
-          <Label prefHeight="40.0" prefWidth="192.0" text="Podcasts" textFill="WHITE">
+          </Button>
+          <Button prefHeight="40.0" prefWidth="150.0" text="Podcasts" textFill="WHITE">
             <padding>
               <Insets left="10.0" right="10.0" />
             </padding>
-          </Label>
+          </Button>
         </children>
         <padding>
           <Insets left="20.0" right="20.0" />
@@ -226,9 +223,9 @@
           </ImageView>
         </children>
       </VBox>
-      <ScrollPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+      <ScrollPane  prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
         <content>
-          <VBox prefHeight="570.0" prefWidth="1680.0" spacing="10.0">
+          <VBox fx:id="mainContentContainer" prefHeight="570.0" prefWidth="1680.0" spacing="10.0">
             <children>
               <Label onMouseClicked="#toggleRecentlyPlayedVisibility" prefHeight="40.0" prefWidth="192.0" text="Recently Played" textFill="WHITE">
                 <padding>
@@ -252,6 +249,22 @@
                   <HBox fx:id="favoriteContainer" prefHeight="0.0" prefWidth="0.0" spacing="30.0" />
                 </content>
               </ScrollPane>
+
+              <Label fx:id="likedLabel" prefHeight="40.0" prefWidth="192.0" text="Liked Songs" textFill="WHITE">
+                <padding>
+                  <Insets left="10.0" right="10.0" />
+                </padding>
+              </Label>
+
+              <ScrollPane fx:id="likedScrollPane" fitToWidth="true" minViewportHeight="270.0" prefHeight="264.0" prefWidth="1072.0" style="-fx-background-color: transparent;" stylesheets="@../../../css/style.css">
+
+              <content>
+                  <HBox fx:id="likedContainer" prefHeight="0.0" prefWidth="0.0" spacing="30.0"/>
+                </content>
+              </ScrollPane>
+
+
+
             </children>
           </VBox>
         </content>
