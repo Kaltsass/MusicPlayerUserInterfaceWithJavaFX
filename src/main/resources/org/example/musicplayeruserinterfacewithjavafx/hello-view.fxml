@@ -286,6 +286,14 @@
             <Slider fx:id="playbackSlider" prefWidth="600.0" styleClass="slider-style" />
           </children>
         </HBox>
+        <!-- Like Button (Heart) -->
+        <HBox alignment="CENTER" spacing="10.0">
+          <children>
+            <!-- Heart Button for liking/unliking the song -->
+            <Button fx:id="likedSong" text="❤" onMouseClicked="#handleLikeButtonClick" style="-fx-background-color: transparent; -fx-text-fill: green;" />
+          </children>
+        </HBox>
+
 
         <!-- Playback Controls -->
         <HBox alignment="CENTER" spacing="20.0">

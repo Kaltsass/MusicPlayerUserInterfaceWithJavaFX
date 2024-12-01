@@ -8,7 +8,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import model.Song;
 import javafx.scene.control.Button;
-
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.List;
 
@@ -28,19 +33,36 @@ public class SongController {
 
     @FXML
     private Button likedSong;
+    private Song song;
+
 
     public void OnButtonClick() {
         System.out.println("Pressed");
     }
 
 
-    private Song song;
+
+
 
     // Μέθοδος για να ορίσετε τα δεδομένα του τραγουδιού
     public void setData(Song song) {
         this.song = song;
-        Image image = new Image(getClass().getResourceAsStream(song.getCover()));
-        img.setImage(image);
+
+        // Φόρτωση της εικόνας δυναμικά από URL
+        if (song.getCover() != null && !song.getCover().isEmpty()) {
+            try {
+                Image image = new Image(song.getCover(), true); // Το true ενεργοποιεί τη φόρτωση στο παρασκήνιο
+                img.setImage(image);
+            } catch (Exception e) {
+                System.err.println("Error loading image from URL: " + song.getCover());
+                img.setImage(new Image(getClass().getResourceAsStream("/img/default_cover.png")));
+            }
+        } else {
+            // Αν δεν υπάρχει URL, εμφάνιση προεπιλεγμένης εικόνας
+            img.setImage(new Image(getClass().getResourceAsStream("/img/default_cover.png")));
+        }
+
+        // Ενημέρωση του ονόματος τραγουδιού και καλλιτέχνη
         songName.setText(song.getName());
         artist.setText(song.getArtist());
 
@@ -113,19 +135,36 @@ public class SongController {
                     // Κλήση της fetchTopPodcasts για να πάρουμε τα top podcasts
                     List<String> podcasts = APITopPodcasts.fetchTopPodcasts();
 
-                    // Εμφάνιση των podcasts στο UI (π.χ. σε ένα Alert)
+                    // Εμφάνιση των podcasts στο UI (π.χ. σε ένα Alert ή σε ένα νέο παράθυρο)
                     if (podcasts != null && !podcasts.isEmpty()) {
                         StringBuilder podcastList = new StringBuilder();
                         for (String podcast : podcasts) {
                             podcastList.append(podcast).append("\n");
                         }
 
-                        // Δημιουργία ενός Alert για την εμφάνιση των podcasts
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Top Podcasts");
-                        alert.setHeaderText("Here are the Top 50 Podcasts:");
-                        alert.setContentText(podcastList.toString());
-                        alert.showAndWait();
+                        // Δημιουργία ενός παραθύρου για τα podcasts
+                        Stage podcastStage = new Stage();
+                        podcastStage.setTitle("Top Podcasts");
+
+                        // Δημιουργία ενός TextArea για να εμφανίσουμε τα podcasts
+                        TextArea podcastTextArea = new TextArea(podcastList.toString());
+                        podcastTextArea.setWrapText(true);  // Ενεργοποίηση του wrap text για καλύτερη μορφοποίηση
+                        podcastTextArea.setEditable(false);  // Μην επιτρέπεις επεξεργασία
+                        podcastTextArea.setPrefHeight(400); // Ρύθμιση ύψους
+                        podcastTextArea.setPrefWidth(500);  // Ρύθμιση πλάτους
+
+                        // Δημιουργία ενός ScrollPane για να επιτρέπεται η κύλιση
+                        ScrollPane scrollPane = new ScrollPane(podcastTextArea);
+                        scrollPane.setFitToWidth(true);  // Κάνει το TextArea να γεμίζει το πλάτος του ScrollPane
+
+                        // Δημιουργία ενός VBox για να οργανώσουμε τα στοιχεία
+                        VBox vbox = new VBox();
+                        vbox.getChildren().add(scrollPane);
+
+                        // Δημιουργία της σκηνής και εμφάνιση του παραθύρου
+                        Scene scene = new Scene(vbox);
+                        podcastStage.setScene(scene);
+                        podcastStage.show();
                     } else {
                         showError("Δεν βρέθηκαν podcasts.");
                     }
@@ -133,7 +172,7 @@ public class SongController {
                     showError("Πρόβλημα με την λήψη των podcasts.");
                     e.printStackTrace();
                 }
-            }
+                }
 
             // Έλεγχος αν το τραγούδι είναι "Top 50 Albums"
             if (song.getName().equals("Top ") && song.getArtist().equals("Albums")) {
@@ -188,6 +227,7 @@ public class SongController {
 
         }
     }
+
 
     // Μέθοδος για να εμφανίσουμε ένα σφάλμα στο UI
     private void showError(String message) {
