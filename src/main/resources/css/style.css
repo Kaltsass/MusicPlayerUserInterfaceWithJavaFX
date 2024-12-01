@@ -176,3 +176,14 @@
     -fx-background-color: #181818;
     -fx-font-family: 'Arial', sans-serif;
 }
+
+
+.clickable-dots {
+    -fx-cursor: hand; /* Change the cursor to a hand */
+    -fx-opacity: 1.0; /* Normal opacity */
+}
+
+.clickable-dots:hover {
+    -fx-opacity: 0.7; /* Dim the image slightly on hover */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 0, 0); /* Optional: Add a shadow */
+}

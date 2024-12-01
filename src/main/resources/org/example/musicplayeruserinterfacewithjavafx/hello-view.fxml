@@ -18,9 +18,10 @@
 <left>
   <VBox prefHeight="200.0" prefWidth="235.0" spacing="20.0" stylesheets="@../../../css/style.css" BorderPane.alignment="CENTER">
     <children>
-      <ImageView fitHeight="39.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="dotsImageView" fitHeight="39.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true"
+                 onMouseClicked="#handleDotsClick" styleClass="clickable-dots">
         <image>
-          <Image url="@../../../img/dots_menu.png" />
+          <Image url="@../../../img/whitedots.png" />
         </image>
         <VBox.margin>
           <Insets left="20.0" top="20.0" />

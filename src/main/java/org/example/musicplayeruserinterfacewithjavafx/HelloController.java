@@ -35,6 +35,11 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.awt.Desktop;
+import java.net.URI;
+import javafx.stage.Modality;
+
+
 public class HelloController implements Initializable {
 
     @FXML private ImageView albumCoverImage;
@@ -103,6 +108,70 @@ public class HelloController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    public void handleDotsClick() {
+        // Create a new Stage for the modal window
+        Stage modalStage = new Stage();
+        modalStage.initModality(Modality.APPLICATION_MODAL); // Blocks interaction with the main window
+        modalStage.setTitle("Options");
+
+        // Create buttons for the options
+        Button termsButton = new Button("Terms of Service");
+        Button privacyButton = new Button("Privacy Policy"); // New button for Privacy Policy
+
+
+        termsButton.setOnAction(e -> {
+            openTermsOfService(); // Call the method to open the Terms link
+            modalStage.close(); // Optionally close the modal
+        });
+
+        privacyButton.setOnAction(e -> {
+            openPrivacyPolicy(); // Call the method to open the Privacy Policy link
+            modalStage.close(); // Optionally close the modal
+        });
+
+        // Layout for the modal
+        VBox layout = new VBox(10); // Spacing of 10
+        layout.getChildren().addAll(termsButton, privacyButton);
+        layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
+
+        // Set the Scene for the modal
+        Scene modalScene = new Scene(layout, 200, 200);
+        modalStage.setScene(modalScene);
+
+        // Show the modal and wait until it is closed
+        modalStage.showAndWait();
+    }
+
+    // Method to open the Terms of Service link
+    private void openTermsOfService() {
+        try {
+            URI termsUri = new URI("https://policies.google.com/terms?hl=en");
+            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                Desktop.getDesktop().browse(termsUri);
+            } else {
+                System.out.println("Desktop browsing not supported on this system.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Log any errors
+        }
+    }
+
+    // Method to open the Privacy Policy link
+    private void openPrivacyPolicy() {
+        try {
+            URI privacyUri = new URI("https://policies.google.com/privacy?hl=en-US");
+            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                Desktop.getDesktop().browse(privacyUri);
+            } else {
+                System.out.println("Desktop browsing not supported on this system.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Log any errors
+        }
+    }
+
 
     @FXML
     private void handleSearch(ActionEvent event) {
