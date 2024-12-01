@@ -1,4 +1,6 @@
-package org.example.musicplayeruserinterfacewithjavafx;
+
+
+        package org.example.musicplayeruserinterfacewithjavafx;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -26,4 +28,5 @@ public class HelloApplication extends Application {
         launch();
     }
 }
+
 

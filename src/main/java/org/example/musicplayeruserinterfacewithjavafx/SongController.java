@@ -1,3 +1,5 @@
+
+
 package org.example.musicplayeruserinterfacewithjavafx;
 
 import javafx.fxml.FXML;
@@ -238,3 +240,4 @@ public class SongController {
         alert.showAndWait();
     }
 }
+
