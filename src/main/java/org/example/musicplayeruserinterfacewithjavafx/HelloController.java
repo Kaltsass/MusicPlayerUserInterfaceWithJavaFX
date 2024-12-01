@@ -1,16 +1,14 @@
-
-
 package org.example.musicplayeruserinterfacewithjavafx;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Point2D;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import model.Song;
 import okhttp3.OkHttpClient;
@@ -21,35 +19,27 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-
-
-
-import java.sql.*;
-
-
-
 import java.io.IOException;
 import java.net.URL;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
-
+import javafx.scene.control.Button;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
-import javafx.scene.control.Button;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-
+import javafx.geometry.Point2D;
+import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class HelloController implements Initializable {
 
@@ -63,37 +53,8 @@ public class HelloController implements Initializable {
     @FXML private Button playPauseButton;
     @FXML private Button nextButton;
     @FXML private Button prevButton;
-
     @FXML private Button btnnewplaylist;
-    @FXML
-    private TextField tf_newUsername;
-
-    @FXML
-    private PasswordField tf_newPassword;
     private MediaPlayerManager mediaPlayerManager;
-    @FXML
-    private Button likedSong;  // Κουμπί για την καρδιά (like/unlike)
-
-    private boolean isLiked = false;  // Σημειώνει αν το τραγούδι είναι liked ή όχι
-
-    // Μέθοδος για την ενημέρωση του κουμπιού καρδιάς
-    private void updateHeartButton() {
-        if (isLiked) {
-            likedSong.setText("❤");  // Αν είναι αγαπημένο, δείχνουμε την κόκκινη ή πράσινη καρδιά
-            likedSong.getStyleClass().add("liked");  // Προσθήκη της κλάσης "liked" για πράσινη καρδιά
-        } else {
-            likedSong.setText("🤍");  // Αν δεν είναι αγαπημένο, δείχνουμε την άσπρη καρδιά
-            likedSong.getStyleClass().remove("liked");  // Αφαίρεση της κλάσης "liked" για άσπρη καρδιά
-        }
-    }
-
-    // Μέθοδος που καλείται όταν γίνεται κλικ στην καρδιά
-    @FXML
-    private void handleLikeButtonClick(MouseEvent event) {
-        isLiked = !isLiked;  // Εναλλάσσουμε την κατάσταση του like
-        updateHeartButton();  // Ενημερώνουμε το κουμπί της καρδιάς
-        System.out.println(isLiked ? "Song added to favorites!" : "Song removed from favorites!");
-    }
     @FXML
     private void handleSearch(ActionEvent event) {
         String query = searchBar.getText();
@@ -102,12 +63,14 @@ public class HelloController implements Initializable {
         }
         searchSongs(query);
     }
-
-
+    @FXML
+    private TextField tf_newUsername;
+    @FXML
+    private PasswordField tf_newPassword;
+    @FXML
+    private VBox likedContainer;// Ο VBox που περιέχει τα αγαπημένα τραγούδια
     @FXML private Button button_account; // Account button in the main window
-
     // Handle Account button click
-
     public void updateAccountButton(String username) {
         button_account.setText(username);  // Update the account button text to new username
     }
@@ -116,28 +79,21 @@ public class HelloController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("account.fxml"));
             Parent root = loader.load();
-
             // Get the controller of the popup and pass the reference of the main controller
             AccountPopupController accountPopupController = loader.getController();
             accountPopupController.setMainController(this);
-
             // Create a new scene for the popup
             Stage stage = new Stage();
             Scene scene = new Scene(root);
             stage.setScene(scene);
-
             // Optionally, set a title for the popup
             stage.setTitle("Account Details");
-
             // Show the popup window
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
-
-
     private void openLogoutPopup() {
         // You can create a simple confirmation popup asking if they want to log out
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -157,23 +113,67 @@ public class HelloController implements Initializable {
 
         // 2. Optionally, clear any user session data (e.g., username, preferences, etc.)
         clearUserData();
-
         System.out.println("User logged out successfully.");
     }
-
     private void clearUserData() {
         // Example: Reset username or any other session data
         // username = null;
         // Clear any other global variables or session data if necessary
     }
+    @FXML
+    private void handleLogout(ActionEvent event) {
+        // Reset the account button text to "Log In"
+        button_account.setText("Log In");
+        // Clear any user session data
+        clearUserData();
 
-    private MediaPlayerManager mediaPlayerManager;
+        System.out.println("User logged out successfully.");
+    }
+    private List<Song> favorites = new ArrayList<>();
+    public void onLikedSongClicked(Song song) {
+        if (!favorites.contains(song)) {
+            favorites.add(song);  // Αν το τραγούδι δεν υπάρχει, το προσθέτουμε
+            addSongToLikedContainer(song);  // Προσθήκη στο UI (likedContainer)
+        }
+    }
+    // Μέθοδος για την εμφάνιση του τραγουδιού στο likedContainer
+    private void addSongToLikedContainer(Song song) {
+        try {
+            // Δημιουργία ενός VBox για το τραγούδι
+            VBox vBox = new VBox();
+            vBox.setSpacing(10);
 
+            // Δημιουργία του Label για το όνομα του τραγουδιού
+            Label songLabel = new Label(song.getName() + " - " + song.getArtist());
+            songLabel.setStyle("-fx-text-fill: white;");
 
+            // Δημιουργία του ImageView για το εξώφυλλο του τραγουδιού
+            if (song.getCover() != null && !song.getCover().isEmpty()) {
+                Image albumCoverImage = new Image(song.getCover());
+                ImageView imageView = new ImageView(albumCoverImage);
+                imageView.setFitWidth(50);
+                imageView.setFitHeight(50);
+                vBox.getChildren().add(imageView);  // Προσθήκη του εξώφυλλου
+            }
 
+            // Προσθήκη του Label με το όνομα του τραγουδιού
+            vBox.getChildren().add(songLabel);
 
+            // Προσθήκη του VBox στο likedContainer
+            likedContainer.getChildren().add(vBox);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private static HelloController instance;
+    public static HelloController getInstance() {
+        if (instance == null) {
+            instance = new HelloController();  // Δημιουργία του instance
+        }
+        return instance;
+    }
     private List<Song> recentlyPlayed;
-    private List<Song> favorites;
     private List<Song> allSongs;
     private boolean isPlaying = false;
     private int currentSongIndex = 0;
@@ -189,14 +189,7 @@ public class HelloController implements Initializable {
         allSongs.addAll(recentlyPlayed);
         allSongs.addAll(favorites);
 
-
         mediaPlayerManager = new MediaPlayerManager();
-
-
-        // Δημιουργία αντικειμένου MediaPlayerManager
-        mediaPlayerManager = new MediaPlayerManager();
-
-        // Initialize the playback slider
 
         playbackSlider.setMin(0);
         playbackSlider.setMax(100);
@@ -236,17 +229,6 @@ public class HelloController implements Initializable {
     }
 
 
-
-    @FXML
-    private void handleSearch(ActionEvent event) {
-        String query = searchBar.getText();
-        if (query.isEmpty()) {
-            return;
-        }
-        searchSongs(query);
-    }
-
-
     private void searchSongs(String query) {
         OkHttpClient client = new OkHttpClient();
         String apiUrl = "https://api.deezer.com/search/track?q=" + query;
@@ -265,35 +247,21 @@ public class HelloController implements Initializable {
 
             searchResultsContainer.getChildren().clear();
 
-
-            // Add search results to UI
-
             for (int i = 0; i < tracksArray.size(); i++) {
                 JsonObject track = tracksArray.get(i).getAsJsonObject();
                 String songTitle = track.get("title").getAsString();
                 String artistName = track.getAsJsonObject("artist").get("name").getAsString();
-
                 String previewUrl = track.get("preview").getAsString();
                 String coverUrl = track.getAsJsonObject("album").get("cover_small").getAsString();
-
-                String previewUrl = track.get("preview").getAsString(); // Preview URL
-                String coverUrl = track.getAsJsonObject("album").get("cover_small").getAsString(); // Album cover
-
 
                 Song song = new Song();
                 song.setName(songTitle);
                 song.setArtist(artistName);
                 song.setPreviewUrl(previewUrl);
-
                 song.setCover(coverUrl);
 
-                song.setCover(coverUrl); // Αποθήκευση της φωτογραφίας του εξωφύλλου
-
-
-                // Δημιουργία του Label για το τραγούδι
                 Label resultLabel = new Label((i + 1) + ". " + songTitle + " by " + artistName);
                 resultLabel.setStyle("-fx-text-fill: white;");
-
 
                 if (coverUrl != null && !coverUrl.isEmpty()) {
                     try {
@@ -311,33 +279,6 @@ public class HelloController implements Initializable {
                 searchResultsContainer.getChildren().add(resultLabel);
             }
 
-
-                // Δημιουργία ImageView για την φωτογραφία του άλμπουμ
-                if (coverUrl != null && !coverUrl.isEmpty()) {
-                    try {
-                        Image albumCoverImage = new Image(coverUrl);
-                        if (albumCoverImage.isError()) {
-                            System.out.println("Error loading image from URL: " + coverUrl);
-                        } else {
-                            ImageView imageView = new ImageView(albumCoverImage);
-                            imageView.setFitWidth(50);  // Ρύθμιση του πλάτους
-                            imageView.setFitHeight(50); // Ρύθμιση του ύψους
-                            resultLabel.setGraphic(imageView); // Προσθήκη εικόνας στο Label
-                        }
-                    } catch (Exception e) {
-                        System.out.println("Error creating ImageView for song cover: " + e.getMessage());
-                        e.printStackTrace();
-                    }
-                } else {
-                    System.out.println("Cover URL is empty or invalid for song: " + songTitle);
-                }
-
-                resultLabel.setOnMouseClicked(mouseEvent -> playSong(song)); // Παίζουμε το τραγούδι όταν το κλικάρουμε
-                searchResultsContainer.getChildren().add(resultLabel);
-            }
-
-            // Κάνε το container των αποτελεσμάτων ορατό
-
             searchResultsContainer.setVisible(true);
 
         } catch (IOException e) {
@@ -348,7 +289,6 @@ public class HelloController implements Initializable {
 
 
 
-
     @FXML
     private void toggleRecentlyPlayedVisibility(MouseEvent event) {
         boolean isVisible = recentlyPlayedContainer.isVisible();
@@ -378,53 +318,6 @@ public class HelloController implements Initializable {
             System.out.println("Playing song...");
         }
     }
-
-
-    @FXML
-    private void handleLogout(ActionEvent event) {
-        // Reset the account button text to "Log In"
-        button_account.setText("Log In");
-
-        // Clear any user session data
-        clearUserData();
-
-        System.out.println("User logged out successfully.");
-    }
-
-
-
-
-
-    @FXML
-    private void toggleRecentlyPlayedVisibility(MouseEvent event) {
-        boolean isVisible = recentlyPlayedContainer.isVisible();
-        recentlyPlayedContainer.setVisible(!isVisible);
-        System.out.println("Recently Played section is now " + (isVisible ? "hidden" : "visible"));
-    }
-
-    // Playback controls
-    @FXML
-    private void handlePlayPauseAction(MouseEvent event) {
-        // Έλεγχος αν το MediaPlayer είναι null
-        if (mediaPlayer == null) {
-            return;  // Αν δεν υπάρχει mediaPlayer, κάνουμε επιστροφή (όταν δεν έχει φορτωθεί τραγούδι).
-        }
-
-        if (isPlaying) {
-            // Αν το τραγούδι παίζει, το σταματάμε
-            mediaPlayer.pause();
-            playPauseButton.setText("▶ Play");  // Αλλάζουμε το κείμενο στο κουμπί σε Play
-            isPlaying = false;
-            System.out.println("Paused song.");
-        } else {
-            // Αν το τραγούδι είναι παγωμένο, το ξεκινάμε
-            mediaPlayer.play();
-            playPauseButton.setText("⏸ Pause");  // Αλλάζουμε το κείμενο στο κουμπί σε Pause
-            isPlaying = true;
-            System.out.println("Playing song...");
-        }
-    }
-
 
 
 
@@ -450,38 +343,6 @@ public class HelloController implements Initializable {
 
     private void playSong(Song song) {
         System.out.println("Playing song: " + song.getName() + " by " + song.getArtist());
-
-
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-        }
-
-        // Δημιουργία αντικειμένου MediaPlayer με το preview URL
-        Media media = new Media(song.getPreviewUrl());
-        mediaPlayer = new MediaPlayer(media);
-
-        // Ορισμός του Slider για τον έλεγχο της προόδου
-        playbackSlider.setValue(0);
-        mediaPlayer.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
-            double progress = newValue.toMillis() / media.getDuration().toMillis() * 100;
-            playbackSlider.setValue(progress);
-        });
-
-        mediaPlayer.play();
-        isPlaying = true;
-        playPauseButton.setText("⏸ Pause");
-
-        // Ενημέρωση του ImageView και του Label για το όνομα και την εικόνα του άλμπουμ
-        if (song.getCover() != null && !song.getCover().isEmpty()) {
-            Image albumCoverImage = new Image(song.getCover());
-            this.albumCoverImage.setImage(albumCoverImage);
-        }
-        songTitleLabel.setText(song.getName());
-    }
-
-    public List<Song> getRecentlyPlayed() {
-        List<Song> ls = new ArrayList<>();
-
 
         if (mediaPlayer != null) {
             mediaPlayer.stop();
@@ -510,7 +371,6 @@ public class HelloController implements Initializable {
     }
 
 
-
     private void addToRecentlyPlayed(Song song) {
         if (!recentlyPlayed.contains(song)) {
             recentlyPlayed.add(0, song);
@@ -527,8 +387,6 @@ public class HelloController implements Initializable {
         List<Song> ls = new ArrayList<>();
         return ls;
     }
-
-
 
     public List<Song> getFavorites() {
         List<Song> ls = new ArrayList<>();
@@ -565,7 +423,6 @@ public class HelloController implements Initializable {
 
         return ls;
     }
-
     // Λειτουργία κουμπιού New Playlist
     public void OnButtonClick7() {
         System.out.println("Pressed");  //
@@ -584,7 +441,6 @@ public class HelloController implements Initializable {
             e.getCause();
         }
     }
-
 
     private Song createSong(String name, String artist, String cover) {
         Song song = new Song();
