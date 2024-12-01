@@ -3,12 +3,12 @@ package org.example.musicplayeruserinterfacewithjavafx;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.geometry.Point2D;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.control.Slider;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import model.Song;
 import okhttp3.OkHttpClient;
@@ -21,13 +21,21 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+
+
+
+import java.sql.*;
+
+
 import java.io.IOException;
 import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
@@ -46,6 +54,11 @@ public class HelloController implements Initializable {
     @FXML private Button nextButton;
     @FXML private Button prevButton;
     @FXML private Button btnnewplaylist;
+    @FXML
+    private TextField tf_newUsername;
+
+    @FXML
+    private PasswordField tf_newPassword;
     private MediaPlayerManager mediaPlayerManager;
     @FXML
     private Button likedSong;  // Κουμπί για την καρδιά (like/unlike)
@@ -80,8 +93,68 @@ public class HelloController implements Initializable {
     }
 
 
+    @FXML private Button button_account; // Account button in the main window
+
+    // Handle Account button click
+
+    public void updateAccountButton(String username) {
+        button_account.setText(username);  // Update the account button text to new username
+    }
+    @FXML
+    private void handleAccountButtonClick() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("account.fxml"));
+            Parent root = loader.load();
+
+            // Get the controller of the popup and pass the reference of the main controller
+            AccountPopupController accountPopupController = loader.getController();
+            accountPopupController.setMainController(this);
+
+            // Create a new scene for the popup
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+
+            // Optionally, set a title for the popup
+            stage.setTitle("Account Details");
+
+            // Show the popup window
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 
 
+    private void openLogoutPopup() {
+        // You can create a simple confirmation popup asking if they want to log out
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Log Out");
+        alert.setHeaderText("Are you sure you want to log out?");
+        alert.setContentText("Click OK to log out, or Cancel to stay logged in.");
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                handleLogout();  // Call logout method if they confirm
+            }
+        });
+    }
+    @FXML
+    private void handleLogout() {
+        // 1. Reset the account button text to "Log In"
+        button_account.setText("Log In");
+
+        // 2. Optionally, clear any user session data (e.g., username, preferences, etc.)
+        clearUserData();
+
+        System.out.println("User logged out successfully.");
+    }
+
+    private void clearUserData() {
+        // Example: Reset username or any other session data
+        // username = null;
+        // Clear any other global variables or session data if necessary
+    }
 
     private List<Song> recentlyPlayed;
     private List<Song> favorites;
@@ -231,7 +304,16 @@ public class HelloController implements Initializable {
     }
 
 
+    @FXML
+    private void handleLogout(ActionEvent event) {
+        // Reset the account button text to "Log In"
+        button_account.setText("Log In");
 
+        // Clear any user session data
+        clearUserData();
+
+        System.out.println("User logged out successfully.");
+    }
 
     @FXML
     private void handleNextAction(MouseEvent event) {
