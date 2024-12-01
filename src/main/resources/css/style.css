@@ -95,7 +95,7 @@
 
 .label.title {
     -fx-text-fill: #fff;
-    -fx-font-size: 16px;
+    -fx-font-size: 18px;
     -fx-font-weight: bold;
 }
 
@@ -172,6 +172,55 @@
     -fx-background-color: #1e1e1e;
     -fx-border-color: #52A447;
 }
+
+
+/* Scrollpane */
+.scroll-pane {
+    -fx-background-color: #181818;
+    -fx-border-color: #121212;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: #181818;
+}
+
+.scroll-pane .thumb {
+    -fx-background-color: #444;
+}
+
+.scroll-pane .thumb:hover {
+    -fx-background-color: #52A447;
+}
+
+/* Στυλ για τα κουμπιά (Like/Unlike) */
+.like-button {
+    -fx-background-color: black; /* Μαύρο φόντο πίσω από τα κουμπιά */
+    -fx-border-color: #4acc39;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-border-radius: 80%; /* Στρογγυλό κουμπί */
+    -fx-background-radius: 80%;
+    -fx-padding: 10px; /* Προσθήκη padding γύρω από τα κουμπιά */
+    -fx-text-fill: white;  /* Άσπρη καρδιά όταν δεν είναι αγαπημένο */
+}
+
+.like-button:hover {
+    -fx-background-color: #4acc39;
+    -fx-border-color: #3c7a33;
+}
+
+/* Στυλ για την πράσινη καρδιά (όταν είναι αγαπημένο) */
+.like-button.liked {
+    -fx-text-fill: #52A447;  /* Πράσινη καρδιά όταν είναι αγαπημένο */
+}
+
+/* Στυλ για την ToolBar */
+.tool-bar {
+    -fx-background-color: transparent;
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+}
+
 
 /* Miscellaneous */
 .root {

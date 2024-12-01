@@ -1,6 +1,6 @@
 
+package org.example.musicplayeruserinterfacewithjavafx;
 
-        package org.example.musicplayeruserinterfacewithjavafx;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
