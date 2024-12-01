@@ -38,6 +38,7 @@ import javafx.stage.StageStyle;
 import java.awt.Desktop;
 import java.net.URI;
 import javafx.stage.Modality;
+import javafx.scene.layout.AnchorPane;
 
 
 public class HelloController implements Initializable {
@@ -108,6 +109,32 @@ public class HelloController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private Button exploreButton;
+
+    @FXML
+    private void handleExploreButtonClick() {
+        try {
+            // Load the Explore page FXML file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ExploreView.fxml"));
+            AnchorPane explorePage = loader.load();
+
+            // Create a new Scene for the Explore page
+            Scene exploreScene = new Scene(explorePage);
+
+            // Get the current stage (the window)
+            Stage stage = (Stage) exploreButton.getScene().getWindow();
+
+            // Set the new scene to the current stage
+            stage.setScene(exploreScene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void handleUpgrade(ActionEvent event) {
         try {

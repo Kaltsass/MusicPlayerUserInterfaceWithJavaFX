@@ -60,11 +60,11 @@
                   <Insets />
                 </HBox.margin>
               </ImageView>
-              <Label prefHeight="17.0" prefWidth="96.0" text="Explore" textFill="#a1a1a1">
+              <Button fx:id="exploreButton" mnemonicParsing="false" onAction="#handleExploreButtonClick" styleClass="custom-button" text="Explore">
                 <font>
-                  <Font name="System Bold Italic" size="18.0" />
+                  <Font name="System Bold" size="18.0" />
                 </font>
-              </Label>
+              </Button>
             </children>
           </HBox>
           <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="20.0">
