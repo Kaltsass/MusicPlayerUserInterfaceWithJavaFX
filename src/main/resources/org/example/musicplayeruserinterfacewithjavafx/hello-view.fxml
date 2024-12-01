@@ -204,7 +204,7 @@
             </children>
           </HBox>
           <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-          <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" styleClass="upgrade-button" stylesheets="@../../../css/style.css" text="Upgrade" textFill="WHITE" />
+          <Button fx:id="upgradeButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" styleClass="upgrade-button" stylesheets="@../../../css/style.css" text="Upgrade" textFill="WHITE" onAction="#handleUpgrade"/>
           <HBox alignment="CENTER" prefHeight="50.0" prefWidth="256.0">
             <children>
               <Button onAction="#openMapLink" style="-fx-background-color: transparent;">

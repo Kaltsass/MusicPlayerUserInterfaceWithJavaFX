@@ -109,6 +109,17 @@ public class HelloController implements Initializable {
         }
     }
 
+    public void handleUpgrade(ActionEvent event) {
+        try {
+            // Open the Spotify Premium URL
+            Desktop.getDesktop().browse(new URI("https://www.spotify.com/gr/premium/"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle exceptions such as unsupported Desktop or invalid URI
+        }
+    }
+
+
     public void openMapLink() {
         try {
             Desktop.getDesktop().browse(new URI("https://www.bing.com/maps?q=ihu+serres&FORM=HDRSC6&cp=41.075631%7E23.553572&lvl=16.0"));
