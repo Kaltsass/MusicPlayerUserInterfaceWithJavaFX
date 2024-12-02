@@ -4,6 +4,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -11,26 +12,34 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="279.0" prefWidth="200.0" styleClass="primary_color" stylesheets="@/css/style.css" xmlns="http://javafx.com/javafx/17.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.musicplayeruserinterfacewithjavafx.SongController">
     <children>
+        <!-- Song Image -->
         <ImageView fx:id="img" fitHeight="184.0" fitWidth="200.0" pickOnBounds="true" smooth="false">
             <image>
                 <Image url="@/img/dukis.png" />
             </image>
         </ImageView>
+
+        <!-- Song Name -->
         <Label fx:id="songName" text="Didgeridoo" textFill="WHITE">
             <font>
                 <Font name="System Bold" size="18.0" />
             </font>
         </Label>
+
+        <!-- Artist Name -->
         <Label fx:id="artist" text="Dukys" textFill="WHITE">
             <font>
                 <Font size="15.0" />
             </font>
         </Label>
 
-        <!-- ToolBar with buttons inside -->
+        <!-- ToolBar for buttons (Add to Playlist and Like button) -->
         <ToolBar prefHeight="43.0" prefWidth="200.0" styleClass="tool-bar">
             <items>
+                <!-- Add to Playlist Button -->
                 <Button fx:id="addToPlaylist" text="+" onAction="#OnButtonClick" textFill="#49da0f" styleClass="like-button"/>
+
+                <!-- Like Button -->
                 <Button fx:id="likedSong" text="❤" onAction="#OnButtonClick" textFill="#49da0f" styleClass="like-button"/>
             </items>
         </ToolBar>
