@@ -236,9 +236,10 @@
   <left>
     <VBox prefHeight="200.0" prefWidth="235.0" spacing="20.0" stylesheets="@../../../css/style.css" BorderPane.alignment="CENTER">
       <children>
-        <ImageView fitHeight="39.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="dotsImageView" fitHeight="39.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true"
+                   onMouseClicked="#handleDotsClick" styleClass="clickable-dots">
           <image>
-            <Image url="@../../../img/dots_menu.png" />
+            <Image url="@../../../img/whitedots.png" />
           </image>
           <VBox.margin>
             <Insets left="20.0" top="20.0" />
@@ -277,11 +278,11 @@
                     <Insets />
                   </HBox.margin>
                 </ImageView>
-                <Label prefHeight="17.0" prefWidth="96.0" text="Explore" textFill="#a1a1a1">
+                <Button fx:id="exploreButton" mnemonicParsing="false" onAction="#handleExploreButtonClick" styleClass="custom-button" text="Explore">
                   <font>
                     <Font name="System Bold Italic" size="18.0" />
                   </font>
-                </Label>
+                </Button>
               </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="20.0">
@@ -294,11 +295,11 @@
                     <Insets />
                   </HBox.margin>
                 </ImageView>
-                <Label prefHeight="17.0" prefWidth="96.0" text="Radio" textFill="#a1a1a1">
+                <Button fx:id="radioButton" onAction="#handleRadioButtonClick" prefHeight="50.0" prefWidth="105.0" styleClass="custom-button" text="Radio">
                   <font>
-                    <Font name="System Bold Italic" size="18.0" />
+                    <Font name="System Bold Italic" size="17.0" />
                   </font>
-                </Label>
+                </Button>
               </children>
             </HBox>
           </children>
@@ -409,15 +410,19 @@
               </children>
             </HBox>
             <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-            <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" styleClass="upgrade-button" stylesheets="@../../../css/style.css" text="Upgrade" textFill="WHITE" />
+            <Button fx:id="upgradeButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" styleClass="upgrade-button" stylesheets="@../../../css/style.css" text="Upgrade" textFill="WHITE" onAction="#handleUpgrade"/>
             <HBox alignment="CENTER" prefHeight="50.0" prefWidth="256.0" xmlns:fx="http://javafx.com/fxml/1">
               <children>
                 <!-- Profile Icon -->
-                <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                  <image>
-                    <Image url="@../../../img/profile_icon.png" />
-                  </image>
-                </ImageView>
+                <Button onAction="#openMapLink" style="-fx-background-color: transparent;">
+                  <graphic>
+                    <ImageView fitHeight="50.0" fitWidth="157.0" pickOnBounds="true" preserveRatio="true">
+                      <image>
+                        <Image url="@../../../img/profile_icon.png" />
+                      </image>
+                    </ImageView>
+                  </graphic>
+                </Button>
                 <!-- Account Button -->
                 <Button fx:id="button_account" text="Account" onAction="#handleAccountButtonClick" prefWidth="200" prefHeight="40" />
               </children>
@@ -426,11 +431,15 @@
         </HBox>
         <VBox prefHeight="200.0" prefWidth="100.0">
           <children>
-            <ImageView fitHeight="240.0" fitWidth="1080.0" pickOnBounds="true" smooth="false">
-              <image>
-                <Image url="@../../../img/background.png" />
-              </image>
-            </ImageView>
+            <Button onAction="#openWebsite" style="-fx-background-color: transparent;">
+              <graphic>
+                <ImageView fitHeight="240.0" fitWidth="1080.0" pickOnBounds="true" smooth="false">
+                  <image>
+                    <Image url="@../../../img/background.png" />
+                  </image>
+                </ImageView>
+              </graphic>
+            </Button>
           </children>
         </VBox>
         <ScrollPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
