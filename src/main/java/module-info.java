@@ -19,6 +19,8 @@ module org.example.musicplayeruserinterfacewithjavafx {
     requires okhttp3;
     requires java.net.http;
     requires javafx.media;
+    requires java.desktop;
+
 
     // Open package to javafx.fxml for reflection access
     opens org.example.musicplayeruserinterfacewithjavafx to javafx.fxml;

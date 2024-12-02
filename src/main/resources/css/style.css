@@ -181,3 +181,75 @@
     -fx-background-color: #181818;
     -fx-font-family: 'Arial', sans-serif;
 }
+
+
+.clickable-dots {
+    -fx-cursor: hand; /* Change the cursor to a hand */
+    -fx-opacity: 1.0; /* Normal opacity */
+}
+
+.clickable-dots:hover {
+    -fx-opacity: 0.7; /* Dim the image slightly on hover */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 0, 0); /* Optional: Add a shadow */
+}
+
+/* upgradebutton style */
+
+.upgrade-button {
+    -fx-background-color: black; /* Button background color */
+    -fx-text-fill: white; /* Text color */
+    -fx-border-color: white; /* Border color */
+    -fx-border-width: 2px; /* Border thickness */
+    -fx-border-radius: 5px; /* Rounded corners for the border */
+    -fx-background-radius: 5px; /* Rounded corners for the button */
+    -fx-padding: 10 20; /* Padding inside the button */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 0, 0, 0, 0); /* No shadow initially */
+    -fx-font-size: 16px; /* Font size */
+    -fx-font-weight: bold; /* Font weight */
+    -fx-cursor: hand; /* Changes the cursor to a hand on hover */
+}
+
+.upgrade-button:hover {
+    -fx-background-color: black; /* Maintain the background color on hover */
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 255, 0.8), 10, 0, 0, 0); /* White glow effect */
+    -fx-translate-y: -2px; /* Simulate a "pop-up" effect */
+}
+
+.upgrade-button:pressed {
+    -fx-translate-y: 0; /* Reset position when clicked */
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 255, 0.5), 5, 0, 0, 0); /* Reduce glow on press */
+}
+
+/* Custom Button Styles */
+.custom-button {
+    -fx-background-color: black; /* Button background color */
+    -fx-text-fill: white; /* Text color */
+    -fx-border-color: white; /* Border color */
+    -fx-border-width: 2px; /* Border thickness */
+    -fx-border-radius: 5px; /* Rounded corners for the border */
+    -fx-background-radius: 5px; /* Rounded corners for the button */
+    -fx-padding: 10 20; /* Padding inside the button */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 0, 0, 0, 0); /* No shadow initially */
+    -fx-font-size: 16px; /* Font size */
+    -fx-font-weight: bold; /* Font weight */
+    -fx-cursor: hand; /* Changes the cursor to a hand on hover */
+    -fx-focus-color: transparent; /* Remove the focus outline (green) */
+}
+
+.custom-button:hover {
+    -fx-background-color: #333; /* Slightly lighter background on hover */
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 255, 0.8), 10, 0, 0, 0); /* White glow effect */
+    -fx-translate-y: -2px; /* Simulate a "pop-up" effect */
+}
+
+.custom-button:pressed {
+    -fx-background-color: #2e2e2e; /* Darken button when pressed */
+    -fx-translate-y: 0; /* Reset position when clicked */
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 255, 0.5), 5, 0, 0, 0); /* Reduce glow on press */
+}
+
+.custom-button:focused {
+    -fx-border-color: white; /* Optional: Keep the border color as white when focused */
+    -fx-border-width: 2px; /* Optional: Maintain border thickness */
+    -fx-focus-color: transparent; /* Ensure no focus ring (green) appears */
+}
