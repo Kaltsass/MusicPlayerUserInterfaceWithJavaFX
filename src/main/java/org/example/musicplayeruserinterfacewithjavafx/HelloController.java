@@ -1,5 +1,7 @@
 package org.example.musicplayeruserinterfacewithjavafx;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -54,6 +56,12 @@ public class HelloController implements Initializable {
     @FXML private Button nextButton;
     @FXML private Button prevButton;
     @FXML private Button btnnewplaylist;
+    @FXML
+    private ListView<String> playlistListView;
+
+    private ObservableList<String> playlistItems;
+
+
     private MediaPlayerManager mediaPlayerManager;
     @FXML
     private void handleSearch(ActionEvent event) {
@@ -201,6 +209,9 @@ public class HelloController implements Initializable {
 
         loadSongs(recentlyPlayed, recentlyPlayedContainer);
         loadSongs(favorites, favoriteContainer);
+        playlistListView.setItems(FXCollections.observableArrayList()); // Initialize list view
+        playlistItems = FXCollections.observableArrayList();
+        playlistListView.setItems(playlistItems);
     }
 
 
@@ -431,7 +442,17 @@ public class HelloController implements Initializable {
 
     private void openPlaylistPopup() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("new-playlist-popup.fxml"));
+            //Parent root = FXMLLoader.load(getClass().getResource("new-playlist-popup.fxml"));
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("new-playlist-popup.fxml"));
+            Parent root = loader.load();
+
+            // Get the PopupController instance
+            PopupController popupController = loader.getController();
+
+            // Pass HelloController to PopupController so it can call addPlaylist
+            popupController.setMainController(this);
+
             Stage popupplaylist = new Stage();
             popupplaylist.initStyle(StageStyle.UNDECORATED);
             popupplaylist.setScene(new Scene(root, 600, 401));
@@ -441,6 +462,27 @@ public class HelloController implements Initializable {
             e.getCause();
         }
     }
+
+    // Μέθοδος για να ελέγξουμε αν το playlist υπάρχει ήδη
+    public boolean isPlaylistExist(String playlistName) {
+        return playlistItems.contains(playlistName);
+    }
+
+    // Μέθοδος για να προσθέσουμε νέο playlist
+    public void addPlaylist(String playlistName) {
+        // Αν το playlist δεν υπάρχει ήδη, το προσθέτουμε
+        if (!isPlaylistExist(playlistName)) {
+            playlistItems.add(playlistName);
+        } else {
+            // Εμφάνιση alert αν το playlist υπάρχει ήδη
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Duplicate Playlist Name");
+            alert.setContentText("Αυτό το όνομα playlist υπάρχει ήδη. Παρακαλούμε εισάγετε άλλο όνομα για το Playlist σας.");
+            alert.showAndWait();
+        }
+    }
+
 
     private Song createSong(String name, String artist, String cover) {
         Song song = new Song();

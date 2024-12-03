@@ -22,7 +22,7 @@ ext {
 java {
   // Using Java Toolchain (recommended for modern Gradle builds)
   toolchain {
-    languageVersion = JavaLanguageVersion.of(17)
+    languageVersion = JavaLanguageVersion.of(23)
   }
 }
 
@@ -37,7 +37,7 @@ application {
 
 
 javafx {
-  version = '21.0.5'  // Adjust to your version
+  version = '23.0.1'  // Adjust to your version
   modules = ['javafx.controls', 'javafx.fxml', 'javafx.web', 'javafx.swing', 'javafx.media']
 }
 
@@ -105,7 +105,7 @@ dependencies {
 }
 
 test {
-  useJUnitPlatform()}
+useJUnitPlatform()}
 
 jlink {
   imageZip = project.file("${buildDir}/distributions/app-${javafx.platform.classifier}.zip")

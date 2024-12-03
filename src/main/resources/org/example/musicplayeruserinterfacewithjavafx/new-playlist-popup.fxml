@@ -9,43 +9,32 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="401.0" prefWidth="600.0"
-            styleClass="primary_color"
-            stylesheets="@../../../css/style.css"
-            xmlns="http://javafx.com/javafx/17.0.2" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.example.musicplayeruserinterfacewithjavafx.PopupController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="401.0" prefWidth="600.0" styleClass="primary_color" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.musicplayeruserinterfacewithjavafx.PopupController">
 
 
     <children>
         <!-- Ετικέτα για το μήνυμα -->
-        <Label alignment="TOP_CENTER" layoutX="100.0" layoutY="144.0"
-               text="Enter the name of your new playlist:" textAlignment="CENTER" textFill="WHITE"
-               AnchorPane.bottomAnchor="236.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="144.0">
+        <Label alignment="TOP_CENTER" layoutX="100.0" layoutY="144.0" text="Enter the name of your new playlist:" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="236.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="144.0">
             <font>
                 <Font name="Arial Bold" size="18.0" />
             </font>
         </Label>
 
         <!-- Πεδία Εισαγωγής -->
-        <TextField fx:id="playlistNameField" alignment="CENTER" layoutX="175.0" layoutY="211.0"
-                   onAction="#getPlaylistName" prefWidth="250.0" promptText="Playlist Name"
-                   AnchorPane.bottomAnchor="162.0" AnchorPane.leftAnchor="175.0" AnchorPane.rightAnchor="175.0" AnchorPane.topAnchor="211.0">
+        <TextField fx:id="playlistNameField" alignment="CENTER" layoutX="175.0" layoutY="211.0" onAction="#getPlaylistName" prefWidth="250.0" promptText="Playlist Name" AnchorPane.bottomAnchor="162.0" AnchorPane.leftAnchor="175.0" AnchorPane.rightAnchor="175.0" AnchorPane.topAnchor="211.0">
             <font>
                 <Font name="Arial" size="15.0" />
             </font>
         </TextField>
 
         <!-- Κουμπιά -->
-        <Button fx:id="cancelButton" alignment="CENTER_RIGHT" layoutX="353.0" layoutY="285.0"
-                mnemonicParsing="false" onAction="#OnButtonClick" text="Cancel" textAlignment="CENTER" textFill="#e80c0c">
+        <Button fx:id="cancelButton" alignment="CENTER_RIGHT" layoutX="353.0" layoutY="285.0" mnemonicParsing="false" onAction="#OnButtonClick" text="Cancel" textAlignment="CENTER" textFill="#e80c0c">
             <font>
                 <Font name="Arial Bold" size="14.0" />
             </font>
         </Button>
 
-        <Button fx:id="okButton" layoutX="185.0" layoutY="285.0" mnemonicParsing="false"
-                onAction="#OnButtonClick" prefWidth="76.0" text="OK" textAlignment="CENTER" textFill="#e80c0c">
+        <Button fx:id="okButton" layoutX="185.0" layoutY="285.0" mnemonicParsing="false" onAction="#OnButtonClick" prefWidth="76.0" text="OK" textAlignment="CENTER" textFill="#e80c0c">
             <font>
                 <Font name="Arial Bold" size="14.0" />
             </font>
@@ -62,8 +51,7 @@
                 </ImageView>
 
                 <!-- Τίτλος -->
-                <Label layoutX="210.0" layoutY="27.0" prefHeight="32.0" prefWidth="181.0"
-                       styleClass="title" text="Create a new playlist" textAlignment="CENTER" textFill="#fcf7f7">
+                <Label layoutX="210.0" layoutY="27.0" prefHeight="32.0" prefWidth="181.0" styleClass="title" text="Create a new playlist" textAlignment="CENTER" textFill="#fcf7f7">
                     <font>
                         <Font name="Calibri Bold" size="30.0" />
                     </font>
