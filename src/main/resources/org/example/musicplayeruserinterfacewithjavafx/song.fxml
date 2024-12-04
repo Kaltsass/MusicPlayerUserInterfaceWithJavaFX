@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ToolBar?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="279.0" prefWidth="200.0" styleClass="primary_color" stylesheets="@/css/style.css" xmlns="http://javafx.com/javafx/17.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.musicplayeruserinterfacewithjavafx.SongController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="279.0" prefWidth="200.0" styleClass="primary_color" stylesheets="@/css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.musicplayeruserinterfacewithjavafx.SongController">
     <children>
         <!-- Song Image -->
         <ImageView fx:id="img" fitHeight="184.0" fitWidth="200.0" pickOnBounds="true" smooth="false">
@@ -37,10 +35,10 @@
         <ToolBar prefHeight="43.0" prefWidth="200.0" styleClass="tool-bar">
             <items>
                 <!-- Add to Playlist Button -->
-                <Button fx:id="addToPlaylist" text="+" onAction="#OnButtonClick" textFill="#49da0f" styleClass="like-button"/>
+                <Button fx:id="addToPlaylist" onAction="#btnaddToPlaylist" styleClass="like-button" text="+" textFill="#49da0f" />
 
                 <!-- Like Button -->
-                <Button fx:id="likedSong" text="❤" onAction="#OnButtonClick" textFill="#49da0f" styleClass="like-button"/>
+                <Button fx:id="likedSong" onAction="#OnButtonClick" styleClass="like-button" text="❤" textFill="#49da0f" />
             </items>
         </ToolBar>
     </children>

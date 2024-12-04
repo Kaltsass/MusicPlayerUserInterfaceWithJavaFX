@@ -34,7 +34,7 @@
             </font>
         </Button>
 
-        <Button fx:id="okButton" layoutX="185.0" layoutY="285.0" mnemonicParsing="false" onAction="#OnButtonClick" prefWidth="76.0" text="OK" textAlignment="CENTER" textFill="#e80c0c">
+        <Button fx:id="okButton" layoutX="185.0" layoutY="285.0" mnemonicParsing="false" onAction="#getPlaylists" prefWidth="76.0" text="OK" textAlignment="CENTER" textFill="#e80c0c">
             <font>
                 <Font name="Arial Bold" size="14.0" />
             </font>

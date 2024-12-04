@@ -1,13 +1,14 @@
-
-
 package org.example.musicplayeruserinterfacewithjavafx;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.StageStyle;
 import model.Song;
 import javafx.scene.control.Button;
 import javafx.scene.Scene;
@@ -35,16 +36,24 @@ public class SongController {
 
     @FXML
     private Button likedSong;
+
     private Song song;
 
+    private HelloController mainController;
+
+    public void setMainController(HelloController mainController) {
+        this.mainController = mainController;
+    }
 
     public void OnButtonClick() {
         System.out.println("Pressed");
     }
 
-
-
-
+    // Λειτουργία κουμπιού AddToPlaylist
+    public void btnaddToPlaylist() {
+        System.out.println("Pressed");
+        openAddToPlaylistPopup();
+    }
 
     // Μέθοδος για να ορίσετε τα δεδομένα του τραγουδιού
     public void setData(Song song) {
@@ -240,6 +249,30 @@ public class SongController {
         alert.showAndWait();
     }
 
+
+
+    private void openAddToPlaylistPopup() {
+        try {
+            //Parent root = FXMLLoader.load(getClass().getResource("new-playlist-popup.fxml"));
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("song-add-playlist.fxml"));
+            Parent root = loader.load();
+
+            // Get the PopupController instance
+            AddToPlaylistPopup addToPlaylistPopup = loader.getController();
+
+            // Pass HelloController to PopupController so it can call addPlaylist
+            addToPlaylistPopup.setMainController(mainController);
+
+            Stage popupplaylistAdd = new Stage();
+            popupplaylistAdd.initStyle(StageStyle.UNDECORATED);
+            popupplaylistAdd.setScene(new Scene(root, 600, 401));
+            popupplaylistAdd.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            e.getCause();
+        }
+    }
 
 
 }
