@@ -1,39 +1,37 @@
 package org.example.musicplayeruserinterfacewithjavafx;
 
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javafx.stage.Modality;
+import javafx.scene.layout.AnchorPane;
+
 import java.io.IOException;
 
 public class RadioController {
 
-    @FXML
-    private Button backButton;
-
-    public void handleBackButtonClick() {
+    public void openRadioWindow() {
         try {
-            // Load the HelloView.fxml file (the main page)
+            // Load the Radio window FXML file
             FXMLLoader loader = new FXMLLoader(getClass().getResource("hello-view.fxml"));
-            BorderPane helloPage = loader.load();  // Use BorderPane here instead of AnchorPane
+            AnchorPane radioPane = loader.load();
 
-            // Create a new Scene for the Hello page
-            Scene helloScene = new Scene(helloPage);
+            // Create a new stage (popup window)
+            Stage popupStage = new Stage();
+            popupStage.setTitle("Radio");
+            popupStage.initModality(Modality.APPLICATION_MODAL); // Makes it modal
+            popupStage.setResizable(false);
 
-            // Get the current stage (the window)
-            Stage stage = (Stage) backButton.getScene().getWindow();
+            // Set the scene for the new stage
+            Scene popupScene = new Scene(radioPane);
+            popupStage.setScene(popupScene);
 
-            // Set the new scene to the current stage (back to the Hello page)
-            stage.setScene(helloScene);
-            stage.show();
+            // Show the popup window
+            popupStage.show();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 }
-
-
