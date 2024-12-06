@@ -17,6 +17,8 @@
     -fx-border-width: 1 0 0 0;
 }
 
+
+
 /* Search Bar */
 .search-container {
     -fx-background-color: #fff;
@@ -194,7 +196,7 @@
 
 /* Στυλ για τα κουμπιά (Like/Unlike) */
 .like-button {
-    -fx-background-color: black; /* Μαύρο φόντο πίσω από τα κουμπιά */
+    -fx-background-color: #181818; /* Γκρι φόντο πίσω από τα κουμπιά */
     -fx-border-color: #4acc39;
     -fx-font-size: 18px;
     -fx-font-weight: bold;
@@ -222,9 +224,29 @@
 }
 
 
+
 /* Miscellaneous */
 .root {
     -fx-background-color: #181818;
     -fx-font-family: 'Arial', sans-serif;
 }
 
+/*  ListView */
+.list-cell {
+    -fx-background-color: #181818;  /* Σκοτεινό φόντο */
+    -fx-text-fill: white;           /* Λευκό χρώμα για το κείμενο */
+    -fx-font-size: 14px;
+}
+
+/* TextFlow */
+.text-flow {
+    -fx-background-color: #1db954;
+    -fx-font-size: 14px;    /* Μεγαλύτερο μέγεθος γραμματοσειράς */
+    -fx-text-fill: #fff;   /* Λευκό χρώμα */
+    -fx-font-weight: bold;  /* Bold */
+}
+.text-flow .text {
+    -fx-font-size: 18px;        /* Μεγαλύτερο μέγεθος γραμματοσειράς */
+    -fx-text-fill: white;       /* Λευκό χρώμα */
+    -fx-font-weight: bold;      /* Bold */
+}

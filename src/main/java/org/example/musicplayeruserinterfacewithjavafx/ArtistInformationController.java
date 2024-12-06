@@ -1,20 +1,20 @@
 package org.example.musicplayeruserinterfacewithjavafx;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
+import model.Song;
 
 import java.io.IOException;
 import java.util.List;
-
 public class ArtistInformationController {
 
     @FXML
@@ -27,7 +27,7 @@ public class ArtistInformationController {
     private Label artistNameLabel;
 
     @FXML
-    private ListView<String> artistSongsListView;
+    private ListView<Label> artistSongsListView;
 
     @FXML
     private Button closeButton;
@@ -41,9 +41,14 @@ public class ArtistInformationController {
     @FXML
     private Button searchButton;
 
+    private HelloController helloController; // Controller για την αναπαραγωγή
+
+    public void setHelloController(HelloController helloController) {
+        this.helloController = helloController;
+    }
+
     @FXML
     void OnBtnClickClose(ActionEvent event) {
-        System.out.println("Pressed"); // Βγάζει μήνυμα στο τερματικό ότι πατήθηκε το κουμπί - να το σβήσουμε μετά
         Stage stage = (Stage) closeButton.getScene().getWindow();
         stage.close();
     }
@@ -52,26 +57,69 @@ public class ArtistInformationController {
     void onSearchButtonClick(ActionEvent event) {
         String artistName = searchBar.getText();
         try {
-            // Ανακτούμε τις πληροφορίες του καλλιτέχνη από τις APIs
+            // Ανάκτηση δεδομένων από το API
             String artistImage = APIArtistInformation.fetchArtistImageUrl(artistName);
             String artistNameFetched = APIArtistInformation.fetchArtistName(artistName);
             String artistBio = APIArtistInformation.fetchArtistInfo(artistName);
-            List<String> songs = APIDeezerInformation.fetchArtistSongs(artistName);
+            JsonArray tracksArray = APIDeezerInformation.fetchArtistTracks(artistName);
             String followers = APIDeezerInformation.fetchArtistFollowers(artistName);
-
-            // Ενημερώνουμε τα UI στοιχεία με τα δεδομένα
+            // Ενημέρωση UI
             artistNameLabel.setText(artistNameFetched);
             artistInfoTextFlow.getChildren().clear();
             artistInfoTextFlow.getChildren().add(new Text(artistBio));
-
-            // Ενημερώνουμε τη λίστα με τα τραγούδια
             artistSongsListView.getItems().clear();
-            artistSongsListView.getItems().addAll(songs);
 
-            // Ενημερώνουμε τον αριθμό των followers
-            followersLabel.setText(followers);
+            // Ενημέρωση λίστας τραγουδιών
+            for (int i = 0; i < tracksArray.size(); i++) {
+                JsonObject track = tracksArray.get(i).getAsJsonObject();
+                String songTitle = track.get("title").getAsString();
+                String previewUrl = track.get("preview").getAsString();
+                String coverUrl = track.getAsJsonObject("album").get("cover_small").getAsString();
 
-            // Ενημερώνουμε την εικόνα του καλλιτέχνη
+                // Δημιουργία τραγουδιού
+                Song song = new Song();
+                song.setName(songTitle);
+                song.setArtist(artistName);
+                song.setPreviewUrl(previewUrl);
+                song.setCover(coverUrl);
+
+                // Δημιουργία Label για το τραγούδι
+                Label resultLabel = new Label((i + 1) + ". " + songTitle);
+                resultLabel.setStyle("-fx-text-fill: white;");
+
+                if (coverUrl != null && !coverUrl.isEmpty()) {
+                    try {
+                        Image albumCoverImage = new Image(coverUrl);
+                        ImageView imageView = new ImageView(albumCoverImage);
+                        imageView.setFitWidth(50);
+                        imageView.setFitHeight(50);
+                        resultLabel.setGraphic(imageView);
+                    } catch (Exception e) {
+                        System.out.println("Error creating ImageView for song cover: " + e.getMessage());
+                    }
+                }
+
+                // Προσθήκη συμβάντος στο Label
+                resultLabel.setOnMouseClicked(event1 -> playSong(song));
+
+                artistSongsListView.getItems().add(resultLabel);
+            }
+
+            // Ενημέρωση followers
+            if (!followers.equals("Δεν βρέθηκαν followers.") && !followers.contains("Error")) {
+                try {
+                    int followersCount = Integer.parseInt(followers);
+                    String formattedFollowers = String.format("%,d", followersCount);
+                    Platform.runLater(() -> followersLabel.setText(formattedFollowers));
+                } catch (NumberFormatException e) {
+                    Platform.runLater(() -> followersLabel.setText("Δεν βρέθηκαν followers.."));
+                    e.printStackTrace();
+                }
+            } else {
+                Platform.runLater(() -> followersLabel.setText(followers));
+            }
+
+            // Ενημέρωση εικόνας καλλιτέχνη
             if (artistImage != null) {
                 artistImageView.setImage(new Image(artistImage));
             }
@@ -81,5 +129,11 @@ public class ArtistInformationController {
         }
     }
 
-
+    private void playSong(Song song) {
+        if (helloController != null) {
+            helloController.playSong(song);  // Καλεί τη μέθοδο playSong του HelloController
+        } else {
+            System.out.println("HelloController is null, cannot play song.");
+        }
+    }
 }

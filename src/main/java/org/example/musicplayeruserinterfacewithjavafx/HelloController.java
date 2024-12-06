@@ -61,6 +61,8 @@ public class HelloController implements Initializable {
     private ListView<String> playlistListView;
     @FXML
     private Label artistInfomLabel;
+    @FXML
+    private ArtistInformationController artistInformationController;
 
     private ObservableList<String> playlistItems;
 
@@ -221,8 +223,11 @@ public class HelloController implements Initializable {
         playlistListView.setItems(playlistItems);
         loadPlaylistsFromFile(); // Φορτώνουμε τα playlists από το αρχείο κατά την εκκίνηση
         artistInfomLabel.setOnMouseClicked(event -> openArtistInformationWindow(artistInfomLabel.getText()));
-    }
+        if (artistInformationController != null) {
+            artistInformationController.setHelloController(this); // Περάστε το instance του HelloController
+        }
 
+    }
 
     private void loadSongs(List<Song> songList, HBox container) {
         try {
@@ -247,7 +252,6 @@ public class HelloController implements Initializable {
         }
 
     }
-
 
     private void searchSongs(String query) {
         OkHttpClient client = new OkHttpClient();
@@ -361,7 +365,7 @@ public class HelloController implements Initializable {
     }
 
 
-    private void playSong(Song song) {
+    public void playSong(Song song) {
         System.out.println("Playing song: " + song.getName() + " by " + song.getArtist());
 
         if (mediaPlayer != null) {

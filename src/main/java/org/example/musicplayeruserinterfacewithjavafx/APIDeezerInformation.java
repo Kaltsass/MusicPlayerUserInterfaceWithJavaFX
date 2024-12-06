@@ -20,25 +20,23 @@ public class APIDeezerInformation {
 
     // Μέθοδος για να ανακτήσει τους followers του καλλιτέχνη
     public static String fetchArtistFollowers(String artistName) throws IOException {
-        // Κωδικοποίηση του ονόματος του καλλιτέχνη για ασφαλή χρήση στο URL
         String encodedArtistName = URLEncoder.encode(artistName, StandardCharsets.UTF_8);
         String url = API_URL + "?q=" + encodedArtistName;
 
-        // Δημιουργία του HTTP Client
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(url).build();
 
-        // Εκτέλεση του αιτήματος και λήψη της απάντησης
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
                 throw new IOException("HTTP error code: " + response.code());
             }
 
-            // Ανάλυση του JSON για να βρούμε το ID του καλλιτέχνη
+            // Ανάκτηση JSON απόκρισης
             String jsonResponse = response.body().string();
-            String artistId = parseArtistIdFromJson(jsonResponse);
+            System.out.println("Search JSON: " + jsonResponse); // Debugging
 
-            // Αν βρούμε το ID του καλλιτέχνη, ανακτούμε τους followers
+            // Parse του ID του καλλιτέχνη
+            String artistId = parseArtistIdFromJson(jsonResponse);
             if (artistId != null) {
                 return fetchFollowersByArtistId(artistId);
             } else {
@@ -47,14 +45,21 @@ public class APIDeezerInformation {
         }
     }
 
+
     // Μέθοδος για να ανακτήσει το ID του καλλιτέχνη από την απάντηση του Deezer API
     private static String parseArtistIdFromJson(String jsonResponse) {
-        JsonObject jsonObject = JsonParser.parseString(jsonResponse).getAsJsonObject();
-        JsonArray dataArray = jsonObject.getAsJsonArray("data");
+        try {
+            JsonObject jsonObject = JsonParser.parseString(jsonResponse).getAsJsonObject();
+            JsonArray dataArray = jsonObject.getAsJsonArray("data");
 
-        if (dataArray.size() > 0) {
-            JsonObject artistObject = dataArray.get(0).getAsJsonObject();
-            return artistObject.get("id").getAsString();
+            if (dataArray.size() > 0) {
+                JsonObject artistObject = dataArray.get(0).getAsJsonObject();
+                String artistId = artistObject.get("id").getAsString();
+                System.out.println("Parsed Artist ID: " + artistId); // Debugging
+                return artistId;
+            }
+        } catch (Exception e) {
+            System.out.println("Error parsing artist ID: " + e.getMessage());
         }
         return null; // Επιστρέφει null αν δεν βρεθεί ο καλλιτέχνης
     }
@@ -73,17 +78,29 @@ public class APIDeezerInformation {
 
             // Επεξεργασία του JSON για να ανακτήσουμε τον αριθμό των followers
             String jsonResponse = response.body().string();
+            System.out.println("Artist JSON Response: " + jsonResponse); // Debugging
+
             return parseFollowersFromJson(jsonResponse);
         }
     }
 
     // Μέθοδος για να αναλύσει τον αριθμό των followers από το JSON της Deezer API
     private static String parseFollowersFromJson(String jsonResponse) {
-        JsonObject jsonObject = JsonParser.parseString(jsonResponse).getAsJsonObject();
-        if (jsonObject.has("nb_fan")) {
-            return jsonObject.get("nb_fan").getAsString();
+        try {
+            JsonObject jsonObject = JsonParser.parseString(jsonResponse).getAsJsonObject();
+            if (jsonObject.has("nb_fan")) {
+                String followers = jsonObject.get("nb_fan").getAsString();
+                System.out.println("Followers count: " + followers); // Debugging
+                return followers;
+            } else {
+                System.out.println("Followers field not found in JSON response.");
+                return "Followers not found in JSON.";
+            }
+        } catch (Exception e) {
+            System.out.println("Error parsing followers JSON: " + e.getMessage());
+            return "Error parsing followers JSON: " + e.getMessage();
         }
-        return "Δεν βρέθηκαν followers.";
+
     }
 
     // Επεξεργασία του JSON για τα τραγούδια
@@ -102,6 +119,34 @@ public class APIDeezerInformation {
             return parseSongsFromJson(jsonResponse);
         }
     }
+    // Επεξεργασία του JSON για τα τραγούδια
+    public static JsonArray fetchArtistTracks(String artistName) throws IOException {
+        String encodedArtistName = URLEncoder.encode(artistName, StandardCharsets.UTF_8);
+        String url = API_URL + "?q=" + encodedArtistName;
+
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(url).build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                throw new IOException("HTTP error code: " + response.code());
+            }
+            String jsonResponse = response.body().string();
+            return parseTracksFromJson(jsonResponse);
+        }
+    }
+
+    // Επεξεργασία του JSON για τα τραγούδια και επιστροφή JsonArray
+    private static JsonArray parseTracksFromJson(String jsonResponse) {
+        try {
+            JsonObject jsonObject = JsonParser.parseString(jsonResponse).getAsJsonObject();
+            return jsonObject.getAsJsonArray("data"); // Επιστρέφουμε το "data" που περιέχει τα τραγούδια
+        } catch (Exception e) {
+            System.out.println("Error parsing tracks JSON: " + e.getMessage());
+            return new JsonArray(); // Επιστρέφουμε άδειο JsonArray σε περίπτωση σφάλματος
+        }
+    }
+
 
     // Επεξεργασία του JSON για τα τραγούδια
     private static List<String> parseSongsFromJson(String jsonResponse) {
