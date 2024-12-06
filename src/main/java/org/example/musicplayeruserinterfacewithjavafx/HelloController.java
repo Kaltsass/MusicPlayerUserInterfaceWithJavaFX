@@ -43,7 +43,11 @@ import java.sql.Statement;
 import java.awt.Desktop;
 import java.net.URI;
 import javafx.stage.Modality;
-import javafx.scene.layout.AnchorPane;
+import org.example.musicplayeruserinterfacewithjavafx.YoutubeAPI;
+import javafx.application.HostServices;
+
+
+
 
 public class HelloController implements Initializable {
 
@@ -409,6 +413,22 @@ public class HelloController implements Initializable {
     }
 
 
+    private HostServices hostServices; // Field to store HostServices
+
+    // Setter method to receive the HostServices instance from HelloApplication
+    public void setHostServices(HostServices hostServices) {
+        this.hostServices = hostServices;
+    }
+
+    // Method to open a URL using HostServices
+    public void openYouTubeLink(String url) {
+        if (hostServices != null) {
+            hostServices.showDocument(url); // Opens the URL in the default browser
+        } else {
+            System.out.println("HostServices not available");
+        }
+    }
+    // Method to handle song search and display YouTube link
     private void searchSongs(String query) {
         OkHttpClient client = new OkHttpClient();
         String apiUrl = "https://api.deezer.com/search/track?q=" + query;
@@ -440,24 +460,58 @@ public class HelloController implements Initializable {
                 song.setPreviewUrl(previewUrl);
                 song.setCover(coverUrl);
 
+                // Fetch YouTube video URL
+                String youtubeUrl = YoutubeAPI.getYouTubeVideoUrl(songTitle, artistName);
+                song.setYoutubeUrl(youtubeUrl);
+
+                // Create the song title label
                 Label resultLabel = new Label((i + 1) + ". " + songTitle + " by " + artistName);
                 resultLabel.setStyle("-fx-text-fill: white;");
 
+                // Create the album cover ImageView
+                ImageView imageView = null;
                 if (coverUrl != null && !coverUrl.isEmpty()) {
                     try {
                         Image albumCoverImage = new Image(coverUrl);
-                        ImageView imageView = new ImageView(albumCoverImage);
-                        imageView.setFitWidth(50);
-                        imageView.setFitHeight(50);
-                        resultLabel.setGraphic(imageView);
+                        imageView = new ImageView(albumCoverImage);
+                        imageView.setFitWidth(50);  // Set the width of the album cover
+                        imageView.setFitHeight(50); // Set the height of the album cover
                     } catch (Exception e) {
                         System.out.println("Error creating ImageView for song cover: " + e.getMessage());
                     }
                 }
 
-                resultLabel.setOnMouseClicked(mouseEvent -> playSong(song));
-                searchResultsContainer.getChildren().add(resultLabel);
+                // Create a VBox for song info (title + YouTube link)
+                VBox infoContainer = new VBox(5); // 5px spacing between elements vertically
+                infoContainer.getChildren().add(resultLabel); // Add song title
+
+                // Add YouTube link if available
+                if (youtubeUrl != null) {
+                    Hyperlink youtubeLink = new Hyperlink("Watch on YouTube");
+                    youtubeLink.setStyle("-fx-text-fill: blue;");
+                    youtubeLink.setOnAction(e -> openYouTubeLink(youtubeUrl)); // Open the YouTube link
+                    infoContainer.getChildren().add(youtubeLink); // Add YouTube link below the title
+                }
+
+                // Create an HBox to hold both the album cover and the song info (on the right)
+                HBox songContainer = new HBox(10); // 10px spacing between album cover and song info
+
+                // Add album cover to HBox (left side)
+                if (imageView != null) {
+                    imageView.setOnMouseClicked(mouseEvent -> playSong(song)); // Play song when cover is clicked
+                    songContainer.getChildren().add(imageView); // Add album cover on the left
+                }
+
+                // Add song info (title + YouTube link) to HBox (right side)
+                songContainer.getChildren().add(infoContainer);
+
+                // Add the HBox to the results container
+                resultLabel.setOnMouseClicked(mouseEvent -> playSong(song)); // Play song when title is clicked
+                searchResultsContainer.getChildren().add(songContainer);
             }
+
+            searchResultsContainer.setVisible(true);
+
 
             searchResultsContainer.setVisible(true);
 
@@ -465,6 +519,7 @@ public class HelloController implements Initializable {
             e.printStackTrace();
         }
     }
+
 
 
 
