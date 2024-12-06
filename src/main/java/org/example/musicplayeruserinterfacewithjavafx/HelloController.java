@@ -59,6 +59,8 @@ public class HelloController implements Initializable {
     @FXML private Button btnnewplaylist;
     @FXML
     private ListView<String> playlistListView;
+    @FXML
+    private Label artistInfomLabel;
 
     private ObservableList<String> playlistItems;
 
@@ -218,6 +220,7 @@ public class HelloController implements Initializable {
         playlistItems = FXCollections.observableArrayList();
         playlistListView.setItems(playlistItems);
         loadPlaylistsFromFile(); // Φορτώνουμε τα playlists από το αρχείο κατά την εκκίνηση
+        artistInfomLabel.setOnMouseClicked(event -> openArtistInformationWindow(artistInfomLabel.getText()));
     }
 
 
@@ -528,7 +531,21 @@ public class HelloController implements Initializable {
             e.printStackTrace();
         }
     }
+    private void openArtistInformationWindow(String artistName) {
+        try {
+            // Φόρτωση του FXML αρχείου
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("artist-information.fxml"));
+            Parent root = loader.load();
 
+            // Δημιουργία νέου Stage
+            Stage stage = new Stage();
+            stage.setTitle("Artist Information");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private Song createSong(String name, String artist, String cover) {
         Song song = new Song();
