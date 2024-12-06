@@ -139,19 +139,22 @@ public class HelloController implements Initializable {
     @FXML
     private void handleExploreButtonClick() {
         try {
-            // Load the Explore page FXML file
+            // Load the ExploreView.fxml file
             FXMLLoader loader = new FXMLLoader(getClass().getResource("ExploreView.fxml"));
-            AnchorPane explorePage = loader.load();
+            AnchorPane explorePane = loader.load();
 
-            // Create a new Scene for the Explore page
-            Scene exploreScene = new Scene(explorePage);
+            // Create a new stage (popup window)
+            Stage popupStage = new Stage();
+            popupStage.setTitle("Explore");
+            popupStage.initModality(Modality.APPLICATION_MODAL); // Blocks interaction with the main window
+            popupStage.setResizable(false);
 
-            // Get the current stage (the window)
-            Stage stage = (Stage) exploreButton.getScene().getWindow();
+            // Set the scene for the new stage
+            Scene popupScene = new Scene(explorePane);
+            popupStage.setScene(popupScene);
 
-            // Set the new scene to the current stage
-            stage.setScene(exploreScene);
-            stage.show();
+            // Show the popup window
+            popupStage.show();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -165,24 +168,28 @@ public class HelloController implements Initializable {
     @FXML
     private void handleRadioButtonClick() {
         try {
-            // Load the radio page FXML file
+            // Load the RadioView.fxml file
             FXMLLoader loader = new FXMLLoader(getClass().getResource("RadioView.fxml"));
-            AnchorPane radioPage = loader.load();
+            AnchorPane radioPane = loader.load();
 
-            // Create a new Scene for the radio page
-            Scene radioScene = new Scene(radioPage);
+            // Create a new stage (popup window)
+            Stage popupStage = new Stage();
+            popupStage.setTitle("Radio");
+            popupStage.initModality(Modality.APPLICATION_MODAL); // Blocks interaction with the main window
+            popupStage.setResizable(false);
 
-            // Get the current stage (the window)
-            Stage stage = (Stage) radioButton.getScene().getWindow();
+            // Set the scene for the new stage
+            Scene popupScene = new Scene(radioPane);
+            popupStage.setScene(popupScene);
 
-            // Set the new scene to the current stage
-            stage.setScene(radioScene);
-            stage.show();
+            // Show the popup window
+            popupStage.show();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
 
     @FXML
