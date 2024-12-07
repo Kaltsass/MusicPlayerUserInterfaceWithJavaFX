@@ -413,6 +413,25 @@ public class HelloController implements Initializable {
     }
 
 
+    @FXML
+    private void handleAboutUsButtonClick(ActionEvent event) {
+        try {
+            // Load the AboutUsView.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/musicplayeruserinterfacewithjavafx/AboutUsView.fxml"));
+            Parent root = loader.load();
+
+            // Set up the modal stage
+            Stage stage = new Stage();
+            stage.setTitle("About Us");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL); // Ensures it blocks interaction with the main window
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
     private HostServices hostServices; // Field to store HostServices
 
     // Setter method to receive the HostServices instance from HelloApplication

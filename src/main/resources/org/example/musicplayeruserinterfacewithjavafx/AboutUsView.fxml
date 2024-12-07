@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<!-- AboutUsView.fxml -->
+
+<AnchorPane prefHeight="900.0" prefWidth="900.0" style="-fx-background-color: #121212;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.musicplayeruserinterfacewithjavafx.AboutUsController">
+
+    <!-- Main Title -->
+    <Label layoutX="80.0" layoutY="48.0" text="About Us" textFill="#FFFFFF">
+        <font>
+            <Font name="Arial Bold" size="30.0" />
+        </font>
+    </Label>
+
+    <!-- Divider Line -->
+    <Line endX="800" endY="0" layoutX="68.0" layoutY="84.0" startX="0" startY="0" stroke="#FFFFFF" strokeWidth="2" />
+
+    <!-- Main VBox for all Content -->
+    <VBox fx:id="mainVBox" layoutX="50.0" layoutY="100.0" spacing="20">
+
+        <!-- Description Section -->
+        <VBox alignment="CENTER_LEFT" spacing="10">
+            <Label prefWidth="800" text="We are a group of university students passionate about technology, music, and innovation." textFill="#E0E0E0" wrapText="true">
+                <font>
+                    <Font name="Arial" size="15.0" />
+                </font>
+            </Label>
+            <Label prefWidth="800" text="Our goal was to create an intuitive, inspiring, and dynamic music player app while learning JavaFX and collaborating as a team." textFill="#E0E0E0" wrapText="true">
+                <font>
+                    <Font name="Arial" size="15.0" />
+                </font>
+            </Label>
+            <Label prefWidth="800" text="We aimed to design a user-friendly interface that would provide seamless navigation, efficient playback controls, and an engaging user experience." textFill="#E0E0E0" wrapText="true">
+                <font>
+                    <Font name="Arial" size="15.0" />
+                </font>
+            </Label>
+            <Label prefWidth="800" text="Throughout the project, we focused on implementing features such as playlist management, track searching, and customizable playback options, all while ensuring the app's performance and responsiveness." textFill="#E0E0E0" wrapText="true">
+                <font>
+                    <Font name="Arial" size="15.0" />
+                </font>
+            </Label>
+            <Label prefWidth="800" text="In addition to honing our technical skills with JavaFX, this project allowed us to strengthen our teamwork, problem-solving, and communication abilities by working together on different aspects of the app's development." textFill="#E0E0E0" wrapText="true">
+                <font>
+                    <Font name="Arial" size="15.0" />
+                </font>
+            </Label>
+            <Label prefWidth="800" text="By dividing tasks, sharing feedback, and troubleshooting challenges as a unit, we fostered a collaborative environment that emphasized learning, creativity, and innovation." textFill="#E0E0E0" wrapText="true">
+                <font>
+                    <Font name="Arial" size="15.0" />
+                </font>
+            </Label>
+            <Label prefWidth="800" text="The experience not only enhanced our programming knowledge but also gave us practical insights into real-world software development workflows." textFill="#E0E0E0" wrapText="true">
+                <font>
+                    <Font name="Arial" size="15.0" />
+                </font>
+            </Label>
+        </VBox>
+
+        <!-- Divider Line -->
+        <Line endX="800" endY="0" layoutX="0" layoutY="0" startX="0" startY="0" stroke="#FFFFFF" strokeWidth="2" />
+
+        <VBox alignment="TOP_LEFT" spacing="10">
+            <Label text="Meet the Team:" textFill="#FFFFFF">
+                <font>
+                    <Font name="Arial Bold" size="24.0" />
+                </font>
+            </Label>
+
+
+            <VBox spacing="5">
+                <Label text="Aggelos Kaltsas" textFill="white">
+                    <font>
+                        <Font name="Arial Bold" size="16.5" />
+                    </font>
+                </Label>
+                <Label text="Aggelos has a deep understanding of JavaFX and has also helped with strategic planning amd team growth." textFill="white">
+                    <font>
+                        <Font name="Arial" size="15.0" />
+                    </font>
+                </Label>
+            </VBox>
+
+            <VBox spacing="5">
+                <Label text="Rakip Lici" textFill="white">
+                    <font>
+                        <Font name="Arial Bold" size="16.5" />
+                    </font>
+                </Label>
+                <Label text="Rakip has led the project with motivation and has contributed significantly to coding the app interface." textFill="white">
+                    <font>
+                        <Font name="Arial" size="15.0" />
+                    </font>
+                </Label>
+            </VBox>
+
+            <VBox spacing="5">
+                <Label text="Kosmas Giatzoglou" textFill="white">
+                    <font>
+                        <Font name="Arial Bold" size="16.5" />
+                    </font>
+                </Label>
+                <Label text="Kosmas focused on creating robust server communication logic and implementing features seamlessly." textFill="white">
+                    <font>
+                        <Font name="Arial" size="15.0" />
+                    </font>
+                </Label>
+            </VBox>
+
+
+            <VBox spacing="5">
+                <Label text="Maria Danidou" textFill="white">
+                    <font>
+                        <Font name="Arial Bold" size="16.5" />
+                    </font>
+                </Label>
+                <Label text="Maria brought creativity to the user interface designs, ensuring the application is intuitive and user-friendly." textFill="white">
+                    <font>
+                        <Font name="Arial" size="15.0" />
+                    </font>
+                </Label>
+            </VBox>
+
+
+            <VBox spacing="5">
+                <Label text="Dimitris Titkakidis" textFill="white">
+                    <font>
+                        <Font name="Arial Bold" size="16.5" />
+                    </font>
+                </Label>
+                <Label text="Dimitris worked on the user-facing aspects of the project, ensuring a smooth navigation experience." textFill="white">
+                    <font>
+                        <Font name="Arial" size="15.0" />
+                    </font>
+                </Label>
+            </VBox>
+        </VBox>
+
+        <!-- Divider Line -->
+        <Line endX="800" endY="0" layoutX="0" layoutY="0" startX="0" startY="0" stroke="#FFFFFF" strokeWidth="2" />
+
+        <!-- Social Media Section -->
+        <VBox alignment="CENTER_LEFT" spacing="10">
+            <Label text="Connect with us on Social Media:" textFill="#FFFFFF">
+                <font>
+                    <Font name="Arial Bold" size="14.5" />
+                </font>
+            </Label>
+        </VBox>
+
+
+    </VBox>
+
+    <HBox fx:id="socialMediaIconsGroup" layoutX="75.0" layoutY="801.0" prefHeight="60.0" prefWidth="255.0" spacing="15.0" stylesheets="@../../../css/style.css" AnchorPane.rightAnchor="570.0" >
+
+    <ImageView fx:id="instagramIcon" fitHeight="50" fitWidth="50" layoutX="75.0" layoutY="757.0" pickOnBounds="true" preserveRatio="true" styleClass="image-view-instagram">
+        <image>
+            <Image url="@/img/instagram.png" />
+        </image>
+    </ImageView>
+    <ImageView fx:id="facebookIcon" fitHeight="50" fitWidth="50" layoutX="199.0" layoutY="757.0" pickOnBounds="true" preserveRatio="true" styleClass="image-view-facebook">
+        <image>
+            <Image url="@/img/facebook.png" />
+        </image>
+    </ImageView>
+
+    <!-- Discord -->
+    <ImageView fx:id="discordIcon" fitHeight="50" fitWidth="50" layoutX="138.0" layoutY="757.0" pickOnBounds="true" preserveRatio="true" styleClass="image-view-discord">
+        <image>
+            <Image url="@/img/discord.png" />
+        </image>
+    </ImageView>
+    <!-- GitHub -->
+    <ImageView fx:id="githubIcon" fitHeight="50.0" fitWidth="50.0" layoutX="200.0" layoutY="850.0" pickOnBounds="true" preserveRatio="true" styleClass="image-view-github">
+        <image>
+            <Image url="@/img/githublogo.png" />
+        </image>
+         <cursor>
+            <Cursor fx:constant="DEFAULT" />
+         </cursor>
+    </ImageView>
+
+    </HBox>
+</AnchorPane>
