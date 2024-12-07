@@ -1,7 +1,5 @@
 package org.example.musicplayeruserinterfacewithjavafx;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,8 +21,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-
-import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +39,16 @@ import java.sql.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.awt.Desktop;
+import java.net.URI;
+import javafx.stage.Modality;
+import org.example.musicplayeruserinterfacewithjavafx.YoutubeAPI;
+import javafx.application.HostServices;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import java.io.*;
+
+
 
 public class HelloController implements Initializable {
 
@@ -57,6 +63,7 @@ public class HelloController implements Initializable {
     @FXML private Button nextButton;
     @FXML private Button prevButton;
     @FXML private Button btnnewplaylist;
+    private MediaPlayerManager mediaPlayerManager;
     @FXML
     private ListView<String> playlistListView;
     @FXML
@@ -65,9 +72,6 @@ public class HelloController implements Initializable {
     private ArtistInformationController artistInformationController;
 
     private ObservableList<String> playlistItems;
-
-
-    private MediaPlayerManager mediaPlayerManager;
     @FXML
     private void handleSearch(ActionEvent event) {
         String query = searchBar.getText();
@@ -142,6 +146,182 @@ public class HelloController implements Initializable {
 
         System.out.println("User logged out successfully.");
     }
+    @FXML
+    private Button exploreButton;
+
+    @FXML
+    private void handleExploreButtonClick() {
+        try {
+            // Load the ExploreView.fxml file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ExploreView.fxml"));
+            AnchorPane explorePane = loader.load();
+
+            // Create a new stage (popup window)
+            Stage popupStage = new Stage();
+            popupStage.setTitle("Explore");
+            popupStage.initModality(Modality.APPLICATION_MODAL); // Blocks interaction with the main window
+            popupStage.setResizable(false);
+
+            // Set the scene for the new stage
+            Scene popupScene = new Scene(explorePane);
+            popupStage.setScene(popupScene);
+
+            // Show the popup window
+            popupStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @FXML
+    private Button radioButton;
+
+    @FXML
+    private void handleRadioButtonClick() {
+        try {
+            // Load the RadioView.fxml file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("RadioView.fxml"));
+            AnchorPane radioPane = loader.load();
+
+            // Create a new stage (popup window)
+            Stage popupStage = new Stage();
+            popupStage.setTitle("Radio");
+            popupStage.initModality(Modality.APPLICATION_MODAL); // Blocks interaction with the main window
+            popupStage.setResizable(false);
+
+            // Set the scene for the new stage
+            Scene popupScene = new Scene(radioPane);
+            popupStage.setScene(popupScene);
+
+            // Show the popup window
+            popupStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    @FXML
+    private Button backButton;  // Ensure you have a reference to the Back button in your controller
+
+    @FXML
+    private void handleBackButtonClick() {
+        try {
+            // Load the HelloView.fxml file (the main page)
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("hello-view.fxml"));
+            AnchorPane helloPage = loader.load();
+
+            // Create a new Scene for the Hello page
+            Scene helloScene = new Scene(helloPage);
+
+            // Get the current stage (the window) where the Explore scene is being shown
+            Stage stage = (Stage) backButton.getScene().getWindow();  // Using the Back button here
+
+            // Set the new scene to the current stage (back to the Hello page)
+            stage.setScene(helloScene);
+            stage.show();
+
+        } catch (IOException e) {
+            System.out.println(getClass().getResource("hello-view.fxml"));
+            e.printStackTrace();
+        }
+    }
+    public void handleUpgrade(ActionEvent event) {
+        try {
+            // Open the Spotify Premium URL
+            Desktop.getDesktop().browse(new URI("https://www.spotify.com/gr/premium/"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle exceptions such as unsupported Desktop or invalid URI
+        }
+    }
+
+
+    public void openMapLink() {
+        try {
+            Desktop.getDesktop().browse(new URI("https://www.bing.com/maps?q=ihu+serres&FORM=HDRSC6&cp=41.075631%7E23.553572&lvl=16.0"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openWebsite() {
+        try {
+            Desktop.getDesktop().browse(new URI("https://www.ihu.gr/"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @FXML
+    public void handleDotsClick() {
+        // Create a new Stage for the modal window
+        Stage modalStage = new Stage();
+        modalStage.initModality(Modality.APPLICATION_MODAL); // Blocks interaction with the main window
+        modalStage.setTitle("Options");
+
+        // Create buttons for the options
+        Button termsButton = new Button("Terms of Service");
+        Button privacyButton = new Button("Privacy Policy"); // New button for Privacy Policy
+
+
+        termsButton.setOnAction(e -> {
+            openTermsOfService(); // Call the method to open the Terms link
+            modalStage.close(); // Optionally close the modal
+        });
+
+        privacyButton.setOnAction(e -> {
+            openPrivacyPolicy(); // Call the method to open the Privacy Policy link
+            modalStage.close(); // Optionally close the modal
+        });
+
+        // Layout for the modal
+        VBox layout = new VBox(10); // Spacing of 10
+        layout.getChildren().addAll(termsButton, privacyButton);
+        layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
+
+        // Set the Scene for the modal
+        Scene modalScene = new Scene(layout, 200, 200);
+        modalStage.setScene(modalScene);
+
+        // Show the modal and wait until it is closed
+        modalStage.showAndWait();
+    }
+
+    // Method to open the Terms of Service link
+    private void openTermsOfService() {
+        try {
+            URI termsUri = new URI("https://policies.google.com/terms?hl=en");
+            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                Desktop.getDesktop().browse(termsUri);
+            } else {
+                System.out.println("Desktop browsing not supported on this system.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Log any errors
+        }
+    }
+
+    // Method to open the Privacy Policy link
+    private void openPrivacyPolicy() {
+        try {
+            URI privacyUri = new URI("https://policies.google.com/privacy?hl=en-US");
+            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                Desktop.getDesktop().browse(privacyUri);
+            } else {
+                System.out.println("Desktop browsing not supported on this system.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Log any errors
+        }
+    }
+
     private List<Song> favorites = new ArrayList<>();
     public void onLikedSongClicked(Song song) {
         if (!favorites.contains(song)) {
@@ -215,19 +395,20 @@ public class HelloController implements Initializable {
         loadSongs(recentlyPlayed, recentlyPlayedContainer);
         loadSongs(favorites, favoriteContainer);
 
-        playlistListView.setItems(FXCollections.observableArrayList()); // Initialize list view
-        playlistItems = FXCollections.observableArrayList();
+     playlistListView.setItems(FXCollections.observableArrayList()); // Initialize list view
+    playlistItems = FXCollections.observableArrayList();
         playlistListView.setItems(playlistItems);
 
-        playlistItems = FXCollections.observableArrayList();
+    playlistItems = FXCollections.observableArrayList();
         playlistListView.setItems(playlistItems);
-        loadPlaylistsFromFile(); // Φορτώνουμε τα playlists από το αρχείο κατά την εκκίνηση
+    loadPlaylistsFromFile(); // Φορτώνουμε τα playlists από το αρχείο κατά την εκκίνηση
         artistInfomLabel.setOnMouseClicked(event -> openArtistInformationWindow(artistInfomLabel.getText()));
         if (artistInformationController != null) {
-            artistInformationController.setHelloController(this); // Περάστε το instance του HelloController
-        }
-
+        artistInformationController.setHelloController(this); // Περάστε το instance του HelloController
     }
+
+}
+
 
     private void loadSongs(List<Song> songList, HBox container) {
         try {
@@ -253,6 +434,23 @@ public class HelloController implements Initializable {
 
     }
 
+
+    private HostServices hostServices; // Field to store HostServices
+
+    // Setter method to receive the HostServices instance from HelloApplication
+    public void setHostServices(HostServices hostServices) {
+        this.hostServices = hostServices;
+    }
+
+    // Method to open a URL using HostServices
+    public void openYouTubeLink(String url) {
+        if (hostServices != null) {
+            hostServices.showDocument(url); // Opens the URL in the default browser
+        } else {
+            System.out.println("HostServices not available");
+        }
+    }
+    // Method to handle song search and display YouTube link
     private void searchSongs(String query) {
         OkHttpClient client = new OkHttpClient();
         String apiUrl = "https://api.deezer.com/search/track?q=" + query;
@@ -284,24 +482,58 @@ public class HelloController implements Initializable {
                 song.setPreviewUrl(previewUrl);
                 song.setCover(coverUrl);
 
+                // Fetch YouTube video URL
+                String youtubeUrl = YoutubeAPI.getYouTubeVideoUrl(songTitle, artistName);
+                song.setYoutubeUrl(youtubeUrl);
+
+                // Create the song title label
                 Label resultLabel = new Label((i + 1) + ". " + songTitle + " by " + artistName);
                 resultLabel.setStyle("-fx-text-fill: white;");
 
+                // Create the album cover ImageView
+                ImageView imageView = null;
                 if (coverUrl != null && !coverUrl.isEmpty()) {
                     try {
                         Image albumCoverImage = new Image(coverUrl);
-                        ImageView imageView = new ImageView(albumCoverImage);
-                        imageView.setFitWidth(50);
-                        imageView.setFitHeight(50);
-                        resultLabel.setGraphic(imageView);
+                        imageView = new ImageView(albumCoverImage);
+                        imageView.setFitWidth(50);  // Set the width of the album cover
+                        imageView.setFitHeight(50); // Set the height of the album cover
                     } catch (Exception e) {
                         System.out.println("Error creating ImageView for song cover: " + e.getMessage());
                     }
                 }
 
-                resultLabel.setOnMouseClicked(mouseEvent -> playSong(song));
-                searchResultsContainer.getChildren().add(resultLabel);
+                // Create a VBox for song info (title + YouTube link)
+                VBox infoContainer = new VBox(5); // 5px spacing between elements vertically
+                infoContainer.getChildren().add(resultLabel); // Add song title
+
+                // Add YouTube link if available
+                if (youtubeUrl != null) {
+                    Hyperlink youtubeLink = new Hyperlink("Watch on YouTube");
+                    youtubeLink.setStyle("-fx-text-fill: blue;");
+                    youtubeLink.setOnAction(e -> openYouTubeLink(youtubeUrl)); // Open the YouTube link
+                    infoContainer.getChildren().add(youtubeLink); // Add YouTube link below the title
+                }
+
+                // Create an HBox to hold both the album cover and the song info (on the right)
+                HBox songContainer = new HBox(10); // 10px spacing between album cover and song info
+
+                // Add album cover to HBox (left side)
+                if (imageView != null) {
+                    imageView.setOnMouseClicked(mouseEvent -> playSong(song)); // Play song when cover is clicked
+                    songContainer.getChildren().add(imageView); // Add album cover on the left
+                }
+
+                // Add song info (title + YouTube link) to HBox (right side)
+                songContainer.getChildren().add(infoContainer);
+
+                // Add the HBox to the results container
+                resultLabel.setOnMouseClicked(mouseEvent -> playSong(song)); // Play song when title is clicked
+                searchResultsContainer.getChildren().add(songContainer);
             }
+
+            searchResultsContainer.setVisible(true);
+
 
             searchResultsContainer.setVisible(true);
 
@@ -309,6 +541,7 @@ public class HelloController implements Initializable {
             e.printStackTrace();
         }
     }
+
 
 
 
@@ -456,7 +689,6 @@ public class HelloController implements Initializable {
     private void openPlaylistPopup() {
         try {
             //Parent root = FXMLLoader.load(getClass().getResource("new-playlist-popup.fxml"));
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("new-playlist-popup.fxml"));
             Parent root = loader.load();
 
@@ -465,7 +697,6 @@ public class HelloController implements Initializable {
 
             // Pass HelloController to PopupController so it can call addPlaylist
             popupController.setMainController(this);
-
             Stage popupplaylist = new Stage();
             popupplaylist.initStyle(StageStyle.UNDECORATED);
             popupplaylist.setScene(new Scene(root, 600, 401));
@@ -475,9 +706,6 @@ public class HelloController implements Initializable {
             e.getCause();
         }
     }
-
-
-
     // Μέθοδος για να ελέγξουμε αν το playlist υπάρχει ήδη
     public boolean isPlaylistExist(String playlistName) {
         return playlistItems.contains(playlistName);

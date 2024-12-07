@@ -6,7 +6,7 @@ module org.example.musicplayeruserinterfacewithjavafx {
     requires javafx.base;
     requires java.sql;
     requires com.google.gson;
-
+    requires java.desktop;
     requires javafx.web;
     requires com.fasterxml.jackson.databind;
     requires org.controlsfx.controls;
@@ -19,6 +19,7 @@ module org.example.musicplayeruserinterfacewithjavafx {
     requires okhttp3;
     requires java.net.http;
     requires javafx.media;
+
 
     // Open package to javafx.fxml for reflection access
     opens org.example.musicplayeruserinterfacewithjavafx to javafx.fxml;
