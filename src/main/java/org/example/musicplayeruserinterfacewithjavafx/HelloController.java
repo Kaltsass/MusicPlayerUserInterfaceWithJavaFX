@@ -5,11 +5,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.control.ScrollPane;
 import model.Song;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -51,12 +53,26 @@ import javafx.application.HostServices;
 
 public class HelloController implements Initializable {
 
+
     @FXML private ImageView albumCoverImage;
     @FXML private Label songTitleLabel;
     @FXML private HBox favoriteContainer;
     @FXML private HBox recentlyPlayedContainer;
     @FXML private TextField searchBar;
     @FXML private VBox searchResultsContainer;
+    @FXML private VBox mainVBox;
+    @FXML private ScrollPane scrollPaneMadeForYou;
+    @FXML private ScrollPane scrollPaneRecentlyPlayed;
+    @FXML private ScrollPane scrollPaneLikedSongs;
+    @FXML private ScrollPane scrollPaneTopCharts;
+    @FXML private ScrollPane scrollPaneArtists;
+    @FXML private ScrollPane scrollPaneAlbums;
+    @FXML private Label labelMadeForYou;
+    @FXML private Label labelRecentlyPlayed;
+    @FXML private Label labelLikedSongs;
+    @FXML private Label labelTopCharts;
+    @FXML private Label labelArtists;
+    @FXML private Label labelAlbums;
     @FXML private Slider playbackSlider;
     @FXML private Button playPauseButton;
     @FXML private Button nextButton;
@@ -193,6 +209,57 @@ public class HelloController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    //Left Button  Functionality
+    // Scroll Pane and Labels
+
+    @FXML
+    public void handleLeftButtonClick(ActionEvent event) {
+        Button clickedButton = (Button) event.getSource();
+
+        // Map buttons to their corresponding labels and scroll panes
+        Label targetLabel = null;
+        ScrollPane targetScrollPane = null;
+
+        switch (clickedButton.getText()) {
+            case "Made For You":
+                targetLabel = labelMadeForYou;
+                targetScrollPane = scrollPaneMadeForYou;
+                break;
+            case "Recently Played":
+                targetLabel = labelRecentlyPlayed;
+                targetScrollPane = scrollPaneRecentlyPlayed;
+                break;
+            case "Liked Songs":
+                targetLabel = labelLikedSongs;
+                targetScrollPane = scrollPaneLikedSongs;
+                break;
+            case "Albums":
+                targetLabel = labelAlbums;
+                targetScrollPane = scrollPaneAlbums;
+                break;
+            case "Artists":
+                targetLabel = labelArtists;
+                targetScrollPane = scrollPaneArtists;
+                break;
+            case "Top Charts":
+                targetLabel = labelTopCharts;
+                targetScrollPane = scrollPaneTopCharts;
+                break;
+        }
+
+        if (targetLabel != null && targetScrollPane != null) {
+            // Remove the label and scroll pane from their current positions
+            mainVBox.getChildren().remove(targetLabel);
+            mainVBox.getChildren().remove(targetScrollPane);
+
+            // Add the label and scroll pane to the top of the VBox
+            mainVBox.getChildren().add(0, targetScrollPane);
+            mainVBox.getChildren().add(0, targetLabel); // Add the label just before the scroll pane
+        }
+    }
+
+
 
 
 
@@ -385,6 +452,8 @@ public class HelloController implements Initializable {
 
         loadSongs(recentlyPlayed, recentlyPlayedContainer);
         loadSongs(favorites, favoriteContainer);
+
+
     }
 
 
@@ -396,6 +465,7 @@ public class HelloController implements Initializable {
                 VBox vBox = fxmlLoader.load();
                 SongController songController = fxmlLoader.getController();
                 songController.setData(song);
+                songController.setHelloController(this); // Pass HelloController instance
 
                 Label songLabel = new Label(song.getName() + " - " + song.getArtist());
                 songLabel.setStyle("-fx-text-fill: white;");
@@ -404,6 +474,7 @@ public class HelloController implements Initializable {
                 vBox.setOnMouseClicked(event -> playSong(song));  // Όταν το τραγούδι πατηθεί, παίζει το τραγούδι
 
                 container.getChildren().add(vBox);
+
             }
 
         } catch (IOException e) {
@@ -411,8 +482,54 @@ public class HelloController implements Initializable {
         }
 
     }
+    @FXML private HBox likedSongsContainer;
+    public void addToLikedSongs(Song song) {
+        if (likedSongsContainer == null) {
+            System.out.println("likedSongsContainer is null!");
+            return;
+        }
 
+        // Create a label for the liked song
+        Label likedSongLabel = new Label(song.getName() + " - " + song.getArtist());
+        likedSongLabel.setStyle("-fx-text-fill: white; -fx-padding: 10;");
 
+        // Optional: Add click functionality to play the liked song
+        likedSongLabel.setOnMouseClicked(event -> playSong(song));
+
+        // Add the liked song to the container
+        likedSongsContainer.getChildren().add(likedSongLabel);
+        System.out.println("Added to liked songs: " + song.getName());
+    }
+
+    /*
+     public void addToLikedSongs(Song song) {
+        try {
+            // Create a VBox for the song
+            VBox songVBox = new VBox();
+            songVBox.setSpacing(10);
+            songVBox.setAlignment(Pos.CENTER);
+
+            // Create ImageView for the song's cover
+            Image image = new Image(song.getCover());
+            ImageView imageView = new ImageView(image);
+            imageView.setFitWidth(100);
+            imageView.setFitHeight(100);
+
+            // Create a label for the song's name and artist
+            Label songLabel = new Label(song.getName() + " - " + song.getArtist());
+            songLabel.setStyle("-fx-text-fill: white;");
+
+            // Add the image and label to the VBox
+            songVBox.getChildren().addAll(imageView, songLabel);
+
+            // Add the VBox to the likedSongsContainer
+            likedSongsContainer.getChildren().add(songVBox);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+   } */
     private HostServices hostServices; // Field to store HostServices
 
     // Setter method to receive the HostServices instance from HelloApplication
