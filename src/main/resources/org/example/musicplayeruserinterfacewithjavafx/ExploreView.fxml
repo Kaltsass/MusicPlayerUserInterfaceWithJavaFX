@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.control.Label?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <!-- ExploreView.fxml -->
 
-<AnchorPane prefHeight="300.0" prefWidth="400.0"
+<AnchorPane prefHeight="428.0" prefWidth="700.0"
             style="-fx-background-color: black;"
             xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="org.example.musicplayeruserinterfacewithjavafx.ExploreController">
 
     <children>
-        <Label text="This is the Explore Window" layoutX="50.0" layoutY="50.0" textFill="white">
-            <font>
+        <Label layoutX="50.0" layoutY="50.0" text="This is the Explore Window" textFill="white">            <font>
                 <Font name="System Bold" size="18.0" />
             </font>
         </Label>
