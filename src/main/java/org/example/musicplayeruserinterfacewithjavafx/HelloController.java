@@ -395,19 +395,19 @@ public class HelloController implements Initializable {
         loadSongs(recentlyPlayed, recentlyPlayedContainer);
         loadSongs(favorites, favoriteContainer);
 
-     playlistListView.setItems(FXCollections.observableArrayList()); // Initialize list view
-    playlistItems = FXCollections.observableArrayList();
+        playlistListView.setItems(FXCollections.observableArrayList()); // Initialize list view
+        playlistItems = FXCollections.observableArrayList();
         playlistListView.setItems(playlistItems);
 
-    playlistItems = FXCollections.observableArrayList();
+        playlistItems = FXCollections.observableArrayList();
         playlistListView.setItems(playlistItems);
-    loadPlaylistsFromFile(); // Φορτώνουμε τα playlists από το αρχείο κατά την εκκίνηση
+        loadPlaylistsFromFile(); // Φορτώνουμε τα playlists από το αρχείο κατά την εκκίνηση
         artistInfomLabel.setOnMouseClicked(event -> openArtistInformationWindow(artistInfomLabel.getText()));
         if (artistInformationController != null) {
-        artistInformationController.setHelloController(this); // Περάστε το instance του HelloController
-    }
+            artistInformationController.setHelloController(this); // Περάστε το instance του HelloController
+        }
 
-}
+    }
 
 
     private void loadSongs(List<Song> songList, HBox container) {

@@ -119,10 +119,10 @@ public class PopupController {
             }
         }
     }
-        // Ορίζει το listener που θα καλείται όταν το popup κλείνει
-        public void setOnCloseRequest(Runnable onCloseRequest) {
-            this.onCloseRequest = onCloseRequest;
-        }
+    // Ορίζει το listener που θα καλείται όταν το popup κλείνει
+    public void setOnCloseRequest(Runnable onCloseRequest) {
+        this.onCloseRequest = onCloseRequest;
+    }
 
     private void handleCancelButton() {
         // Κλείσιμο του popup παραθύρου χωρίς καμία άλλη λειτουργία

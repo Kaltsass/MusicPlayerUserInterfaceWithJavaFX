@@ -185,7 +185,7 @@ public class SongController {
                     showError("Πρόβλημα με την λήψη των podcasts.");
                     e.printStackTrace();
                 }
-                }
+            }
 
             // Έλεγχος αν το τραγούδι είναι "Top 50 Albums"
             if (song.getName().equals("Top ") && song.getArtist().equals("Albums")) {

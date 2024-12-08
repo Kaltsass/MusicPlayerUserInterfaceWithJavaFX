@@ -29,7 +29,7 @@ public class APIArtistInformation {
         }
     }
 
-     public static String fetchArtistInfo(String artistName) throws IOException {
+    public static String fetchArtistInfo(String artistName) throws IOException {
         // privateConstruct the Wikipedia API URL
         String encodedArtistName = URLEncoder.encode(artistName, StandardCharsets.UTF_8);
         String url = API_URL +
