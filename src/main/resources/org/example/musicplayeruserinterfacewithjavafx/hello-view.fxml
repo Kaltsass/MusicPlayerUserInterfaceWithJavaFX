@@ -13,6 +13,8 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.control.ListView?>
+
 
 
 <?import javafx.scene.layout.AnchorPane?>
@@ -104,7 +106,7 @@
                 <Insets left="10.0" right="10.0" />
               </padding>
             </Label>
-            <Label prefHeight="40.0" prefWidth="192.0" text="Recently Played" textFill="WHITE" onMouseClicked="#toggleRecentlyPlayedVisibility">
+            <Label onDragDetected="#toggleRecentlyPlayedVisibility" onMouseClicked="#toggleRecentlyPlayedVisibility" prefHeight="40.0" prefWidth="192.0" text="Recently Played" textFill="WHITE">
               <padding>
                 <Insets left="10.0" right="10.0" />
               </padding>
@@ -119,7 +121,7 @@
                 <Insets left="10.0" right="10.0" />
               </padding>
             </Label>
-            <Label prefHeight="40.0" prefWidth="192.0" text="Artists" textFill="WHITE">
+            <Label fx:id="artistInfomLabel" prefHeight="40.0" prefWidth="192.0" text="Artists" textFill="WHITE">
               <padding>
                 <Insets left="10.0" right="10.0" />
               </padding>
@@ -142,7 +144,15 @@
             <Font size="14.0" />
           </font>
         </Label>
-        <Pane prefHeight="134.0" prefWidth="235.0" VBox.vgrow="ALWAYS" />
+        <Pane prefHeight="274.0" prefWidth="235.0" VBox.vgrow="ALWAYS">
+          <children>
+            <ScrollPane layoutX="-1.0" layoutY="-7.0" prefHeight="194.0" prefWidth="238.0">
+              <content>
+                <ListView fx:id="playlistListView" prefHeight="194.0" prefWidth="238.0" />
+              </content>
+            </ScrollPane>
+          </children>
+        </Pane>
         <HBox alignment="CENTER" prefHeight="75.0" prefWidth="235.0" spacing="20.0" styleClass="top-border" stylesheets="@../../../css/style.css">
           <children>
             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
@@ -191,7 +201,7 @@
                   </image>
                 </ImageView>
                 <TextField fx:id="searchBar" prefHeight="26.0" prefWidth="180.0" promptText="Search for songs..." style="-fx-background-color: transparent;" />
-                <Button text="Search" fx:id="searchButton" onAction="#handleSearch" style="-fx-background-color: #1DB954; -fx-text-fill: white;" />
+                <Button fx:id="searchButton" onAction="#handleSearch" style="-fx-background-color: #1DB954; -fx-text-fill: white;" text="Search" />
               </children>
             </HBox>
             <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
@@ -209,7 +219,7 @@
                   </graphic>
                 </Button>
                 <!-- Account Button -->
-                <Button fx:id="button_account" text="Account" onAction="#handleAccountButtonClick" prefWidth="200" prefHeight="40" />
+                <Button fx:id="button_account" onAction="#handleAccountButtonClick" prefHeight="40" prefWidth="200" text="Account" />
               </children>
             </HBox>
           </children>
@@ -231,7 +241,7 @@
           <content>
             <VBox prefHeight="570.0" prefWidth="1680.0" spacing="10.0">
               <children>
-                <Label prefHeight="40.0" prefWidth="192.0" text="Recently Played" textFill="WHITE" onMouseClicked="#toggleRecentlyPlayedVisibility">
+                <Label onMouseClicked="#toggleRecentlyPlayedVisibility" prefHeight="40.0" prefWidth="192.0" text="Recently Played" textFill="WHITE">
                   <padding>
                     <Insets left="10.0" right="10.0" />
                   </padding>
@@ -285,7 +295,7 @@
               <!-- ImageView for album cover -->
               <ImageView fx:id="albumCoverImage" fitHeight="50.0" fitWidth="50.0" />
               <!-- Label for song title -->
-              <Label fx:id="songTitleLabel" text="Song Title" styleClass="song-title-label" />
+              <Label fx:id="songTitleLabel" styleClass="song-title-label" text="Song Title" />
             </HBox>
 
             <!-- Slider for playback progress -->
