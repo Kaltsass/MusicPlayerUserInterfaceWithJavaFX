@@ -87,6 +87,8 @@
                 </Label>
             </VBox>
 
+
+
             <VBox spacing="5">
                 <Label text="Rakip Lici" textFill="white">
                     <font>
@@ -100,6 +102,8 @@
                 </Label>
             </VBox>
 
+
+
             <VBox spacing="5">
                 <Label text="Kosmas Giatzoglou" textFill="white">
                     <font>
@@ -112,6 +116,8 @@
                     </font>
                 </Label>
             </VBox>
+
+
 
 
             <VBox spacing="5">
@@ -128,6 +134,8 @@
             </VBox>
 
 
+
+
             <VBox spacing="5">
                 <Label text="Dimitris Titkakidis" textFill="white">
                     <font>
@@ -142,6 +150,8 @@
             </VBox>
         </VBox>
 
+
+
         <!-- Divider Line -->
         <Line endX="800" endY="0" layoutX="0" layoutY="0" startX="0" startY="0" stroke="#FFFFFF" strokeWidth="2" />
 
@@ -153,6 +163,8 @@
                 </font>
             </Label>
         </VBox>
+
+
 
 
     </VBox>
@@ -170,6 +182,8 @@
             </image>
         </ImageView>
 
+
+
         <!-- Discord -->
         <ImageView fx:id="discordIcon" fitHeight="50" fitWidth="50" layoutX="138.0" layoutY="757.0" pickOnBounds="true" preserveRatio="true" styleClass="image-view-discord">
             <image>
@@ -185,6 +199,8 @@
                 <Cursor fx:constant="DEFAULT" />
             </cursor>
         </ImageView>
+
+
 
     </HBox>
 </AnchorPane>
