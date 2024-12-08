@@ -21,7 +21,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +44,9 @@ import java.net.URI;
 import javafx.stage.Modality;
 import org.example.musicplayeruserinterfacewithjavafx.YoutubeAPI;
 import javafx.application.HostServices;
-
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import java.io.*;
 
 
 
@@ -63,6 +64,14 @@ public class HelloController implements Initializable {
     @FXML private Button prevButton;
     @FXML private Button btnnewplaylist;
     private MediaPlayerManager mediaPlayerManager;
+    @FXML
+    private ListView<String> playlistListView;
+    @FXML
+    private Label artistInfomLabel;
+    @FXML
+    private ArtistInformationController artistInformationController;
+
+    private ObservableList<String> playlistItems;
     @FXML
     private void handleSearch(ActionEvent event) {
         String query = searchBar.getText();
@@ -385,7 +394,20 @@ public class HelloController implements Initializable {
 
         loadSongs(recentlyPlayed, recentlyPlayedContainer);
         loadSongs(favorites, favoriteContainer);
+
+     playlistListView.setItems(FXCollections.observableArrayList()); // Initialize list view
+    playlistItems = FXCollections.observableArrayList();
+        playlistListView.setItems(playlistItems);
+
+    playlistItems = FXCollections.observableArrayList();
+        playlistListView.setItems(playlistItems);
+    loadPlaylistsFromFile(); // Φορτώνουμε τα playlists από το αρχείο κατά την εκκίνηση
+        artistInfomLabel.setOnMouseClicked(event -> openArtistInformationWindow(artistInfomLabel.getText()));
+        if (artistInformationController != null) {
+        artistInformationController.setHelloController(this); // Περάστε το instance του HelloController
     }
+
+}
 
 
     private void loadSongs(List<Song> songList, HBox container) {
@@ -576,7 +598,7 @@ public class HelloController implements Initializable {
     }
 
 
-    private void playSong(Song song) {
+    public void playSong(Song song) {
         System.out.println("Playing song: " + song.getName() + " by " + song.getArtist());
 
         if (mediaPlayer != null) {
@@ -666,7 +688,15 @@ public class HelloController implements Initializable {
 
     private void openPlaylistPopup() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("new-playlist-popup.fxml"));
+            //Parent root = FXMLLoader.load(getClass().getResource("new-playlist-popup.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("new-playlist-popup.fxml"));
+            Parent root = loader.load();
+
+            // Get the PopupController instance
+            PopupController popupController = loader.getController();
+
+            // Pass HelloController to PopupController so it can call addPlaylist
+            popupController.setMainController(this);
             Stage popupplaylist = new Stage();
             popupplaylist.initStyle(StageStyle.UNDECORATED);
             popupplaylist.setScene(new Scene(root, 600, 401));
@@ -674,6 +704,78 @@ public class HelloController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
             e.getCause();
+        }
+    }
+    // Μέθοδος για να ελέγξουμε αν το playlist υπάρχει ήδη
+    public boolean isPlaylistExist(String playlistName) {
+        return playlistItems.contains(playlistName);
+    }
+
+    // Μέθοδος για να προσθέσουμε νέο playlist
+    public void addPlaylist(String playlistName) {
+        // Αν το playlist δεν υπάρχει ήδη, το προσθέτουμε
+        if (!isPlaylistExist(playlistName)) {
+            playlistItems.add(playlistName);
+            savePlaylistsToFile(); // Αποθηκεύουμε τη νέα λίστα
+            refreshPlaylists();
+        } else {
+            // Εμφάνιση alert αν το playlist υπάρχει ήδη
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Duplicate Playlist Name");
+            alert.setContentText("Αυτό το όνομα playlist υπάρχει ήδη. Παρακαλούμε εισάγετε άλλο όνομα για το Playlist σας.");
+            alert.showAndWait();
+        }
+    }
+    // Μέθοδος για να φορτώσουμε τα playlist από το αρχείο
+    private void loadPlaylistsFromFile() {
+        File file = new File("playlists.txt"); // Ο φάκελος και το όνομα του αρχείου
+        if (file.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    if (!line.trim().isEmpty()) {
+                        playlistItems.add(line); // Προσθήκη του playlist στο ObservableList
+                    }
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    // Μέθοδος για συγχρονισμό του ListView
+    private void refreshPlaylists() {
+
+        playlistListView.getItems().clear();
+        playlistListView.getItems().addAll(playlistItems);
+    }
+
+    // Μέθοδος για να αποθηκεύσουμε τα playlist στο αρχείο
+    public void savePlaylistsToFile() {
+        File file = new File("playlists.txt");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            for (String playlist : playlistItems) {
+                writer.write(playlist);
+                writer.newLine(); // Καταχώρηση κάθε playlist σε νέα γραμμή
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void openArtistInformationWindow(String artistName) {
+        try {
+            // Φόρτωση του FXML αρχείου
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("artist-information.fxml"));
+            Parent root = loader.load();
+
+            // Δημιουργία νέου Stage
+            Stage stage = new Stage();
+            stage.setTitle("Artist Information");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
