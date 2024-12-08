@@ -29,8 +29,8 @@ public class APIArtistInformation {
         }
     }
 
-    private static String fetchArtistInfo(String artistName) throws IOException {
-        // Construct the Wikipedia API URL
+    public static String fetchArtistInfo(String artistName) throws IOException {
+        // privateConstruct the Wikipedia API URL
         String encodedArtistName = URLEncoder.encode(artistName, StandardCharsets.UTF_8);
         String url = API_URL +
                 "?action=query" +
@@ -60,6 +60,58 @@ public class APIArtistInformation {
             return parseWikipediaResponse(jsonResponse, artistName);
 
         }
+    }
+    public static String fetchArtistName(String artistName) throws IOException {
+        // URL όπως πριν
+        String encodedArtistName = URLEncoder.encode(artistName, StandardCharsets.UTF_8);
+        String url = API_URL +
+                "?action=query" +
+                "&prop=extracts" +
+                "&format=json" +
+                "&exintro=true" +
+                "&explaintext=true" +
+                "&titles=" + encodedArtistName;
+
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(url).build();
+
+        try (Response response = client.newCall(request).execute()) {
+            String jsonResponse = response.body().string();
+            JsonObject jsonObject = JsonParser.parseString(jsonResponse).getAsJsonObject();
+            JsonObject pages = jsonObject.getAsJsonObject("query").getAsJsonObject("pages");
+
+            for (String key : pages.keySet()) {
+                return pages.getAsJsonObject(key).get("title").getAsString();
+            }
+        }
+        return "Άγνωστος καλλιτέχνης";
+    }
+
+    public static String fetchArtistImageUrl(String artistName) throws IOException {
+        String encodedArtistName = URLEncoder.encode(artistName, StandardCharsets.UTF_8);
+        String url = API_URL +
+                "?action=query" +
+                "&prop=pageimages" +
+                "&format=json" +
+                "&piprop=original" +
+                "&titles=" + encodedArtistName;
+
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(url).build();
+
+        try (Response response = client.newCall(request).execute()) {
+            String jsonResponse = response.body().string();
+            JsonObject jsonObject = JsonParser.parseString(jsonResponse).getAsJsonObject();
+            JsonObject pages = jsonObject.getAsJsonObject("query").getAsJsonObject("pages");
+
+            for (String key : pages.keySet()) {
+                JsonObject page = pages.getAsJsonObject(key);
+                if (page.has("original")) {
+                    return page.getAsJsonObject("original").get("source").getAsString();
+                }
+            }
+        }
+        return null; //
     }
 
     private static String parseWikipediaResponse(String jsonResponse, String artistName) {
