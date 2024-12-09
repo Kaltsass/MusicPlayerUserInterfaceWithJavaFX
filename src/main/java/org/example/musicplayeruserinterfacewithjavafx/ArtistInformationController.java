@@ -15,8 +15,13 @@ import model.Song;
 
 import java.io.IOException;
 import java.util.List;
+
+import static org.example.musicplayeruserinterfacewithjavafx.APIArtistInformation.fetchArtistImageUrl;
+import static org.example.musicplayeruserinterfacewithjavafx.APIArtistInformation.fetchArtistName;
+
 public class ArtistInformationController {
 
+    public Button saveArtistButton;
     @FXML
     private ImageView artistImageView;
 
@@ -44,6 +49,7 @@ public class ArtistInformationController {
     private HelloController helloController; // Controller για την αναπαραγωγή
 
     public void setHelloController(HelloController helloController) {
+
         this.helloController = helloController;
     }
 
@@ -58,8 +64,8 @@ public class ArtistInformationController {
         String artistName = searchBar.getText();
         try {
             // Ανάκτηση δεδομένων από το API
-            String artistImage = APIArtistInformation.fetchArtistImageUrl(artistName);
-            String artistNameFetched = APIArtistInformation.fetchArtistName(artistName);
+            String artistImage = fetchArtistImageUrl(artistName);
+            String artistNameFetched = fetchArtistName(artistName);
             String artistBio = APIArtistInformation.fetchArtistInfo(artistName);
             JsonArray tracksArray = APIDeezerInformation.fetchArtistTracks(artistName);
             String followers = APIDeezerInformation.fetchArtistFollowers(artistName);
@@ -134,6 +140,35 @@ public class ArtistInformationController {
             helloController.playSong(song);  // Καλεί τη μέθοδο playSong του HelloController
         } else {
             System.out.println("HelloController is null, cannot play song.");
+        }
+    }
+    @FXML
+    void onSaveArtistClick(ActionEvent event) {
+        if (helloController != null) {
+            String artistName = searchBar.getText(); // Get the artist name from the search bar (or dynamically)
+
+            try {
+                // Fetch the artist's name and image URL dynamically
+                String fetchedArtistName = fetchArtistName(artistName); // This will fetch the artist name
+                String artistImageUrl = fetchArtistImageUrl(artistName); // This will fetch the artist image URL
+
+                // If the artist image URL is null or invalid, use a default image
+                Image artistImage;
+                if (artistImageUrl != null) {
+                    artistImage = new Image(artistImageUrl); // Fetch image from URL
+                } else {
+                    artistImage = new Image(getClass().getResource("/images/default.png").toExternalForm()); // Use default image
+                }
+
+                // Pass the fetched artist data (name and image) to HelloController
+                helloController.addArtistToScrollPane(fetchedArtistName, artistImage);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Error fetching artist data: " + e.getMessage());
+            }
+        } else {
+            System.out.println("HelloController reference is null!");
         }
     }
 }

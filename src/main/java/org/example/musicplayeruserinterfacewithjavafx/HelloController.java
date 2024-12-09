@@ -48,21 +48,65 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.io.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 
 
 public class HelloController implements Initializable {
 
-    @FXML private ImageView albumCoverImage;
-    @FXML private Label songTitleLabel;
-    @FXML private HBox favoriteContainer;
-    @FXML private HBox recentlyPlayedContainer;
-    @FXML private TextField searchBar;
-    @FXML private VBox searchResultsContainer;
-    @FXML private Slider playbackSlider;
-    @FXML private Button playPauseButton;
-    @FXML private Button nextButton;
-    @FXML private Button prevButton;
-    @FXML private Button btnnewplaylist;
+    @FXML
+    private HBox savedArtistsHBox;
+    @FXML
+    private ImageView albumCoverImage;
+    @FXML
+    private Label songTitleLabel;
+    @FXML
+    private HBox favoriteContainer;
+    @FXML
+    private HBox recentlyPlayedContainer;
+    @FXML
+    private TextField searchBar;
+    @FXML
+    private VBox searchResultsContainer;
+    @FXML
+    private Slider playbackSlider;
+    @FXML
+    private Button playPauseButton;
+    @FXML
+    private Button nextButton;
+    @FXML
+    private Button prevButton;
+    @FXML
+    private Button btnnewplaylist;
+    @FXML
+    private VBox mainVBox;
+    @FXML
+    private ScrollPane scrollPaneMadeForYou;
+    @FXML
+    private ScrollPane scrollPaneRecentlyPlayed;
+    @FXML
+    private ScrollPane scrollPaneLikedSongs;
+    @FXML
+    private ScrollPane scrollPaneTopCharts;
+    @FXML
+    private ScrollPane scrollPaneArtists;
+    @FXML
+    private ScrollPane scrollPaneAlbums;
+    @FXML
+    private Label labelMadeForYou;
+    @FXML
+    private Label labelRecentlyPlayed;
+    @FXML
+    private Label labelLikedSongs;
+    @FXML
+    private Label labelTopCharts;
+    @FXML
+    private Label labelArtists;
+    @FXML
+    private Label labelAlbums;
+
+
     private MediaPlayerManager mediaPlayerManager;
     @FXML
     private ListView<String> playlistListView;
@@ -72,6 +116,7 @@ public class HelloController implements Initializable {
     private ArtistInformationController artistInformationController;
 
     private ObservableList<String> playlistItems;
+
     @FXML
     private void handleSearch(ActionEvent event) {
         String query = searchBar.getText();
@@ -80,17 +125,21 @@ public class HelloController implements Initializable {
         }
         searchSongs(query);
     }
+
     @FXML
     private TextField tf_newUsername;
     @FXML
     private PasswordField tf_newPassword;
     @FXML
     private VBox likedContainer;// Ο VBox που περιέχει τα αγαπημένα τραγούδια
-    @FXML private Button button_account; // Account button in the main window
+    @FXML
+    private Button button_account; // Account button in the main window
+
     // Handle Account button click
     public void updateAccountButton(String username) {
         button_account.setText(username);  // Update the account button text to new username
     }
+
     @FXML
     private void handleAccountButtonClick() {
         try {
@@ -111,6 +160,7 @@ public class HelloController implements Initializable {
             e.printStackTrace();
         }
     }
+
     private void openLogoutPopup() {
         // You can create a simple confirmation popup asking if they want to log out
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -123,6 +173,7 @@ public class HelloController implements Initializable {
             }
         });
     }
+
     @FXML
     private void handleLogout() {
         // 1. Reset the account button text to "Log In"
@@ -132,11 +183,13 @@ public class HelloController implements Initializable {
         clearUserData();
         System.out.println("User logged out successfully.");
     }
+
     private void clearUserData() {
         // Example: Reset username or any other session data
         // username = null;
         // Clear any other global variables or session data if necessary
     }
+
     @FXML
     private void handleLogout(ActionEvent event) {
         // Reset the account button text to "Log In"
@@ -146,6 +199,7 @@ public class HelloController implements Initializable {
 
         System.out.println("User logged out successfully.");
     }
+
     @FXML
     private Button exploreButton;
 
@@ -204,6 +258,55 @@ public class HelloController implements Initializable {
     }
 
 
+    @FXML
+    public void handleLeftButtonClick(ActionEvent event) {
+        // Λαμβάνουμε το κουμπί που πατήθηκε
+        Button clickedButton = (Button) event.getSource();
+
+        // Αντιστοιχίζουμε τα κουμπιά με τα αντίστοιχα Label και ScrollPane
+        Label targetLabel = null;
+        ScrollPane targetScrollPane = null;
+
+        // Ανάλογα με το κείμενο του κουμπιού, επιλέγουμε το αντίστοιχο Label και ScrollPane
+        switch (clickedButton.getText()) {
+            case "Made For You":
+                targetLabel = labelMadeForYou;           // Το Label για το "Made For You"
+                targetScrollPane = scrollPaneMadeForYou; // Το ScrollPane για το "Made For You"
+                break;
+            case "Recently Played":
+                targetLabel = labelRecentlyPlayed;         // Το Label για τα "Recently Played"
+                targetScrollPane = scrollPaneRecentlyPlayed; // Το ScrollPane για τα "Recently Played"
+                break;
+            case "Liked Songs":
+                targetLabel = labelLikedSongs;             // Το Label για τα "Liked Songs"
+                targetScrollPane = scrollPaneLikedSongs;   // Το ScrollPane για τα "Liked Songs"
+                break;
+            case "Albums":
+                targetLabel = labelAlbums;                 // Το Label για τα "Albums"
+                targetScrollPane = scrollPaneAlbums;       // Το ScrollPane για τα "Albums"
+                break;
+            case "Artists":
+                targetLabel = artistInfomLabel;            // Το Label για τους "Artists"
+                targetScrollPane = scrollPaneArtists;      // Το ScrollPane για τους "Artists"
+                break;
+            case "Top Charts":
+                targetLabel = labelTopCharts;              // Το Label για τα "Top Charts"
+                targetScrollPane = scrollPaneTopCharts;    // Το ScrollPane για τα "Top Charts"
+                break;
+        }
+
+        // Εάν έχουν επιλεγεί το Label και το ScrollPane, προχωράμε με την αφαίρεση και την προσθήκη τους
+        if (targetLabel != null && targetScrollPane != null) {
+            // Αφαιρούμε το Label και το ScrollPane από τις τρέχουσες θέσεις τους στο VBox
+            mainVBox.getChildren().remove(targetLabel);
+            mainVBox.getChildren().remove(targetScrollPane);
+
+            // Προσθέτουμε το ScrollPane και το Label στην κορυφή του VBox
+            mainVBox.getChildren().add(0, targetScrollPane); // Πρώτα προσθέτουμε το ScrollPane
+            mainVBox.getChildren().add(0, targetLabel);      // Στη συνέχεια προσθέτουμε το Label
+        }
+    }
+
 
     @FXML
     private Button backButton;  // Ensure you have a reference to the Back button in your controller
@@ -230,6 +333,7 @@ public class HelloController implements Initializable {
             e.printStackTrace();
         }
     }
+
     public void handleUpgrade(ActionEvent event) {
         try {
             // Open the Spotify Premium URL
@@ -323,12 +427,14 @@ public class HelloController implements Initializable {
     }
 
     private List<Song> favorites = new ArrayList<>();
+
     public void onLikedSongClicked(Song song) {
         if (!favorites.contains(song)) {
             favorites.add(song);  // Αν το τραγούδι δεν υπάρχει, το προσθέτουμε
             addSongToLikedContainer(song);  // Προσθήκη στο UI (likedContainer)
         }
     }
+
     // Μέθοδος για την εμφάνιση του τραγουδιού στο likedContainer
     private void addSongToLikedContainer(Song song) {
         try {
@@ -359,13 +465,16 @@ public class HelloController implements Initializable {
             e.printStackTrace();
         }
     }
+
     private static HelloController instance;
+
     public static HelloController getInstance() {
         if (instance == null) {
             instance = new HelloController();  // Δημιουργία του instance
         }
         return instance;
     }
+
     private List<Song> recentlyPlayed;
     private List<Song> allSongs;
     private boolean isPlaying = false;
@@ -377,6 +486,9 @@ public class HelloController implements Initializable {
         allSongs = new ArrayList<>();
         recentlyPlayed = new ArrayList<>(getRecentlyPlayed());
         favorites = new ArrayList<>(getFavorites());
+
+        // Initialize the set to avoid NullPointerException
+        addedArtistNames = new HashSet<>();
 
         // Combine lists into one for all songs
         allSongs.addAll(recentlyPlayed);
@@ -418,6 +530,7 @@ public class HelloController implements Initializable {
                 VBox vBox = fxmlLoader.load();
                 SongController songController = fxmlLoader.getController();
                 songController.setData(song);
+                songController.setHelloController(this);
 
                 Label songLabel = new Label(song.getName() + " - " + song.getArtist());
                 songLabel.setStyle("-fx-text-fill: white;");
@@ -432,6 +545,27 @@ public class HelloController implements Initializable {
             e.printStackTrace();
         }
 
+    }
+
+    @FXML
+    private HBox likedSongsContainer;
+
+    public void addToLikedSongs(Song song) {
+        if (likedSongsContainer == null) {
+            System.out.println("likedSongsContainer is null!");
+            return;
+        }
+
+        // Create a label for the liked song
+        Label likedSongLabel = new Label(song.getName() + " - " + song.getArtist());
+        likedSongLabel.setStyle("-fx-text-fill: white; -fx-padding: 10;");
+
+        // Optional: Add click functionality to play the liked song
+        likedSongLabel.setOnMouseClicked(event -> playSong(song));
+
+        // Add the liked song to the container
+        likedSongsContainer.getChildren().add(likedSongLabel);
+        System.out.println("Added to liked songs: " + song.getName());
     }
 
 
@@ -450,6 +584,7 @@ public class HelloController implements Initializable {
             System.out.println("HostServices not available");
         }
     }
+
     // Method to handle song search and display YouTube link
     private void searchSongs(String query) {
         OkHttpClient client = new OkHttpClient();
@@ -543,9 +678,6 @@ public class HelloController implements Initializable {
     }
 
 
-
-
-
     @FXML
     private void toggleRecentlyPlayedVisibility(MouseEvent event) {
         boolean isVisible = recentlyPlayedContainer.isVisible();
@@ -575,8 +707,6 @@ public class HelloController implements Initializable {
             System.out.println("Playing song...");
         }
     }
-
-
 
 
     @FXML
@@ -680,6 +810,7 @@ public class HelloController implements Initializable {
 
         return ls;
     }
+
     // Λειτουργία κουμπιού New Playlist
     public void OnButtonClick7() {
         System.out.println("Pressed");  //
@@ -706,6 +837,7 @@ public class HelloController implements Initializable {
             e.getCause();
         }
     }
+
     // Μέθοδος για να ελέγξουμε αν το playlist υπάρχει ήδη
     public boolean isPlaylistExist(String playlistName) {
         return playlistItems.contains(playlistName);
@@ -727,6 +859,7 @@ public class HelloController implements Initializable {
             alert.showAndWait();
         }
     }
+
     // Μέθοδος για να φορτώσουμε τα playlist από το αρχείο
     private void loadPlaylistsFromFile() {
         File file = new File("playlists.txt"); // Ο φάκελος και το όνομα του αρχείου
@@ -744,6 +877,7 @@ public class HelloController implements Initializable {
             }
         }
     }
+
     // Μέθοδος για συγχρονισμό του ListView
     private void refreshPlaylists() {
 
@@ -763,11 +897,20 @@ public class HelloController implements Initializable {
             e.printStackTrace();
         }
     }
+
     private void openArtistInformationWindow(String artistName) {
         try {
             // Φόρτωση του FXML αρχείου
             FXMLLoader loader = new FXMLLoader(getClass().getResource("artist-information.fxml"));
             Parent root = loader.load();
+
+
+            // Get the ArtistInformationController
+            ArtistInformationController artistInfoController = loader.getController();
+
+            // Pass the reference of HelloController to ArtistInformationController
+            artistInfoController.setHelloController(this);
+
 
             // Δημιουργία νέου Stage
             Stage stage = new Stage();
@@ -787,4 +930,47 @@ public class HelloController implements Initializable {
         song.setPreviewUrl("https://www.deezer.com/preview"); // Προσωρινό preview URL για δοκιμές
         return song;
     }
+
+
+
+
+    private Set<String> addedArtistNames;  // Set to track added artist names
+
+
+    public void addArtistToScrollPane(String artistName, Image artistImage) {
+        if (savedArtistsHBox != null) {
+            // Check if the artist has already been added
+            if (addedArtistNames != null && addedArtistNames.contains(artistName)) {
+                return;  // Skip if artist has already been added
+            }
+
+            // Create a VBox to hold the image and label
+            VBox artistVBox = new VBox();
+            artistVBox.setSpacing(10);  // Space between image and label
+            artistVBox.setStyle("-fx-alignment: center;");
+
+            // Create an ImageView for the artist's image
+            ImageView artistImageView = new ImageView(artistImage);
+            artistImageView.setFitWidth(200);
+            artistImageView.setFitHeight(200);
+            artistImageView.setPreserveRatio(true);
+
+            // Create a Label for the artist's name
+            Label artistLabel = new Label(artistName);
+            artistLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;");
+
+            // Add the ImageView and Label to the VBox
+            artistVBox.getChildren().addAll(artistImageView, artistLabel);
+
+            // Add the VBox to the HBox
+            savedArtistsHBox.getChildren().add(artistVBox);
+
+            // Track the artist to avoid duplicates
+            addedArtistNames.add(artistName);
+        } else {
+            System.out.println("savedArtistsHBox is null, cannot add artist.");
+        }
+    }
+
+
 }
