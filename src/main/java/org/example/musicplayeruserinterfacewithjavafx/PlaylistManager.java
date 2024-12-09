@@ -21,10 +21,10 @@ public class PlaylistManager {
     // Μέθοδος για να φορτώσουμε όλα τα playlists από το αρχείο
     public List<String> loadPlaylistsFromFile() {
         List<String> playlists = new ArrayList<>();
-        File file = new File(PLAYLISTS_FILE);
+        File file = new File(getPlaylistsFilePath());
 
         if (file.exists()) {
-            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(getPlaylistsFilePath()))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     if (!line.trim().isEmpty()) {
@@ -69,5 +69,7 @@ public class PlaylistManager {
             e.printStackTrace();
         }
     }
-
+    protected String getPlaylistsFilePath() {
+        return PLAYLISTS_FILE;
+    }
 }
