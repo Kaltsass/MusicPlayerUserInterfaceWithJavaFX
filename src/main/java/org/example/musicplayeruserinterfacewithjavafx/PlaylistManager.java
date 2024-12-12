@@ -72,4 +72,9 @@ public class PlaylistManager {
     protected String getPlaylistsFilePath() {
         return PLAYLISTS_FILE;
     }
+
+    // Getter for playlist items
+    public ObservableList<String> getPlaylists() {
+        return playlistItems;
+    }
 }
