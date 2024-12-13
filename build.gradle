@@ -42,7 +42,7 @@ javafx {
 
 
 dependencies {
-
+  testImplementation('org.junit.jupiter:junit-jupiter:5.8.2')
   implementation 'mysql:mysql-connector-java:8.0.30'
   // SQLite JDBC Library
   implementation 'org.xerial:sqlite-jdbc:3.42.0.0'
@@ -105,11 +105,8 @@ dependencies {
 
 test {
   useJUnitPlatform()
-  jvmArgs += [
-          '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
-          '--add-opens', 'java.base/java.io=ALL-UNNAMED',
-          '--add-opens', 'java.base/java.util=ALL-UNNAMED'
-  ]}
+  jvmArgs '--add-opens', 'java.base/java.io=ALL-UNNAMED'
+}
 
 jlink {
   imageZip = project.file("${buildDir}/distributions/app-${javafx.platform.classifier}.zip")
