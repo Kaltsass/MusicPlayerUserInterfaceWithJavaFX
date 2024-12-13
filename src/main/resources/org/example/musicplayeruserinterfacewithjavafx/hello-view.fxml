@@ -177,7 +177,12 @@
                 <Button fx:id="searchButton" onAction="#handleSearch" style="-fx-background-color: #1DB954; -fx-text-fill: white;" text="Search" />
               </children>
             </HBox>
+
             <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+              <children>
+                <Button fx:id="aboutUsButton"  layoutX="6.0" layoutY="11.0" mnemonicParsing="false" onAction="#handleAboutUsButtonClick" prefHeight="40.0" prefWidth="120.0" styleClass="custom-button" text="About Us" />
+              </children></Pane>
+
             <Button fx:id="upgradeButton" mnemonicParsing="false" onAction="#handleUpgrade" prefHeight="40.0" prefWidth="120.0" styleClass="upgrade-button" stylesheets="@../../../css/style.css" text="Upgrade" textFill="WHITE" />
             <HBox alignment="CENTER" prefHeight="50.0" prefWidth="256.0" xmlns:fx="http://javafx.com/fxml/1">
               <children>
