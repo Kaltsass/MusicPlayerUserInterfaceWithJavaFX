@@ -47,14 +47,17 @@ public class PlaylistManager {
 
     // Μέθοδος για να προσθέσουμε νέο playlist στο αρχείο
     public void addPlaylist(String playlistName) {
+        if (playlistName == null || playlistName.trim().isEmpty()) {
+            System.out.println("Cannot add an empty playlist name!");
+            return; // Don't add an empty or null playlist name
+        }
+
         if (!isPlaylistExist(playlistName)) {
             playlistItems.add(playlistName);
-            savePlaylistsToFile(); // Αποθήκευση του playlist στο αρχείο
-
+            savePlaylistsToFile(); // Save the playlists to the file
         } else {
             System.out.println("Playlist already exists!");
         }
-
     }
 
     // Μέθοδος για να αποθηκεύσουμε την τρέχουσα λίστα playlists στο αρχείο
