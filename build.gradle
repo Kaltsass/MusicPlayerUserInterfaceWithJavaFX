@@ -47,6 +47,12 @@ dependencies {
   // SQLite JDBC Library
   implementation 'org.xerial:sqlite-jdbc:3.42.0.0'
 
+  // Mockito for mocking objects
+  testImplementation 'org.mockito:mockito-core:4.0.0'
+
+  // Mockito for JUnit 5 integration
+  testImplementation 'org.mockito:mockito-junit-jupiter:4.0.0'
+
   // Use JavaFX 16 for Java 11 compatibility (make sure this matches your JavaFX version)
   implementation 'org.openjfx:javafx-controls:16'
   implementation 'org.openjfx:javafx-fxml:16'
@@ -105,7 +111,7 @@ dependencies {
 
 test {
   useJUnitPlatform()
-  jvmArgs '--add-opens', 'java.base/java.io=ALL-UNNAMED'
+
 }
 
 jlink {
