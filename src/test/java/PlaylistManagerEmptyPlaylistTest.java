@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class PlaylistManagerEmptyPlaylistTest {
 
-    private static final String TEST_FILE = "test_playlists.txt"; // Test-specific file
+    private static final String TEST_FILE = "playlists.txt"; // Test-specific file
     private PlaylistManager playlistManager;
 
     @BeforeEach
@@ -37,9 +37,9 @@ public class PlaylistManagerEmptyPlaylistTest {
 
     @Test
     public void testAddEmptyPlaylist() {
-        playlistManager.addPlaylist("");
+        playlistManager.addPlaylist(""); // Attempt to add an empty playlist
 
         // Verify that an empty playlist is not added
-        assertFalse(playlistManager.getPlaylists().contains(""));
+        assertFalse(playlistManager.getPlaylists().contains(""), "Empty playlist should not be added");
     }
 }
