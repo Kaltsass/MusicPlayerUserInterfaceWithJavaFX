@@ -53,6 +53,7 @@ dependencies {
   // Mockito for JUnit 5 integration
   testImplementation 'org.mockito:mockito-junit-jupiter:4.0.0'
 
+
   // Use JavaFX 16 for Java 11 compatibility (make sure this matches your JavaFX version)
   implementation 'org.openjfx:javafx-controls:16'
   implementation 'org.openjfx:javafx-fxml:16'
@@ -106,6 +107,7 @@ dependencies {
   // JUnit for Testing
   testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+
 
 }
 
