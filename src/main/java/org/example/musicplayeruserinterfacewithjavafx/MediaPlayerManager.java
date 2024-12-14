@@ -1,4 +1,3 @@
-
 package org.example.musicplayeruserinterfacewithjavafx;
 
 
@@ -12,6 +11,9 @@ public class MediaPlayerManager {
     // Constructor για την MediaPlayerManager
     public MediaPlayerManager() {
         this.mediaPlayer = null; // Εγκατάσταση σε null αρχικά
+    }
+    public void setMediaPlayer(MediaPlayer mediaPlayer) {
+        this.mediaPlayer = mediaPlayer;
     }
 
     // Μέθοδος για αναπαραγωγή τραγουδιού

@@ -21,10 +21,10 @@ public class PlaylistManager {
     // Μέθοδος για να φορτώσουμε όλα τα playlists από το αρχείο
     public List<String> loadPlaylistsFromFile() {
         List<String> playlists = new ArrayList<>();
-        File file = new File(PLAYLISTS_FILE);
+        File file = new File(getPlaylistsFilePath());
 
         if (file.exists()) {
-            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(getPlaylistsFilePath()))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     if (!line.trim().isEmpty()) {
@@ -47,14 +47,17 @@ public class PlaylistManager {
 
     // Μέθοδος για να προσθέσουμε νέο playlist στο αρχείο
     public void addPlaylist(String playlistName) {
+        if (playlistName == null || playlistName.trim().isEmpty()) {
+            System.out.println("Cannot add an empty playlist name!");
+            return; // Don't add an empty or null playlist name
+        }
+
         if (!isPlaylistExist(playlistName)) {
             playlistItems.add(playlistName);
-            savePlaylistsToFile(); // Αποθήκευση του playlist στο αρχείο
-
+            savePlaylistsToFile(); // Save the playlists to the file
         } else {
             System.out.println("Playlist already exists!");
         }
-
     }
 
     // Μέθοδος για να αποθηκεύσουμε την τρέχουσα λίστα playlists στο αρχείο
@@ -69,5 +72,12 @@ public class PlaylistManager {
             e.printStackTrace();
         }
     }
+    protected String getPlaylistsFilePath() {
+        return PLAYLISTS_FILE;
+    }
 
+    // Getter for playlist items
+    public ObservableList<String> getPlaylists() {
+        return playlistItems;
+    }
 }

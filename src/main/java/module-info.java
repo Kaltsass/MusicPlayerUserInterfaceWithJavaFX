@@ -21,8 +21,16 @@ module org.example.musicplayeruserinterfacewithjavafx {
     requires javafx.media;
 
 
+
+
     // Open package to javafx.fxml for reflection access
     opens org.example.musicplayeruserinterfacewithjavafx to javafx.fxml;
 
+
     opens model to javafx.base;
+    // Export packages
+
+    exports model;
+
+
 }
