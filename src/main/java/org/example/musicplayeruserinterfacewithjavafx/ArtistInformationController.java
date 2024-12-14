@@ -64,8 +64,8 @@ public class ArtistInformationController {
         String artistName = searchBar.getText();
         try {
             // Ανάκτηση δεδομένων από το API
-            String artistImage = fetchArtistImageUrl(artistName);
-            String artistNameFetched = fetchArtistName(artistName);
+            String artistImage = APIArtistInformation.fetchArtistImageUrl(artistName);
+            String artistNameFetched = APIArtistInformation.fetchArtistName(artistName);
             String artistBio = APIArtistInformation.fetchArtistInfo(artistName);
             JsonArray tracksArray = APIDeezerInformation.fetchArtistTracks(artistName);
             String followers = APIDeezerInformation.fetchArtistFollowers(artistName);

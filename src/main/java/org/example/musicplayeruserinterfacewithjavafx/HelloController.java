@@ -3,6 +3,7 @@ package org.example.musicplayeruserinterfacewithjavafx;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -55,56 +56,36 @@ import java.util.Set;
 
 public class HelloController implements Initializable {
 
-    @FXML
-    private HBox savedArtistsHBox;
-    @FXML
-    private ImageView albumCoverImage;
-    @FXML
-    private Label songTitleLabel;
-    @FXML
-    private HBox favoriteContainer;
-    @FXML
-    private HBox recentlyPlayedContainer;
-    @FXML
-    private TextField searchBar;
-    @FXML
-    private VBox searchResultsContainer;
-    @FXML
-    private Slider playbackSlider;
-    @FXML
-    private Button playPauseButton;
-    @FXML
-    private Button nextButton;
-    @FXML
-    private Button prevButton;
-    @FXML
-    private Button btnnewplaylist;
-    @FXML
-    private VBox mainVBox;
-    @FXML
-    private ScrollPane scrollPaneMadeForYou;
-    @FXML
-    private ScrollPane scrollPaneRecentlyPlayed;
-    @FXML
-    private ScrollPane scrollPaneLikedSongs;
-    @FXML
-    private ScrollPane scrollPaneTopCharts;
-    @FXML
-    private ScrollPane scrollPaneArtists;
-    @FXML
-    private ScrollPane scrollPaneAlbums;
-    @FXML
-    private Label labelMadeForYou;
-    @FXML
-    private Label labelRecentlyPlayed;
-    @FXML
-    private Label labelLikedSongs;
-    @FXML
-    private Label labelTopCharts;
-    @FXML
-    private Label labelArtists;
-    @FXML
-    private Label labelAlbums;
+    @FXML public HBox likedSongsContainer;
+    @FXML public ScrollPane mainScrollPane;
+    @FXML private HBox artistLabelAndButtonContainer;
+    @FXML private Button artistActionButton;
+    @FXML private HBox savedArtistsHBox;
+    @FXML private ImageView albumCoverImage;
+    @FXML private Label songTitleLabel;
+    @FXML private HBox favoriteContainer;
+    @FXML private HBox recentlyPlayedContainer;
+    @FXML private HBox albumsContainer;
+    @FXML private TextField searchBar;
+    @FXML private VBox searchResultsContainer;
+    @FXML private Slider playbackSlider;
+    @FXML private Button playPauseButton;
+    @FXML private Button nextButton;
+    @FXML private Button prevButton;
+    @FXML private Button btnnewplaylist;
+    @FXML private VBox mainVBox;
+    @FXML private ScrollPane scrollPaneMadeForYou;
+    @FXML private ScrollPane scrollPaneRecentlyPlayed;
+    @FXML private ScrollPane scrollPaneLikedSongs;
+    @FXML private ScrollPane scrollPaneTopCharts;
+    @FXML private ScrollPane scrollPaneArtists;
+    @FXML private ScrollPane scrollPaneAlbums;
+    @FXML private Label labelMadeForYou;
+    @FXML private Label labelRecentlyPlayed;
+    @FXML private Label labelLikedSongs;
+    @FXML private Label labelTopCharts;
+    @FXML private Label labelArtists;
+    @FXML private Label labelAlbums;
 
 
     private MediaPlayerManager mediaPlayerManager;
@@ -264,7 +245,8 @@ public class HelloController implements Initializable {
         Button clickedButton = (Button) event.getSource();
 
         // Αντιστοιχίζουμε τα κουμπιά με τα αντίστοιχα Label και ScrollPane
-        Label targetLabel = null;
+        // Αλλαγή του target Label σε Node για να μπορεί να τραβήξει και το κουμπί
+        Node targetLabel = null;
         ScrollPane targetScrollPane = null;
 
         // Ανάλογα με το κείμενο του κουμπιού, επιλέγουμε το αντίστοιχο Label και ScrollPane
@@ -286,7 +268,7 @@ public class HelloController implements Initializable {
                 targetScrollPane = scrollPaneAlbums;       // Το ScrollPane για τα "Albums"
                 break;
             case "Artists":
-                targetLabel = artistInfomLabel;            // Το Label για τους "Artists"
+                targetLabel = artistLabelAndButtonContainer;            // Το Label για τους "Artists"
                 targetScrollPane = scrollPaneArtists;      // Το ScrollPane για τους "Artists"
                 break;
             case "Top Charts":
@@ -304,6 +286,9 @@ public class HelloController implements Initializable {
             // Προσθέτουμε το ScrollPane και το Label στην κορυφή του VBox
             mainVBox.getChildren().add(0, targetScrollPane); // Πρώτα προσθέτουμε το ScrollPane
             mainVBox.getChildren().add(0, targetLabel);      // Στη συνέχεια προσθέτουμε το Label
+
+            // Scroll the mainScrollPane to the top
+            mainScrollPane.setVvalue(0);  // This will scroll to the top of the ScrollPane
         }
     }
 
@@ -477,6 +462,7 @@ public class HelloController implements Initializable {
 
     private List<Song> recentlyPlayed;
     private List<Song> allSongs;
+    private List<Song> likedSongs;
     private boolean isPlaying = false;
     private int currentSongIndex = 0;
     private MediaPlayer mediaPlayer;
@@ -486,6 +472,7 @@ public class HelloController implements Initializable {
         allSongs = new ArrayList<>();
         recentlyPlayed = new ArrayList<>(getRecentlyPlayed());
         favorites = new ArrayList<>(getFavorites());
+        likedSongs = new ArrayList<>();
 
         // Initialize the set to avoid NullPointerException
         addedArtistNames = new HashSet<>();
@@ -493,6 +480,7 @@ public class HelloController implements Initializable {
         // Combine lists into one for all songs
         allSongs.addAll(recentlyPlayed);
         allSongs.addAll(favorites);
+        allSongs.addAll(likedSongs);
 
         mediaPlayerManager = new MediaPlayerManager();
 
@@ -506,6 +494,7 @@ public class HelloController implements Initializable {
 
         loadSongs(recentlyPlayed, recentlyPlayedContainer);
         loadSongs(favorites, favoriteContainer);
+        loadSongs(likedSongs, likedSongsContainer);
 
         playlistListView.setItems(FXCollections.observableArrayList()); // Initialize list view
         playlistItems = FXCollections.observableArrayList();
@@ -514,10 +503,14 @@ public class HelloController implements Initializable {
         playlistItems = FXCollections.observableArrayList();
         playlistListView.setItems(playlistItems);
         loadPlaylistsFromFile(); // Φορτώνουμε τα playlists από το αρχείο κατά την εκκίνηση
-        artistInfomLabel.setOnMouseClicked(event -> openArtistInformationWindow(artistInfomLabel.getText()));
+        artistActionButton.setOnMouseClicked(event -> openArtistInformationWindow(artistActionButton.getText()));
         if (artistInformationController != null) {
             artistInformationController.setHelloController(this); // Περάστε το instance του HelloController
         }
+
+        // Fetch and load top albums into the albums container
+        List<String> albumsList = APITopAlbums.fetchTopAlbums(); // Fetch albums from API
+        loadAlbums(albumsList); // Load fetched albums into the albumsContainer
 
     }
 
@@ -566,26 +559,18 @@ public class HelloController implements Initializable {
 
     }
 
-    @FXML
-    private HBox likedSongsContainer;
-
     public void addToLikedSongs(Song song) {
-        if (likedSongsContainer == null) {
-            System.out.println("likedSongsContainer is null!");
-            return;
+        if (!likedSongs.contains(song)) {  // Check if the song is already in the liked songs list
+            likedSongs.add(0, song);  // Add to the top (like recently played)
+        } else {
+            likedSongs.remove(song);  // Remove the song if it exists already
+            likedSongs.add(0, song);  // Add it to the top again
         }
 
-        // Create a label for the liked song
-        Label likedSongLabel = new Label(song.getName() + " - " + song.getArtist());
-        likedSongLabel.setStyle("-fx-text-fill: white; -fx-padding: 10;");
-
-        // Optional: Add click functionality to play the liked song
-        likedSongLabel.setOnMouseClicked(event -> playSong(song));
-
-        // Add the liked song to the container
-        likedSongsContainer.getChildren().add(likedSongLabel);
-        System.out.println("Added to liked songs: " + song.getName());
+        likedSongsContainer.getChildren().clear();  // Clear the current container to refresh the UI
+        loadSongs(likedSongs, likedSongsContainer);  // Reload the liked songs into the container
     }
+
 
 
     private HostServices hostServices; // Field to store HostServices
@@ -951,7 +936,7 @@ public class HelloController implements Initializable {
     }
 
 
-
+    //Artists Button
 
     private Set<String> addedArtistNames;  // Set to track added artist names
 
@@ -988,6 +973,45 @@ public class HelloController implements Initializable {
             addedArtistNames.add(artistName);
         } else {
             System.out.println("savedArtistsHBox is null, cannot add artist.");
+        }
+    }
+
+    //Albums Button
+
+    public void loadAlbums(List<String> albumsList) {
+        try {
+            // Iterate through the list of albums
+            for (String albumInfo : albumsList) {
+                // Split the album info (title, artist, cover URL)
+                String[] parts = albumInfo.split(", ");
+                String title = parts[0].split(": ")[1];      // Album title
+                String artist = parts[1].split(": ")[1];     // Artist name
+                String coverImageUrl = parts[2].split(": ")[1]; // Album cover image URL
+
+                // Create the album item (VBox with cover image and label)
+                VBox albumItem = new VBox(10); // Vertical box with spacing
+                albumItem.setStyle("-fx-alignment: center;"); // Center align the content
+
+                // Create the cover image
+                Image coverImage = new Image(coverImageUrl, 200, 200, true, true); // Load album cover
+                ImageView imageView = new ImageView(coverImage);
+                imageView.setFitWidth(200); // Set width
+                imageView.setFitHeight(200); // Set height
+                imageView.setPreserveRatio(true); // Keep aspect ratio
+
+                // Create the label with album name and artist
+                Label albumLabel = new Label(artist  + "-" + title); // Display title and artist
+                albumLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10;"); // Customize text style
+
+                // Add image and label to the album item container (VBox)
+                albumItem.getChildren().addAll(imageView, albumLabel);
+
+                // Add the album item to the HBox container
+                albumsContainer.getChildren().add(albumItem);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error loading albums into the UI: " + e.getMessage());
         }
     }
 
