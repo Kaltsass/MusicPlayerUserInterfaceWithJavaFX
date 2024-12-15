@@ -1,5 +1,7 @@
 package model;
 
+import javafx.scene.image.Image;
+
 public class Song {
     private String cover;
     private String name;
@@ -51,4 +53,22 @@ public class Song {
     public void setYoutubeUrl(String youtubeUrl) {
         this.youtubeUrl = youtubeUrl;
     }
+
+    public Image getCoverImage() {
+        if (cover != null && !cover.isEmpty()) {
+            try {
+                return new Image(cover, true); // Load image in background
+            } catch (Exception e) {
+                System.err.println("Error loading image from URL: " + cover);
+                return getDefaultCoverImage();
+            }
+        }
+        return getDefaultCoverImage();
+    }
+
+    // Default cover image if no cover is available
+    private Image getDefaultCoverImage() {
+        return new Image(getClass().getResourceAsStream("/img/default_cover.png"));
+    }
+
 }
