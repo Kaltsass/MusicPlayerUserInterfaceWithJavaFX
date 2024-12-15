@@ -206,6 +206,28 @@ public class HelloController implements Initializable {
 
 
     @FXML
+    private ListView<Hyperlink> newsListView;
+
+    @FXML
+    private void handleArticleClick(MouseEvent event) {
+        // Ensure you're using newsListView from ExploreController here
+        Hyperlink selectedArticle = newsListView.getSelectionModel().getSelectedItem();
+        if (selectedArticle != null) {
+            String url = selectedArticle.getText(); // URL should be in the text
+            System.out.println("Opening URL: " + url);  // Debugging log
+            try {
+                // Open the URL in the default web browser
+                Desktop.getDesktop().browse(new URI(url));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("No article selected.");
+        }
+    }
+
+
+    @FXML
     private Button backButton;  // Ensure you have a reference to the Back button in your controller
 
     @FXML
@@ -408,6 +430,9 @@ public class HelloController implements Initializable {
         }
 
     }
+
+
+
 
     @FXML
     private void handleAboutUsButtonClick(ActionEvent event) {
