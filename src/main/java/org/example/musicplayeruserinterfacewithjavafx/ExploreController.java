@@ -1,10 +1,12 @@
-package org.example.musicplayeruserinterfacewithjavafx;  // <-- This line should be added
+package org.example.musicplayeruserinterfacewithjavafx;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.scene.input.MouseEvent;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,10 +15,12 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.awt.Desktop;
+import java.net.URI;
 
 public class ExploreController {
     @FXML
-    private ListView<String> newsListView;
+    private ListView<NewsArticle> newsListView;
 
     public void initialize() {
         fetchNews();
@@ -47,13 +51,13 @@ public class ExploreController {
                     // Log the full response to check if multiple articles exist
                     String jsonResponse = response.toString();
                     System.out.println("API Response: " + jsonResponse); // Log the full API response
-                    ObservableList<String> newsTitles = parseNewsTitles(jsonResponse);
+                    ObservableList<NewsArticle> newsArticles = parseNewsArticles(jsonResponse);
 
                     // Debugging: Log number of news articles parsed
-                    System.out.println("Parsed " + newsTitles.size() + " news articles.");
+                    System.out.println("Parsed " + newsArticles.size() + " news articles.");
 
                     // Update UI on the JavaFX Application Thread
-                    Platform.runLater(() -> newsListView.setItems(newsTitles));
+                    Platform.runLater(() -> newsListView.setItems(newsArticles));
 
                 } else {
                     System.err.println("Error: Unable to fetch news (Response Code: " + responseCode + ")");
@@ -64,24 +68,40 @@ public class ExploreController {
         }).start();
     }
 
-    private ObservableList<String> parseNewsTitles(String jsonResponse) {
-        ObservableList<String> newsTitles = FXCollections.observableArrayList();
+    private ObservableList<NewsArticle> parseNewsArticles(String jsonResponse) {
+        ObservableList<NewsArticle> newsArticles = FXCollections.observableArrayList();
 
         try {
             JSONObject jsonObject = new JSONObject(jsonResponse);
             JSONArray articles = jsonObject.getJSONArray("articles");
 
-            // Loop through each article and get the title
+            // Loop through each article and get the title and URL
             for (int i = 0; i < articles.length(); i++) {
                 JSONObject article = articles.getJSONObject(i);
                 String title = article.getString("title");
-                newsTitles.add(title);
+                String url = article.getString("url");
+                newsArticles.add(new NewsArticle(title, url));
                 System.out.println("Parsed title: " + title); // Debug the parsed title
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return newsTitles;
+        return newsArticles;
+    }
+
+    // Event handler to open the article link when a news item is clicked
+    @FXML
+    private void handleArticleClick(MouseEvent event) {
+        NewsArticle selectedArticle = newsListView.getSelectionModel().getSelectedItem();
+        if (selectedArticle != null) {
+            String url = selectedArticle.getUrl();
+            try {
+                // Open the URL in the default web browser
+                Desktop.getDesktop().browse(new URI(url));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
