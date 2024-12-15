@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
-<!-- ExploreView.fxml -->
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="800.0" prefWidth="1500.0"
             style="-fx-background-color: black;"
@@ -13,9 +10,19 @@
             fx:controller="org.example.musicplayeruserinterfacewithjavafx.ExploreController">
 
     <children>
-        <Label layoutX="50.0" layoutY="50.0" text="This is the Explore Window" textFill="white">            <font>
-                <Font name="System Bold" size="18.0" />
+        <!-- Label for the Explore section -->
+        <Label layoutX="50.0" layoutY="20.0" text="Explore - Latest News" textFill="white">
+            <font>
+                <Font name="System Bold" size="24.0" />
             </font>
         </Label>
+
+        <!-- ListView to display news headlines -->
+        <ListView fx:id="newsListView"
+                  layoutX="50.0" layoutY="70.0"
+                  prefHeight="700.0" prefWidth="1400.0"
+                  style="-fx-control-inner-background: #1c1c1c; -fx-text-fill: white; -fx-font-size: 16px;">
+        </ListView>
+
     </children>
 </AnchorPane>
