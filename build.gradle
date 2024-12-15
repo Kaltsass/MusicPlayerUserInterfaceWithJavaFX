@@ -5,8 +5,6 @@ plugins {
   id 'org.openjfx.javafxplugin' version '0.0.13'
   id 'org.beryx.jlink' version '2.25.0'
 }
-
-
 mainClassName = 'org.example.musicplayeruserinterfacewithjavafx.Main'
 group = 'org.example'
 version = '1.0-SNAPSHOT'

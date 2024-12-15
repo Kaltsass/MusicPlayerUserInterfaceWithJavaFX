@@ -37,10 +37,10 @@
         <ToolBar prefHeight="43.0" prefWidth="200.0" styleClass="tool-bar">
             <items>
                 <!-- Add to Playlist Button -->
-                <Button fx:id="addToPlaylist" text="+" onAction="#OnButtonClick" textFill="#49da0f" styleClass="like-button"/>
+                <Button fx:id="addToPlaylist" onAction="#btnaddToPlaylist" styleClass="like-button" text="+" textFill="#49da0f" />
 
                 <!-- Like Button -->
-                <Button fx:id="likedSong" text="❤" onAction="#OnButtonClick" textFill="#49da0f" styleClass="like-button"/>
+                <Button fx:id="likedSong" onAction="#OnButtonClick" styleClass="like-button" text="❤" textFill="#49da0f" />
             </items>
         </ToolBar>
     </children>

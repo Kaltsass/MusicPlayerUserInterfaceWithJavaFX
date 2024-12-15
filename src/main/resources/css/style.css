@@ -194,7 +194,7 @@
 
 /* Στυλ για τα κουμπιά (Like/Unlike) */
 .like-button {
-    -fx-background-color: black; /* Μαύρο φόντο πίσω από τα κουμπιά */
+    -fx-background-color: #181818; /* Γκρι φόντο πίσω από τα κουμπιά */
     -fx-border-color: #4acc39;
     -fx-font-size: 18px;
     -fx-font-weight: bold;
@@ -296,4 +296,104 @@
     -fx-border-color: white; /* Optional: Keep the border color as white when focused */
     -fx-border-width: 2px; /* Optional: Maintain border thickness */
     -fx-focus-color: transparent; /* Ensure no focus ring (green) appears */
+}
+/*  ListView */
+.list-cell {
+    -fx-background-color: #181818;  /* Σκοτεινό φόντο */
+    -fx-text-fill: white;           /* Λευκό χρώμα για το κείμενο */
+    -fx-font-size: 14px;
+}
+
+/* TextFlow */
+.text-flow {
+    -fx-background-color: #1db954;
+    -fx-font-size: 14px;    /* Μεγαλύτερο μέγεθος γραμματοσειράς */
+    -fx-text-fill: #fff;   /* Λευκό χρώμα */
+    -fx-font-weight: bold;  /* Bold */
+}
+.text-flow .text {
+    -fx-font-size: 18px;        /* Μεγαλύτερο μέγεθος γραμματοσειράς */
+    -fx-text-fill: white;       /* Λευκό χρώμα */
+    -fx-font-weight: bold;      /* Bold */
+}
+
+
+
+
+
+/* Base default style for Instagram Icon */
+.image-view-instagram {
+    -fx-cursor: hand; /* Changes the cursor to 'hand' on hover */
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.3), 10, 0.5, 0, 0);
+    -fx-scale-x: 1; /* Ensure no zoom by default */
+    -fx-scale-y: 1;
+    -fx-transition: all 0.2s ease; /* Smooth effect transitions */
+}
+
+
+
+/* Hover effect for Instagram */
+.image-view-instagram:hover {
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 20, 0.7, 0, 0); /* Brighter white glow */
+    -fx-opacity: 0.9; /* Subtle transparency */
+    -fx-scale-x: 0.8; /* Zoom out on hover (scale down) */
+    -fx-scale-y: 0.8;
+    -fx-transition: all 0.2s ease; /* Smooth effect transition */
+}
+
+
+/* facebook hover effects with smooth transitions */
+.image-view-facebook {
+    -fx-cursor: hand; /* Changes cursor to hand when hovering */
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.3), 10, 0.5, 0, 0);
+    -fx-transition: all 0.2s ease; /* Smooth effect transitions */
+}
+
+/* Hover effect for Facebook */
+.image-view-facebook:hover {
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 25, 0.7, 0, 0);
+    -fx-scale-x: 0.9;
+    -fx-scale-y: 0.9;
+    -fx-transition: all 0.2s ease; /* Smooth effect transitions */
+}
+
+
+
+
+/* discord hover effects with smooth transitions */
+.image-view-discord {
+    -fx-cursor: hand; /* Changes cursor to hand when hovering */
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.3), 10, 0.5, 0, 0);
+    -fx-transition: all 0.2s ease; /* Smooth effect transitions */
+}
+
+
+
+/* Hover effect for discord */
+.image-view-discord:hover {
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 25, 0.7, 0, 0);
+    -fx-scale-x: 0.9;
+    -fx-scale-y: 0.9;
+    -fx-transition: all 0.2s ease; /* Smooth effect transitions */
+}
+
+
+
+
+/* github hover effects with smooth transitions */
+.image-view-github {
+    -fx-cursor: hand; /* Changes cursor to hand when hovering */
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.3), 10, 0.5, 0, 0);
+    -fx-transition: all 0.2s ease; /* Smooth effect transitions */
+}
+
+
+
+
+/* Hover effect for github */
+.image-view-github:hover {
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 25, 0.7, 0, 0);
+    -fx-scale-x: 0.9;
+    -fx-scale-y: 0.9;
+    -fx-transition: all 0.2s ease; /* Smooth effect transitions */
 }
