@@ -166,3 +166,6 @@ public class APIDeezerInformation {
         return songs;
     }
 }
+
+
+// parsers able to be tested with fake json response
