@@ -42,10 +42,17 @@ javafx {
 
 
 dependencies {
-
+  testImplementation('org.junit.jupiter:junit-jupiter:5.8.2')
   implementation 'mysql:mysql-connector-java:8.0.30'
   // SQLite JDBC Library
   implementation 'org.xerial:sqlite-jdbc:3.42.0.0'
+
+  // Mockito for mocking objects
+  testImplementation 'org.mockito:mockito-core:4.0.0'
+
+  // Mockito for JUnit 5 integration
+  testImplementation 'org.mockito:mockito-junit-jupiter:4.0.0'
+
 
   // Use JavaFX 16 for Java 11 compatibility (make sure this matches your JavaFX version)
   implementation 'org.openjfx:javafx-controls:16'
@@ -57,7 +64,8 @@ dependencies {
 
   implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
   implementation 'org.asynchttpclient:async-http-client:2.12.3'
-  implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.6.0'
+  implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.9.0' // Use a newer, consistent version
+  implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.0'
   implementation 'com.squareup.okhttp3:okhttp:4.9.3'  // Προσθήκη OkHttp στην εφαρμογή
   implementation 'com.google.code.gson:gson:2.8.8' // Προσθήκη της εξάρτησης Gson
   implementation 'com.squareup.okhttp:okhttp:2.7.5' // Παλιότερη έκδοση
@@ -100,10 +108,13 @@ dependencies {
   testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 
+
 }
 
 test {
-  useJUnitPlatform()}
+  useJUnitPlatform()
+
+}
 
 jlink {
   imageZip = project.file("${buildDir}/distributions/app-${javafx.platform.classifier}.zip")
