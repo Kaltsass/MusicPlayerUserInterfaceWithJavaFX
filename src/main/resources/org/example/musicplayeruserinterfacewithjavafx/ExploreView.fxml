@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1500.0"
+<AnchorPane prefHeight="800.0" prefWidth="1600.0"
             style="-fx-background-color: black;"
             xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="org.example.musicplayeruserinterfacewithjavafx.ExploreController">
