@@ -46,9 +46,11 @@ public class APITopAlbums {
                 JsonObject album = albumsArray.get(i).getAsJsonObject();
                 String albumTitle = album.get("title").getAsString();
                 String artistName = album.getAsJsonObject("artist").get("name").getAsString();
+                // Get the URL of the album cover
+                String coverImageUrl = album.get("cover_big").getAsString();
 
                 // Προσθήκη του album στη λίστα
-                albumsList.add("Album: " + albumTitle + ", Artist: " + artistName);
+                albumsList.add("Album: " + albumTitle + ", Artist: " + artistName + ", Cover: " + coverImageUrl);
             }
         } catch (IOException e) {
             // Εκτύπωση στοίβας σφαλμάτων για περισσότερες πληροφορίες
@@ -58,4 +60,13 @@ public class APITopAlbums {
 
         return albumsList;  // Επιστροφή της λίστας με τα albums
     }
+    //Για να δω αν τραβάει φωτογραφίες
+    public static void main(String[] args) {
+        List<String> albums = fetchTopAlbums();
+        System.out.println("Fetched Albums: ");
+        for (String album : albums) {
+            System.out.println(album);
+        }
+    }
+
 }
