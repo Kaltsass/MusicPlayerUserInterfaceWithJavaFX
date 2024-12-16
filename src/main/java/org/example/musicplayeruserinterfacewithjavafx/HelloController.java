@@ -23,9 +23,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
+
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.media.Media;
@@ -48,10 +47,6 @@ import javafx.application.HostServices;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.io.*;
-
-import java.util.HashSet;
-import java.util.Set;
-
 
 
 public class HelloController implements Initializable {
@@ -585,15 +580,34 @@ public class HelloController implements Initializable {
     }
 
     public void addToLikedSongs(Song song) {
-        if (!likedSongs.contains(song)) {  // Check if the song is already in the liked songs list
-            likedSongs.add(0, song);  // Add to the top (like recently played)
-        } else {
-            likedSongs.remove(song);  // Remove the song if it exists already
-            likedSongs.add(0, song);  // Add it to the top again
-        }
+        if (likedSongs.contains(song)) {  // If the song is already in the liked songs list
+            // Show confirmation dialog before removing the song
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Remove Song");
+            alert.setHeaderText("This song is already liked.");
+            alert.setContentText("Do you want to remove it from liked songs?");
 
-        likedSongsContainer.getChildren().clear();  // Clear the current container to refresh the UI
-        loadSongs(likedSongs, likedSongsContainer);  // Reload the liked songs into the container
+            // Add "Yes" and "No" buttons
+            ButtonType yesButton = new ButtonType("Yes");
+            ButtonType noButton = new ButtonType("No");
+
+            alert.getButtonTypes().setAll(yesButton, noButton);
+
+            // Wait for the user to respond
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent() && result.get() == yesButton) {
+                // Remove the song from the liked songs list if user clicks "Yes"
+                likedSongs.remove(song);
+
+                likedSongsContainer.getChildren().clear();  // Clear the current container to refresh the UI
+                loadSongs(likedSongs, likedSongsContainer);  // Reload the liked songs into the container
+            }
+        } else {
+            likedSongs.add(0, song);  // Add to the top (like recently played)
+            likedSongsContainer.getChildren().clear();  // Clear the current container to refresh the UI
+            loadSongs(likedSongs, likedSongsContainer);  // Reload the liked songs into the container
+        }
     }
 
 
