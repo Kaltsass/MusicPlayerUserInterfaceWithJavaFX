@@ -57,8 +57,11 @@ public class ExploreController {
                 }
             }
 
+            // Filter the results to remove any general news
+            ObservableList<Hyperlink> filteredMusicNews = filterMusicArticles(allMusicNews);
+
             // Update the UI
-            Platform.runLater(() -> newsListView.setItems(allMusicNews));
+            Platform.runLater(() -> newsListView.setItems(filteredMusicNews));
         }).start();
     }
 
@@ -110,8 +113,8 @@ public class ExploreController {
                 String content = article.optString("content", "");
                 String url = article.optString("url", "");
 
-                // Apply stricter filtering
-                if ((title.toLowerCase().contains("music") || description.toLowerCase().contains("music") || content.toLowerCase().contains("music")) && !url.isEmpty()) {
+                // Apply stricter filtering to ensure it's music-related
+                if (isMusicRelated(title, description, content) && !url.isEmpty()) {
                     Hyperlink hyperlink = new Hyperlink(title);
                     hyperlink.setOnAction(event -> openUrl(url)); // Attach the URL to open when clicked
 
@@ -123,6 +126,32 @@ public class ExploreController {
         }
 
         return newsArticles;
+    }
+
+    private boolean isMusicRelated(String title, String description, String content) {
+        // Define strict music-related checks
+        String[] musicTerms = {"music", "singer", "artist", "album", "concert", "song", "band", "festival", "recording", "lyrics"};
+
+        // Check if any music-related term exists in the title, description, or content
+        for (String term : musicTerms) {
+            if (title.toLowerCase().contains(term) || description.toLowerCase().contains(term) || content.toLowerCase().contains(term)) {
+                return true;
+            }
+        }
+        return false; // Return false if no music-related terms are found
+    }
+
+    private ObservableList<Hyperlink> filterMusicArticles(ObservableList<Hyperlink> allMusicNews) {
+        ObservableList<Hyperlink> filteredMusicNews = FXCollections.observableArrayList();
+
+        for (Hyperlink hyperlink : allMusicNews) {
+            // Filter out any general news articles that don't meet music-related criteria
+            if (hyperlink.getText().toLowerCase().contains("music") || hyperlink.getText().toLowerCase().contains("artist") || hyperlink.getText().toLowerCase().contains("album")) {
+                filteredMusicNews.add(hyperlink);
+            }
+        }
+
+        return filteredMusicNews;
     }
 
     private void openUrl(String url) {
