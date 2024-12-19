@@ -23,9 +23,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
+
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.media.Media;
@@ -48,10 +47,6 @@ import javafx.application.HostServices;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.io.*;
-
-import java.util.HashSet;
-import java.util.Set;
-
 
 
 public class HelloController implements Initializable {
@@ -529,10 +524,17 @@ public class HelloController implements Initializable {
         if (artistInformationController != null) {
             artistInformationController.setHelloController(this); // Περάστε το instance του HelloController
         }
-
-        // Fetch and load top albums into the albums container
+       // Fetch top albums and their details
         List<String> albumsList = APITopAlbums.fetchTopAlbums(); // Fetch albums from API
-        loadAlbums(albumsList); // Load fetched albums into the albumsContainer
+
+        // Fetch album IDs for retrieving songs
+        List<String> albumIds = APITopAlbums.getAlbumIds(); // A new method to fetch album IDs
+
+        // Fetch songs for the top 10 albums
+        Map<String, List<String>> albumSongsMap = APITopAlbums.fetchSongsFromTopAlbums(albumIds);
+
+        // Load albums into the UI with click listeners to show songs
+        loadAlbums(albumsList, albumSongsMap);
 
     }
 
@@ -585,15 +587,34 @@ public class HelloController implements Initializable {
     }
 
     public void addToLikedSongs(Song song) {
-        if (!likedSongs.contains(song)) {  // Check if the song is already in the liked songs list
-            likedSongs.add(0, song);  // Add to the top (like recently played)
-        } else {
-            likedSongs.remove(song);  // Remove the song if it exists already
-            likedSongs.add(0, song);  // Add it to the top again
-        }
+        if (likedSongs.contains(song)) {  // If the song is already in the liked songs list
+            // Show confirmation dialog before removing the song
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Remove Song");
+            alert.setHeaderText("This song is already liked.");
+            alert.setContentText("Do you want to remove it from liked songs?");
 
-        likedSongsContainer.getChildren().clear();  // Clear the current container to refresh the UI
-        loadSongs(likedSongs, likedSongsContainer);  // Reload the liked songs into the container
+            // Add "Yes" and "No" buttons
+            ButtonType yesButton = new ButtonType("Yes");
+            ButtonType noButton = new ButtonType("No");
+
+            alert.getButtonTypes().setAll(yesButton, noButton);
+
+            // Wait for the user to respond
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent() && result.get() == yesButton) {
+                // Remove the song from the liked songs list if user clicks "Yes"
+                likedSongs.remove(song);
+
+                likedSongsContainer.getChildren().clear();  // Clear the current container to refresh the UI
+                loadSongs(likedSongs, likedSongsContainer);  // Reload the liked songs into the container
+            }
+        } else {
+            likedSongs.add(0, song);  // Add to the top (like recently played)
+            likedSongsContainer.getChildren().clear();  // Clear the current container to refresh the UI
+            loadSongs(likedSongs, likedSongsContainer);  // Reload the liked songs into the container
+        }
     }
 
 
@@ -1003,35 +1024,38 @@ public class HelloController implements Initializable {
 
     //Albums Button
 
-    public void loadAlbums(List<String> albumsList) {
+    public void loadAlbums(List<String> albumsList, Map<String, List<String>> albumSongsMap) {
         try {
-            // Iterate through the list of albums
             for (String albumInfo : albumsList) {
-                // Split the album info (title, artist, cover URL)
                 String[] parts = albumInfo.split(", ");
-                String title = parts[0].split(": ")[1];      // Album title
-                String artist = parts[1].split(": ")[1];     // Artist name
-                String coverImageUrl = parts[2].split(": ")[1]; // Album cover image URL
+                String title = parts[0].split(": ")[1];
+                String artist = parts[1].split(": ")[1];
+                String coverImageUrl = parts[2].split(": ")[1];
 
-                // Create the album item (VBox with cover image and label)
-                VBox albumItem = new VBox(10); // Vertical box with spacing
-                albumItem.setStyle("-fx-alignment: center;"); // Center align the content
+                VBox albumItem = new VBox(10);
+                albumItem.setStyle("-fx-alignment: center; -fx-cursor: hand;");
 
-                // Create the cover image
-                Image coverImage = new Image(coverImageUrl, 200, 200, true, true); // Load album cover
+                Image coverImage = new Image(coverImageUrl, 200, 200, true, true);
                 ImageView imageView = new ImageView(coverImage);
-                imageView.setFitWidth(200); // Set width
-                imageView.setFitHeight(200); // Set height
-                imageView.setPreserveRatio(true); // Keep aspect ratio
+                imageView.setFitWidth(200);
+                imageView.setFitHeight(200);
+                imageView.setPreserveRatio(true);
 
-                // Create the label with album name and artist
-                Label albumLabel = new Label(artist  + "-" + title); // Display title and artist
-                albumLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10;"); // Customize text style
+                Label albumLabel = new Label(artist + " - " + title);
+                albumLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10;");
 
-                // Add image and label to the album item container (VBox)
                 albumItem.getChildren().addAll(imageView, albumLabel);
 
-                // Add the album item to the HBox container
+                // Add click event listener
+                albumItem.setOnMouseClicked(event -> {
+                    List<String> songs = albumSongsMap.get(title);
+                    if (songs != null) {
+                        displaySongs(artist, title, songs);
+                    } else {
+                        System.out.println("No songs found for album: " + title);
+                    }
+                });
+
                 albumsContainer.getChildren().add(albumItem);
             }
         } catch (Exception e) {
@@ -1039,6 +1063,36 @@ public class HelloController implements Initializable {
             System.out.println("Error loading albums into the UI: " + e.getMessage());
         }
     }
+
+
+
+    private void displaySongs(String artist, String albumTitle, List<String> songs) {
+        Stage songStage = new Stage();
+        songStage.setTitle("Songs of " + albumTitle + " by " + artist);
+
+        VBox songListContainer = new VBox(10);
+        songListContainer.setStyle("-fx-padding: 20; -fx-alignment: center; -fx-background-color: #2b2b2b;");
+
+        Label titleLabel = new Label("Songs from " + albumTitle);
+        titleLabel.setStyle("-fx-text-fill: white; -fx-font-size: 18px; -fx-padding: 10;");
+        songListContainer.getChildren().add(titleLabel);
+
+        for (String song : songs) {
+            Label songLabel = new Label(song);
+            songLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
+            songListContainer.getChildren().add(songLabel);
+        }
+
+        ScrollPane scrollPane = new ScrollPane(songListContainer);
+        scrollPane.setStyle("-fx-background: transparent; -fx-padding: 10;");
+        scrollPane.setFitToWidth(true);
+
+        Scene scene = new Scene(scrollPane, 400, 600);
+        songStage.setScene(scene);
+        songStage.show();
+    }
+
+
 
 
 }
