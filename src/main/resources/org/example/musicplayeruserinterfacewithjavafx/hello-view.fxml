@@ -261,7 +261,7 @@
                 </Label>
                 <ScrollPane fx:id="scrollPaneAlbums" fitToWidth="true" minViewportHeight="270.0" prefHeight="264.0" prefWidth="1072.0" style="-fx-background-color: transparent;" stylesheets="@../../../css/style.css">
                   <content>
-                    <HBox fx:id="albumsContainer" prefHeight="0.0" prefWidth="0.0" spacing="30.0" />
+                    <HBox fx:id="albumsContainer" spacing="30.0" style="-fx-alignment: top-center; -fx-background-color: transparent;" />
                   </content>
                 </ScrollPane>
 
