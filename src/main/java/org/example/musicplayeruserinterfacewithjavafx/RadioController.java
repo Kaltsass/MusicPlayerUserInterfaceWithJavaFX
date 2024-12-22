@@ -30,7 +30,9 @@ public class RadioController {
     private Button nextStationButton;
 
     private MediaPlayer mediaPlayer;
+
     private List<JsonObject> trackData = new ArrayList<>();
+
     private int currentTrackIndex = 0;
 
     private final OkHttpClient client = new OkHttpClient();
@@ -39,7 +41,9 @@ public class RadioController {
      * Initialize the radio functionality.
      */
     public void initialize() {
+
         nowPlayingLabel.setText("Now Playing: Nothing");
+
         albumCoverImageView.setImage(null);
 
         // Set up "Next Track" button action
@@ -60,6 +64,7 @@ public class RadioController {
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
                 System.out.println("Error fetching radio tracks: HTTP " + response.code());
+
                 nowPlayingLabel.setText("Error loading radio tracks.");
                 return;
             }
