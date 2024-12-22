@@ -11,15 +11,31 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 
 import javafx.scene.image.Image;
+
+
 import javafx.scene.image.ImageView;
+
 import javafx.scene.layout.AnchorPane;
+
+
 import javafx.stage.Modality;
+
 import javafx.stage.Stage;
 import javafx.scene.media.Media;
+
 import javafx.scene.media.MediaPlayer;
+
+
 import java.io.IOException;
+
 import java.util.ArrayList;
+
+
+
 import java.util.List;
+
+
+
 public class RadioController {
 
     @FXML
