@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.Button?>
 
 <!-- RadioView.fxml -->
 
@@ -15,7 +14,7 @@
             fx:controller="org.example.musicplayeruserinterfacewithjavafx.RadioController">
 
     <children>
-        <!-- Static Radio Window Label -->
+        <!-- Existing label from your initial code -->
         <Label text="This is the Radio Window" layoutX="50.0" layoutY="50.0" textFill="white">
             <font>
                 <Font name="System Bold" size="18.0" />
@@ -23,21 +22,25 @@
         </Label>
 
         <!-- Now Playing Label -->
-        <Label fx:id="nowPlayingLabel" text="Now Playing: " layoutX="50.0" layoutY="100.0" textFill="white">
+        <Label fx:id="nowPlayingLabel"
+               layoutX="50.0" layoutY="150.0"
+               text="Now Playing"
+               textFill="white">
             <font>
-                <Font name="System" size="16.0" />
+                <Font name="System Bold" size="24.0"/>
             </font>
         </Label>
 
-        <!-- Album Cover Display -->
-        <ImageView fx:id="albumCoverImageView" layoutX="50.0" layoutY="150.0" fitWidth="200.0" fitHeight="200.0"
-                   preserveRatio="true" />
+        <!-- Album Cover Image -->
+        <ImageView fx:id="albumCoverImageView"
+                   layoutX="50.0" layoutY="200.0"
+                   fitHeight="300.0" fitWidth="300.0"
+                   preserveRatio="true"/>
 
-        <!-- Song Progress Bar -->
-        <ProgressBar fx:id="songProgressBar" layoutX="50.0" layoutY="380.0" prefWidth="300.0" />
-
-        <!-- Control Buttons -->
-        <Button text="Start Radio" layoutX="50.0" layoutY="420.0" onAction="#startRadio" />
-        <Button text="Stop Radio" layoutX="150.0" layoutY="420.0" onAction="#stopRadio" />
+        <!-- Next Station Button -->
+        <Button fx:id="nextStationButton"
+                layoutX="50.0" layoutY="550.0"
+                text="Next Station"
+                style="-fx-background-color: white; -fx-text-fill: black;"/>
     </children>
 </AnchorPane>
