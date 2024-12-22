@@ -42,7 +42,7 @@ public class RadioController {
         nowPlayingLabel.setText("Now Playing: Nothing");
         albumCoverImageView.setImage(null);
 
-        // Set up "Next Station" button action
+        // Set up "Next Track" button action
         nextStationButton.setOnAction(event -> playNextTrack());
 
         // Fetch radio tracks when the UI loads
@@ -71,7 +71,12 @@ public class RadioController {
             trackData.clear(); // Clear existing track data
 
             for (int i = 0; i < tracksArray.size(); i++) {
-                trackData.add(tracksArray.get(i).getAsJsonObject());
+                JsonObject track = tracksArray.get(i).getAsJsonObject();
+
+                // Ensure the preview URL is available
+                if (track.has("preview") && !track.get("preview").getAsString().isEmpty()) {
+                    trackData.add(track);
+                }
             }
 
             if (trackData.isEmpty()) {
@@ -95,7 +100,10 @@ public class RadioController {
             mediaPlayer.dispose();
         }
 
-        if (currentTrackIndex < trackData.size()) {
+        if (!trackData.isEmpty()) {
+            // Increment index and reset to 0 if it exceeds the list size
+            currentTrackIndex = (currentTrackIndex + 1) % trackData.size();
+
             JsonObject track = trackData.get(currentTrackIndex);
             String trackTitle = track.get("title").getAsString();
             String artistName = track.getAsJsonObject("artist").get("name").getAsString();
@@ -109,15 +117,10 @@ public class RadioController {
             // Play the track preview
             Media media = new Media(previewUrl);
             mediaPlayer = new MediaPlayer(media);
-            mediaPlayer.setOnEndOfMedia(() -> {
-                currentTrackIndex++;
-                playNextTrack();
-            });
+            mediaPlayer.setOnEndOfMedia(() -> playNextTrack());
             mediaPlayer.play();
         } else {
-            // Loop back to the first track
-            currentTrackIndex = 0;
-            playNextTrack();
+            nowPlayingLabel.setText("No tracks to play.");
         }
     }
 }
