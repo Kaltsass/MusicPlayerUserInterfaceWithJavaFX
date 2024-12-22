@@ -1,11 +1,10 @@
 package org.example.musicplayeruserinterfacewithjavafx;
 
 public class Song {
-
     private String name;
     private String artist;
-    private String previewUrl;
-    private String cover;
+    private String previewUrl; // URL for a 30-second preview
+    private String cover;      // Album cover image URL
 
     // Constructor
     public Song(String name, String artist, String previewUrl, String cover) {
@@ -15,7 +14,7 @@ public class Song {
         this.cover = cover;
     }
 
-    // Getters and Setters
+    // Getters and setters
     public String getName() {
         return name;
     }
