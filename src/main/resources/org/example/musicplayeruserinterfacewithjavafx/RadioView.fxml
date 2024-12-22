@@ -34,8 +34,10 @@
 
         <!-- Next Track Button -->
         <Button fx:id="nextStationButton" layoutX="50.0" layoutY="500.0"
+
                 text="Next Track" style="-fx-background-color: #ffffff; -fx-text-fill: #000000; -fx-font-size: 18px;" />
 
         <!-- Additional Padding (Optional) -->
     </children>
+
 </AnchorPane>
