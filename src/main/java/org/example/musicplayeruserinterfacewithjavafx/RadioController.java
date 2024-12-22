@@ -112,13 +112,18 @@ public class RadioController {
 
             // Update UI with track details
             nowPlayingLabel.setText("Now Playing: " + trackTitle + " by " + artistName);
+
             albumCoverImageView.setImage(new Image(albumCoverUrl));
 
             // Play the track preview
             Media media = new Media(previewUrl);
+
             mediaPlayer = new MediaPlayer(media);
+
             mediaPlayer.setOnEndOfMedia(() -> playNextTrack());
+
             mediaPlayer.play();
+
         } else {
             nowPlayingLabel.setText("No tracks to play.");
         }
