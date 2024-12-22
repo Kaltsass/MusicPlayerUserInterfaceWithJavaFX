@@ -65,7 +65,9 @@ public class RadioController {
             }
 
             String jsonResponse = response.body().string();
+
             JsonObject jsonObject = JsonParser.parseString(jsonResponse).getAsJsonObject();
+
             JsonArray tracksArray = jsonObject.getAsJsonArray("data");
 
             trackData.clear(); // Clear existing track data
@@ -97,6 +99,7 @@ public class RadioController {
     private void playNextTrack() {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
+
             mediaPlayer.dispose();
         }
 
