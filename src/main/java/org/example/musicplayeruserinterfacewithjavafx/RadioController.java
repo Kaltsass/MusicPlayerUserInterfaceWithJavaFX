@@ -105,9 +105,13 @@ public class RadioController {
             currentTrackIndex = (currentTrackIndex + 1) % trackData.size();
 
             JsonObject track = trackData.get(currentTrackIndex);
+
             String trackTitle = track.get("title").getAsString();
+
             String artistName = track.getAsJsonObject("artist").get("name").getAsString();
+
             String previewUrl = track.get("preview").getAsString();
+
             String albumCoverUrl = track.getAsJsonObject("album").get("cover_big").getAsString();
 
             // Update UI with track details
