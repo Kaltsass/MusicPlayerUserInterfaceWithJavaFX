@@ -13,7 +13,7 @@
     <children>
 
         <!-- Title Label -->
-        <Label text="Live Radio" layoutX="600.0" layoutY="50.0" textFill="white"
+        <Label text="Live Radio" layoutX="600.0" layoutY="90.0" textFill="white"
 
                style="-fx-font-size: 36px; -fx-font-weight: bold;" />
 
