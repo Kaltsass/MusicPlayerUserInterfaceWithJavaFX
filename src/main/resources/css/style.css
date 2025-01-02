@@ -399,6 +399,7 @@
 }
 
 
+/*buttontwo for radio page */
 
 .custom-buttontwo {
     -fx-background-color: black; /* Button background color */
@@ -414,6 +415,8 @@
     -fx-cursor: hand; /* Changes the cursor to a hand on hover */
     -fx-focus-color: transparent; /* Remove the focus outline (green) */
 }
+
+
 
 .custom-buttontwo:hover {
     -fx-background-color: #333; /* Slightly lighter background on hover */
