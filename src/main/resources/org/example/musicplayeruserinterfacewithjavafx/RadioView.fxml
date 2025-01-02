@@ -32,13 +32,13 @@
 
 
         <!-- Next Track Button -->
-        <Button fx:id="nextStationButton" layoutX="650.0" layoutY="540.0"
+        <Button fx:id="nextStationButton" layoutX="700.0" layoutY="540.0"
 
                 text="Next Track" style="-fx-background-color: #ffffff; -fx-text-fill: #000000; -fx-font-size: 22px;" />
 
 
         <!-- Additional Details -->
-        <Label layoutX="600.0" layoutY="700.0" text="Tune in to your favorite radio station!"
+        <Label layoutX="600.0" layoutY="610.0" text="Tune in to your favorite radio station!"
 
                textFill="white" style="-fx-font-size: 20px;" />
 
