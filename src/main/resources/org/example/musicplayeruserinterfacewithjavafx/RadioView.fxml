@@ -25,7 +25,6 @@
                textFill="white" style="-fx-font-size: 20px;" />
 
         <!-- Album Cover Image -->
-
         <ImageView fx:id="albumCoverImageView" layoutX="600.0" layoutY="200.0"
 
                    fitHeight="300.0" fitWidth="300.0" preserveRatio="true"
