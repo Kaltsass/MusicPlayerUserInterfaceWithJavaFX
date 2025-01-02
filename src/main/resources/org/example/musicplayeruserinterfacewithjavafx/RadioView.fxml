@@ -19,7 +19,6 @@
                style="-fx-font-size: 36px; -fx-font-weight: bold;" />
 
         <!-- Now Playing Label -->
-
         <Label fx:id="nowPlayingLabel" layoutX="600.0" layoutY="150.0" text="Now Playing: Nothing"
 
                textFill="white" style="-fx-font-size: 20px;" />
