@@ -41,7 +41,7 @@
         <!-- Additional Details -->
         <Label layoutX="600.0" layoutY="700.0" text="Tune in to your favorite radio station!"
 
-               textFill="white" style="-fx-font-size: 25px;" />
+               textFill="white" style="-fx-font-size: 20px;" />
 
 
 
