@@ -34,7 +34,7 @@
         <!-- Next Track Button -->
         <Button fx:id="nextStationButton" layoutX="650.0" layoutY="550.0"
 
-                text="Next Track" style="-fx-background-color: #ffffff; -fx-text-fill: #000000; -fx-font-size: 18px;" />
+                text="Next Track" style="-fx-background-color: #ffffff; -fx-text-fill: #000000; -fx-font-size: 22px;" />
 
 
 
