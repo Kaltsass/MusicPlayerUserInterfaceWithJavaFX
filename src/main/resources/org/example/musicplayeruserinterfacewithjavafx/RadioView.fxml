@@ -32,10 +32,9 @@
 
 
         <!-- Next Track Button -->
-        <Button fx:id="nextStationButton" layoutX="650.0" layoutY="550.0"
+        <Button fx:id="nextStationButton" layoutX="650.0" layoutY="540.0"
 
                 text="Next Track" style="-fx-background-color: #ffffff; -fx-text-fill: #000000; -fx-font-size: 22px;" />
-
 
 
         <!-- Additional Details -->
