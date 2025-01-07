@@ -1,6 +1,7 @@
 package org.example.musicplayeruserinterfacewithjavafx;
 
-
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.InvalidationListener;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -61,6 +62,7 @@ public class MediaPlayerManager {
             mediaPlayer.stop();
         }
     }
+
 
     // Έλεγχος αν το τραγούδι παίζει
     public boolean isPlaying() {
