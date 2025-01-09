@@ -123,7 +123,7 @@ public class RadioController {
     }
 
     /**
-     * Stop the current track playback.
+     * Stop the radio playback.
      */
     private void stopPlayback() {
         if (mediaPlayer != null) {
