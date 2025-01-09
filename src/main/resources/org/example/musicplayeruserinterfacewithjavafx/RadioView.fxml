@@ -38,7 +38,7 @@
                 text="Next Track" style="-fx-background-color: #ffffff; -fx-text-fill: #000000; -fx-font-size: 18px;" />
 
         <!-- Stop Button -->
-        <Button fx:id="stopButton" layoutX="700.0" layoutY="540.0"
+        <Button fx:id="stopButton" layoutX="400.0" layoutY="500.0"
                 text="Stop" style="-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 22px;" />
 
         <!-- Additional Padding (Optional) -->
