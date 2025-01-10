@@ -47,6 +47,7 @@ import javafx.application.HostServices;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.io.*;
+import java.util.stream.Collectors;
 
 
 public class HelloController implements Initializable {
@@ -75,12 +76,20 @@ public class HelloController implements Initializable {
     @FXML private ScrollPane scrollPaneTopCharts;
     @FXML private ScrollPane scrollPaneArtists;
     @FXML private ScrollPane scrollPaneAlbums;
+    @FXML public HBox playlistSongsContainer;
     @FXML private Label labelMadeForYou;
     @FXML private Label labelRecentlyPlayed;
     @FXML private Label labelLikedSongs;
     @FXML private Label labelTopCharts;
     @FXML private Label labelArtists;
     @FXML private Label labelAlbums;
+
+    @FXML
+    private Label labelPlaylist;
+
+    @FXML
+    private ScrollPane scrollPanelPlaylist;
+
 
 
     private MediaPlayerManager mediaPlayerManager;
@@ -269,6 +278,10 @@ public class HelloController implements Initializable {
             case "Top Charts":
                 targetLabel = labelTopCharts;              // Το Label για τα "Top Charts"
                 targetScrollPane = scrollPaneTopCharts;    // Το ScrollPane για τα "Top Charts"
+                break;
+            case "Playlists":
+                targetLabel = labelPlaylist; // Το Label με το σωστό fx:id
+                targetScrollPane = scrollPanelPlaylist; // Το ScrollPane με το σωστό fx:id
                 break;
         }
 
@@ -483,6 +496,7 @@ public class HelloController implements Initializable {
     private boolean isPlaying = false;
     private int currentSongIndex = 0;
     private MediaPlayer mediaPlayer;
+    private List<Song> playlistSongs;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -490,6 +504,7 @@ public class HelloController implements Initializable {
         recentlyPlayed = new ArrayList<>(getRecentlyPlayed());
         favorites = new ArrayList<>(getFavorites());
         likedSongs = new ArrayList<>();
+        playlistSongs = new ArrayList<>();
 
         // Initialize the set to avoid NullPointerException
         addedArtistNames = new HashSet<>();
@@ -498,6 +513,7 @@ public class HelloController implements Initializable {
         allSongs.addAll(recentlyPlayed);
         allSongs.addAll(favorites);
         allSongs.addAll(likedSongs);
+        allSongs.addAll(playlistSongs);
 
         mediaPlayerManager = new MediaPlayerManager();
 
@@ -512,6 +528,7 @@ public class HelloController implements Initializable {
         loadSongs(recentlyPlayed, recentlyPlayedContainer);
         loadSongs(favorites, favoriteContainer);
         loadSongs(likedSongs, likedSongsContainer);
+        loadSongs(playlistSongs, playlistSongsContainer);
 
         playlistListView.setItems(FXCollections.observableArrayList()); // Initialize list view
         playlistItems = FXCollections.observableArrayList();
@@ -519,7 +536,12 @@ public class HelloController implements Initializable {
 
         playlistItems = FXCollections.observableArrayList();
         playlistListView.setItems(playlistItems);
-        loadPlaylistsFromFile(); // Φορτώνουμε τα playlists από το αρχείο κατά την εκκίνηση
+        //loadPlaylistsFromFile(); // Φορτώνουμε τα playlists από το αρχείο κατά την εκκίνηση
+
+
+        // Φορτώνουμε τα playlists από το φάκελο κατά την εκκίνηση
+        loadPlaylistsFromFolder();
+
         artistActionButton.setOnMouseClicked(event -> openArtistInformationWindow(artistActionButton.getText()));
         if (artistInformationController != null) {
             artistInformationController.setHelloController(this); // Περάστε το instance του HelloController
@@ -825,6 +847,7 @@ public class HelloController implements Initializable {
         return ls;
     }
 
+
     public List<Song> getFavorites() {
         List<Song> ls = new ArrayList<>();
 
@@ -895,6 +918,34 @@ public class HelloController implements Initializable {
 
     // Μέθοδος για να προσθέσουμε νέο playlist
     public void addPlaylist(String playlistName) {
+        if (playlistName == null || playlistName.trim().isEmpty()) {
+            // Εμφάνιση alert αν το playlist υπάρχει ήδη
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Το Playlist Name είναι κενό!");
+            alert.setContentText("Παρακαλούμε εισάγετε ένα έγκυρο όνομα για το playlist σας.");
+            alert.showAndWait();
+            return;
+        }
+        File playlistFile = new File("playlists/" + playlistName + ".txt");
+        if (playlistFile.exists()) {
+            // Εμφάνιση alert αν το playlist υπάρχει ήδη
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Duplicate Playlist Name");
+            alert.setContentText("Αυτό το όνομα playlist υπάρχει ήδη. Παρακαλούμε εισάγετε άλλο όνομα για το Playlist σας.");
+            alert.showAndWait();
+        } else {
+            try {
+                if (playlistFile.createNewFile()) {
+                    System.out.println("Playlist created successfully: " + playlistFile.getName());
+                    loadPlaylistsFromFolder(); // Ενημέρωση της λίστας στο UI
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        /*
         // Αν το playlist δεν υπάρχει ήδη, το προσθέτουμε
         if (!isPlaylistExist(playlistName)) {
             playlistItems.add(playlistName);
@@ -907,7 +958,7 @@ public class HelloController implements Initializable {
             alert.setHeaderText("Duplicate Playlist Name");
             alert.setContentText("Αυτό το όνομα playlist υπάρχει ήδη. Παρακαλούμε εισάγετε άλλο όνομα για το Playlist σας.");
             alert.showAndWait();
-        }
+        }*/
     }
 
     // Μέθοδος για να φορτώσουμε τα playlist από το αρχείο
@@ -925,6 +976,102 @@ public class HelloController implements Initializable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+    // Μέθοδος για να φορτώσουμε τα playlist από το φάκελο playlists
+    private void loadPlaylistsFromFolder() {
+        File playlistsFolder = new File("playlists");
+        if (!playlistsFolder.exists() || !playlistsFolder.isDirectory()) {
+            System.out.println("Playlists folder does not exist or is not a directory.");
+            return;
+        }
+
+        File[] playlistFiles = playlistsFolder.listFiles((dir, name) -> name.endsWith(".txt"));
+        if (playlistFiles != null) {
+            playlistItems.clear();
+            for (File file : playlistFiles) {
+                String fileName = file.getName();
+                String playlistName = fileName.substring(0, fileName.lastIndexOf('.')); // Αφαιρεί την κατάληξη .txt
+                playlistItems.add(playlistName);
+            }
+            playlistListView.setItems(playlistItems);
+        }
+    }
+
+    @FXML
+    private void handlePlaylistSelection(MouseEvent event) {
+
+        // Get the selected playlist from the ListView
+        String selectedPlaylist = playlistListView.getSelectionModel().getSelectedItem();
+        if (selectedPlaylist != null) {
+            try {
+                // Load the FXML file
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("playlist-view.fxml"));
+                Parent root = loader.load();
+
+                // Get the controller of the loaded FXML
+                PlaylistViewController controller = loader.getController();
+
+                // Pass the selected playlist name to the controller
+                controller.setPlaylistName(selectedPlaylist);
+
+                // Create a new stage for the playlist view
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root));
+                stage.show();
+                List<Song> playlistSongs = loadSongsFromPlaylist(selectedPlaylist);
+                playlistSongsContainer.getChildren().clear();
+                loadSongs(playlistSongs, playlistSongsContainer);
+                System.out.println("Loaded songs for playlist: " + selectedPlaylist);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("No playlist selected.");
+        }
+
+    }
+    private List<Song> loadSongsFromPlaylist(String playlistName) {
+        List<Song> songs = new ArrayList<>();
+        File playlistFile = new File("playlists/" + playlistName + ".txt");
+        if (playlistFile.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(playlistFile))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    System.out.println("Reading line: " + line);
+                    String[] parts = line.split(" - ");
+                    if (parts.length == 4) {
+                        Song song = new Song();
+                        song.setName(parts[0]);
+                        song.setArtist(parts[1]);
+                        song.setPreviewUrl(parts[2]);
+                        song.setCover(parts[3]);
+                        System.out.println("Added song: " + song.getName() + " by " + song.getArtist());
+
+                        songs.add(song);
+                    } else {
+                        System.out.println("Invalid line format: " + line);
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Playlist file not found: " + playlistFile.getAbsolutePath());
+        }
+        return songs;
+    }
+
+    private void loadPlaylistsIntoListView() {
+        File playlistsFolder = new File("playlists");
+        if (playlistsFolder.exists() && playlistsFolder.isDirectory()) {
+            List<String> playlistNames = List.of(playlistsFolder.list((dir, name) -> name.endsWith(".txt")))
+                    .stream()
+                    .map(name -> name.substring(0, name.lastIndexOf('.')))
+                    .collect(Collectors.toList());
+            playlistListView.getItems().addAll(playlistNames);
+        } else {
+            System.out.println("Playlists folder does not exist or is not a directory.");
         }
     }
 
@@ -971,6 +1118,7 @@ public class HelloController implements Initializable {
             e.printStackTrace();
         }
     }
+
 
     private Song createSong(String name, String artist, String cover) {
         Song song = new Song();

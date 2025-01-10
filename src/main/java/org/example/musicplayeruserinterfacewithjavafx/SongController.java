@@ -66,7 +66,13 @@ public class SongController {
     // Λειτουργία κουμπιού AddToPlaylist
     public void btnaddToPlaylist() {
         System.out.println("Pressed");
-        openAddToPlaylistPopup();
+        if (song != null) {
+            System.out.println("Adding song to playlist: " + song.getName() + " by " + song.getArtist());
+            openAddToPlaylistPopup();
+        } else {
+            System.out.println("No song data available.");
+        }
+
     }
 
 
@@ -265,6 +271,8 @@ public class SongController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+
     private void openAddToPlaylistPopup() {
         try {
             //Parent root = FXMLLoader.load(getClass().getResource("new-playlist-popup.fxml"));
@@ -277,6 +285,10 @@ public class SongController {
 
             // Pass HelloController to PopupController so it can call addPlaylist
             addToPlaylistPopup.setMainController(mainController);
+
+            // Περάστε το τραγούδι στο popup
+            addToPlaylistPopup.setSelectedSong(song);
+
 
             Stage popupplaylistAdd = new Stage();
             popupplaylistAdd.initStyle(StageStyle.UNDECORATED);

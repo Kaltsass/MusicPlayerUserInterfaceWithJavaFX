@@ -106,12 +106,17 @@ public class PopupController {
                 alert.setContentText("Αυτό το όνομα playlist υπάρχει ήδη. Παρακαλούμε εισάγετε άλλο όνομα για το Playlist σας.");
                 alert.showAndWait();
             } else {
-
+                /*
                 // Αν το playlist δεν υπάρχει, το προσθέτουμε
                 playlistManager.addPlaylist(playlistName);
                 if (onCloseRequest != null) {
-                    onCloseRequest.run();  // Καλεί την μέθοδο ανανέωσης
-                }
+                    onCloseRequest.run();  // Καλεί τη μέθοδο ανανέωσης
+                }*/
+
+                playlistManager.createPlaylistFile(playlistName);
+                System.out.println("Playlist created successfully: " + playlistName);
+                // Ανανέωση του ListView
+
                 // Κλείνει το παράθυρο
                 Stage stage = (Stage) cancelButton.getScene().getWindow();
                 stage.close();
@@ -119,6 +124,9 @@ public class PopupController {
             }
         }
     }
+
+
+
     // Ορίζει το listener που θα καλείται όταν το popup κλείνει
     public void setOnCloseRequest(Runnable onCloseRequest) {
         this.onCloseRequest = onCloseRequest;

@@ -46,4 +46,15 @@ public class Song {
     public void setCover(String cover) {
         this.cover = cover;
     }
+
+    // Μέθοδος toString() για debugging
+    @Override
+    public String toString() {
+        return "Song{" +
+                "name='" + name + '\'' +
+                ", artist='" + artist + '\'' +
+                ", cover='" + cover + '\'' +
+                ", previewUrl='" + previewUrl + '\'' +
+                '}';
+    }
 }

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="752.0" prefWidth="600.0" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.musicplayeruserinterfacewithjavafx.PlaylistViewController">
+   <children>
+      <ScrollPane layoutX="24.0" layoutY="134.0" prefHeight="507.0" prefWidth="553.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="494.0" prefWidth="537.0">
+               <children>
+                  <ListView fx:id="playlistContentsListView" layoutX="14.0" layoutY="10.0" prefHeight="473.0" prefWidth="512.0" />
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
+      <AnchorPane layoutX="10.0" layoutY="14.0" prefHeight="86.0" prefWidth="579.0">
+         <children>
+            <ImageView fitHeight="75.0" fitWidth="158.0" layoutX="67.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../img/profile_icon.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="playlistTitleLabel" layoutX="196.0" layoutY="28.0" prefHeight="32.0" prefWidth="275.0" styleClass="title" text="Playlist" textAlignment="CENTER" textFill="#fcf7f7">
+               <font>
+                  <Font name="Calibri Bold" size="30.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <Separator layoutX="10.0" layoutY="106.0" prefHeight="4.0" prefWidth="579.0" style="-fx-background-color: #4acc39;" />
+      <Button fx:id="closeButton" layoutX="343.0" layoutY="673.0" mnemonicParsing="false" onAction="#OnBtnClickClose" prefWidth="160.0" text="Close" />
+      <Button fx:id="deleteplaylist" layoutX="89.0" layoutY="673.0" mnemonicParsing="false" onAction="#onDeletePlaylistButtonClick" text="Delete from Playlist" />
+   </children>
+</AnchorPane>
