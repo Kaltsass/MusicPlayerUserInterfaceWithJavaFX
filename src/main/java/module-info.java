@@ -20,6 +20,8 @@ module org.example.musicplayeruserinterfacewithjavafx {
     requires java.net.http;
     requires javafx.media;
     requires org.json;
+    requires java.base;
+
 
 
 

@@ -1,6 +1,6 @@
 package org.example.musicplayeruserinterfacewithjavafx;
 
-public class Song {
+public class Song extends model.Song {
     private String name;
     private String artist;
     private String previewUrl; // URL for a 30-second preview
