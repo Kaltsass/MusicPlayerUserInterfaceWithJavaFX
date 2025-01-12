@@ -45,9 +45,24 @@ public class SongController {
         this.mainController = mainController;
     }
 
-    public void OnButtonClick() {
-        System.out.println("Pressed");
+    @FXML private HelloController helloController; // Reference to HelloController
+
+    // Method to set the HelloController reference
+    public void setHelloController(HelloController helloController) {
+        this.helloController = helloController;
     }
+
+
+    @FXML
+    public void OnButtonClick() {
+        if (helloController != null && song != null) {
+            helloController.addToLikedSongs(song);
+            System.out.println("Liked song: " + song.getName());
+        } else {
+            System.out.println("Cannot add song to liked songs. HelloController or song is null.");
+        }
+    }
+
     // Λειτουργία κουμπιού AddToPlaylist
     public void btnaddToPlaylist() {
         System.out.println("Pressed");
@@ -272,6 +287,7 @@ public class SongController {
             e.getCause();
         }
     }
+
 
 }
 

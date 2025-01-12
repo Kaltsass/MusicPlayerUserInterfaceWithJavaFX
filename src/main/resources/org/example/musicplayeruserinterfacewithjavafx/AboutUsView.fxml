@@ -137,12 +137,12 @@
 
 
             <VBox spacing="5">
-                <Label text="Dimitris Titkakidis" textFill="white">
+                <Label text="Xristodoulos Tiktapanidis" textFill="white">
                     <font>
                         <Font name="Arial Bold" size="16.5" />
                     </font>
                 </Label>
-                <Label text="Dimitris worked on the user-facing aspects of the project, ensuring a smooth navigation experience." textFill="white">
+                <Label text="Xristodoulos worked on the user-facing aspects of the project, ensuring a smooth navigation experience." textFill="white">
                     <font>
                         <Font name="Arial" size="15.0" />
                     </font>

@@ -3,13 +3,16 @@ package org.example.musicplayeruserinterfacewithjavafx;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Slider;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import model.Song;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -21,10 +24,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.net.URLEncoder;
+import java.util.*;
+
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.media.Media;
@@ -46,23 +51,52 @@ import org.example.musicplayeruserinterfacewithjavafx.YoutubeAPI;
 import javafx.application.HostServices;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import java.io.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
+import java.io.*;
+import java.util.stream.Collectors;
 
 
 public class HelloController implements Initializable {
 
+
+
+    @FXML public HBox likedSongsContainer;
+    @FXML public ScrollPane mainScrollPane;
+    @FXML HBox madeForYouContainer;
+    @FXML private HBox artistLabelAndButtonContainer;
+    @FXML private HBox madeForYouLabelAndButtonContainer;
+    @FXML private Button artistActionButton;
+    @FXML private HBox savedArtistsHBox;
     @FXML private ImageView albumCoverImage;
     @FXML private Label songTitleLabel;
     @FXML private HBox favoriteContainer;
     @FXML private HBox recentlyPlayedContainer;
+    @FXML private HBox albumsContainer;
     @FXML private TextField searchBar;
     @FXML private VBox searchResultsContainer;
     @FXML private Slider playbackSlider;
     @FXML private Button playPauseButton;
+    @FXML private Button madeForYouButton ;
     @FXML private Button nextButton;
     @FXML private Button prevButton;
     @FXML private Button btnnewplaylist;
+    @FXML private VBox mainVBox;
+    @FXML private ScrollPane scrollPaneMadeForYou;
+    @FXML private ScrollPane scrollPaneRecentlyPlayed;
+    @FXML private ScrollPane scrollPaneLikedSongs;
+    @FXML private ScrollPane scrollPaneTopCharts;
+    @FXML private ScrollPane scrollPaneArtists;
+    @FXML private ScrollPane scrollPaneAlbums;
+    @FXML private Label labelMadeForYou;
+    @FXML private Label labelRecentlyPlayed;
+    @FXML private Label labelLikedSongs;
+    @FXML private Label labelTopCharts;
+    @FXML private Label labelArtists;
+    @FXML private Label labelAlbums;
+
+
     private MediaPlayerManager mediaPlayerManager;
     @FXML
     private ListView<String> playlistListView;
@@ -72,6 +106,9 @@ public class HelloController implements Initializable {
     private ArtistInformationController artistInformationController;
 
     private ObservableList<String> playlistItems;
+
+
+
     @FXML
     private void handleSearch(ActionEvent event) {
         String query = searchBar.getText();
@@ -80,17 +117,21 @@ public class HelloController implements Initializable {
         }
         searchSongs(query);
     }
+
     @FXML
     private TextField tf_newUsername;
     @FXML
     private PasswordField tf_newPassword;
     @FXML
     private VBox likedContainer;// Ο VBox που περιέχει τα αγαπημένα τραγούδια
-    @FXML private Button button_account; // Account button in the main window
+    @FXML
+    private Button button_account; // Account button in the main window
+
     // Handle Account button click
     public void updateAccountButton(String username) {
         button_account.setText(username);  // Update the account button text to new username
     }
+
     @FXML
     private void handleAccountButtonClick() {
         try {
@@ -111,6 +152,7 @@ public class HelloController implements Initializable {
             e.printStackTrace();
         }
     }
+
     private void openLogoutPopup() {
         // You can create a simple confirmation popup asking if they want to log out
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -123,6 +165,7 @@ public class HelloController implements Initializable {
             }
         });
     }
+
     @FXML
     private void handleLogout() {
         // 1. Reset the account button text to "Log In"
@@ -132,11 +175,13 @@ public class HelloController implements Initializable {
         clearUserData();
         System.out.println("User logged out successfully.");
     }
+
     private void clearUserData() {
         // Example: Reset username or any other session data
         // username = null;
         // Clear any other global variables or session data if necessary
     }
+
     @FXML
     private void handleLogout(ActionEvent event) {
         // Reset the account button text to "Log In"
@@ -146,6 +191,7 @@ public class HelloController implements Initializable {
 
         System.out.println("User logged out successfully.");
     }
+
     @FXML
     private Button exploreButton;
 
@@ -204,6 +250,81 @@ public class HelloController implements Initializable {
     }
 
 
+    @FXML
+    public void handleLeftButtonClick(ActionEvent event) {
+        // Λαμβάνουμε το κουμπί που πατήθηκε
+        Button clickedButton = (Button) event.getSource();
+
+        // Αντιστοιχίζουμε τα κουμπιά με τα αντίστοιχα Label και ScrollPane
+        // Αλλαγή του target Label σε Node για να μπορεί να τραβήξει και το κουμπί
+        Node targetLabel = null;
+        ScrollPane targetScrollPane = null;
+
+        // Ανάλογα με το κείμενο του κουμπιού, επιλέγουμε το αντίστοιχο Label και ScrollPane
+        switch (clickedButton.getText()) {
+            case "Made For You":
+                targetLabel = madeForYouLabelAndButtonContainer;           // Το Label για το "Made For You"
+                targetScrollPane = scrollPaneMadeForYou; // Το ScrollPane για το "Made For You"
+                break;
+            case "Recently Played":
+                targetLabel = labelRecentlyPlayed;         // Το Label για τα "Recently Played"
+                targetScrollPane = scrollPaneRecentlyPlayed; // Το ScrollPane για τα "Recently Played"
+                break;
+            case "Liked Songs":
+                targetLabel = labelLikedSongs;             // Το Label για τα "Liked Songs"
+                targetScrollPane = scrollPaneLikedSongs;   // Το ScrollPane για τα "Liked Songs"
+                break;
+            case "Albums":
+                targetLabel = labelAlbums;                 // Το Label για τα "Albums"
+                targetScrollPane = scrollPaneAlbums;       // Το ScrollPane για τα "Albums"
+                break;
+            case "Artists":
+                targetLabel = artistLabelAndButtonContainer;            // Το Label για τους "Artists"
+                targetScrollPane = scrollPaneArtists;      // Το ScrollPane για τους "Artists"
+                break;
+            case "Top Charts":
+                targetLabel = labelTopCharts;              // Το Label για τα "Top Charts"
+                targetScrollPane = scrollPaneTopCharts;    // Το ScrollPane για τα "Top Charts"
+                break;
+        }
+
+        // Εάν έχουν επιλεγεί το Label και το ScrollPane, προχωράμε με την αφαίρεση και την προσθήκη τους
+        if (targetLabel != null && targetScrollPane != null) {
+            // Αφαιρούμε το Label και το ScrollPane από τις τρέχουσες θέσεις τους στο VBox
+            mainVBox.getChildren().remove(targetLabel);
+            mainVBox.getChildren().remove(targetScrollPane);
+
+            // Προσθέτουμε το ScrollPane και το Label στην κορυφή του VBox
+            mainVBox.getChildren().add(0, targetScrollPane); // Πρώτα προσθέτουμε το ScrollPane
+            mainVBox.getChildren().add(0, targetLabel);      // Στη συνέχεια προσθέτουμε το Label
+
+            // Scroll the mainScrollPane to the top
+            mainScrollPane.setVvalue(0);  // This will scroll to the top of the ScrollPane
+        }
+    }
+
+
+    @FXML
+    private ListView<Hyperlink> newsListView;
+
+    @FXML
+    private void handleArticleClick(MouseEvent event) {
+        // Ensure you're using newsListView from ExploreController here
+        Hyperlink selectedArticle = newsListView.getSelectionModel().getSelectedItem();
+        if (selectedArticle != null) {
+            String url = selectedArticle.getText(); // URL should be in the text
+            System.out.println("Opening URL: " + url);  // Debugging log
+            try {
+                // Open the URL in the default web browser
+                Desktop.getDesktop().browse(new URI(url));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("No article selected.");
+        }
+    }
+
 
     @FXML
     private Button backButton;  // Ensure you have a reference to the Back button in your controller
@@ -230,6 +351,7 @@ public class HelloController implements Initializable {
             e.printStackTrace();
         }
     }
+
     public void handleUpgrade(ActionEvent event) {
         try {
             // Open the Spotify Premium URL
@@ -323,12 +445,14 @@ public class HelloController implements Initializable {
     }
 
     private List<Song> favorites = new ArrayList<>();
+
     public void onLikedSongClicked(Song song) {
         if (!favorites.contains(song)) {
             favorites.add(song);  // Αν το τραγούδι δεν υπάρχει, το προσθέτουμε
             addSongToLikedContainer(song);  // Προσθήκη στο UI (likedContainer)
         }
     }
+
     // Μέθοδος για την εμφάνιση του τραγουδιού στο likedContainer
     private void addSongToLikedContainer(Song song) {
         try {
@@ -359,15 +483,19 @@ public class HelloController implements Initializable {
             e.printStackTrace();
         }
     }
+
     private static HelloController instance;
+
     public static HelloController getInstance() {
         if (instance == null) {
             instance = new HelloController();  // Δημιουργία του instance
         }
         return instance;
     }
+
     private List<Song> recentlyPlayed;
     private List<Song> allSongs;
+    private List<Song> likedSongs;
     private boolean isPlaying = false;
     private int currentSongIndex = 0;
     private MediaPlayer mediaPlayer;
@@ -377,10 +505,15 @@ public class HelloController implements Initializable {
         allSongs = new ArrayList<>();
         recentlyPlayed = new ArrayList<>(getRecentlyPlayed());
         favorites = new ArrayList<>(getFavorites());
+        likedSongs = new ArrayList<>();
+
+        // Initialize the set to avoid NullPointerException
+        addedArtistNames = new HashSet<>();
 
         // Combine lists into one for all songs
         allSongs.addAll(recentlyPlayed);
         allSongs.addAll(favorites);
+        allSongs.addAll(likedSongs);
 
         mediaPlayerManager = new MediaPlayerManager();
 
@@ -394,6 +527,7 @@ public class HelloController implements Initializable {
 
         loadSongs(recentlyPlayed, recentlyPlayedContainer);
         loadSongs(favorites, favoriteContainer);
+        loadSongs(likedSongs, likedSongsContainer);
 
         playlistListView.setItems(FXCollections.observableArrayList()); // Initialize list view
         playlistItems = FXCollections.observableArrayList();
@@ -402,12 +536,46 @@ public class HelloController implements Initializable {
         playlistItems = FXCollections.observableArrayList();
         playlistListView.setItems(playlistItems);
         loadPlaylistsFromFile(); // Φορτώνουμε τα playlists από το αρχείο κατά την εκκίνηση
-        artistInfomLabel.setOnMouseClicked(event -> openArtistInformationWindow(artistInfomLabel.getText()));
+        artistActionButton.setOnMouseClicked(event -> openArtistInformationWindow(artistActionButton.getText()));
         if (artistInformationController != null) {
             artistInformationController.setHelloController(this); // Περάστε το instance του HelloController
         }
+       // Fetch top albums and their details
+        List<String> albumsList = APITopAlbums.fetchTopAlbums(); // Fetch albums from API
+
+        // Fetch album IDs for retrieving songs
+        List<String> albumIds = APITopAlbums.getAlbumIds(); // A new method to fetch album IDs
+
+        // Fetch songs for the top 10 albums
+        Map<String, List<String>> albumSongsMap = APITopAlbums.fetchSongsFromTopAlbums(albumIds);
+
+        // Load albums into the UI with click listeners to show songs
+        loadAlbums(albumsList, albumSongsMap);
+        // Made For You
+        madeForYouButton.setOnAction(event -> handleMadeForYou());
+
+        // Attach scroll event forwarding to all child ScrollPanes
+        setupScrollForwarding();
+
+        // Add a scroll event filter to the mainScrollPane
+        mainScrollPane.addEventFilter(ScrollEvent.SCROLL, event -> {
+            if (!event.isConsumed()) {
+                // Amount scrolled
+                double deltaY = event.getDeltaY();
+                // Adjust this factor to slow down scrolling (e.g., 0.5 for half speed)
+                double scrollSpeedFactor = 0.5;
+                // Current scroll position
+                double currentValue = mainScrollPane.getVvalue();
+                mainScrollPane.setVvalue(currentValue - (deltaY / mainScrollPane.getHeight()) * scrollSpeedFactor);
+                // Consume the event to prevent propagation
+                event.consume();
+            }
+        });
 
     }
+
+
+
 
     @FXML
     private void handleAboutUsButtonClick(ActionEvent event) {
@@ -437,6 +605,7 @@ public class HelloController implements Initializable {
                 VBox vBox = fxmlLoader.load();
                 SongController songController = fxmlLoader.getController();
                 songController.setData(song);
+                songController.setHelloController(this);
 
                 Label songLabel = new Label(song.getName() + " - " + song.getArtist());
                 songLabel.setStyle("-fx-text-fill: white;");
@@ -452,6 +621,38 @@ public class HelloController implements Initializable {
         }
 
     }
+
+    public void addToLikedSongs(Song song) {
+        if (likedSongs.contains(song)) {  // If the song is already in the liked songs list
+            // Show confirmation dialog before removing the song
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Remove Song");
+            alert.setHeaderText("This song is already liked.");
+            alert.setContentText("Do you want to remove it from liked songs?");
+
+            // Add "Yes" and "No" buttons
+            ButtonType yesButton = new ButtonType("Yes");
+            ButtonType noButton = new ButtonType("No");
+
+            alert.getButtonTypes().setAll(yesButton, noButton);
+
+            // Wait for the user to respond
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent() && result.get() == yesButton) {
+                // Remove the song from the liked songs list if user clicks "Yes"
+                likedSongs.remove(song);
+
+                likedSongsContainer.getChildren().clear();  // Clear the current container to refresh the UI
+                loadSongs(likedSongs, likedSongsContainer);  // Reload the liked songs into the container
+            }
+        } else {
+            likedSongs.add(0, song);  // Add to the top (like recently played)
+            likedSongsContainer.getChildren().clear();  // Clear the current container to refresh the UI
+            loadSongs(likedSongs, likedSongsContainer);  // Reload the liked songs into the container
+        }
+    }
+
 
 
     private HostServices hostServices; // Field to store HostServices
@@ -469,6 +670,7 @@ public class HelloController implements Initializable {
             System.out.println("HostServices not available");
         }
     }
+
     // Method to handle song search and display YouTube link
     private void searchSongs(String query) {
         OkHttpClient client = new OkHttpClient();
@@ -562,9 +764,6 @@ public class HelloController implements Initializable {
     }
 
 
-
-
-
     @FXML
     private void toggleRecentlyPlayedVisibility(MouseEvent event) {
         boolean isVisible = recentlyPlayedContainer.isVisible();
@@ -594,8 +793,6 @@ public class HelloController implements Initializable {
             System.out.println("Playing song...");
         }
     }
-
-
 
 
     @FXML
@@ -699,6 +896,7 @@ public class HelloController implements Initializable {
 
         return ls;
     }
+
     // Λειτουργία κουμπιού New Playlist
     public void OnButtonClick7() {
         System.out.println("Pressed");  //
@@ -725,6 +923,7 @@ public class HelloController implements Initializable {
             e.getCause();
         }
     }
+
     // Μέθοδος για να ελέγξουμε αν το playlist υπάρχει ήδη
     public boolean isPlaylistExist(String playlistName) {
         return playlistItems.contains(playlistName);
@@ -746,6 +945,7 @@ public class HelloController implements Initializable {
             alert.showAndWait();
         }
     }
+
     // Μέθοδος για να φορτώσουμε τα playlist από το αρχείο
     private void loadPlaylistsFromFile() {
         File file = new File("playlists.txt"); // Ο φάκελος και το όνομα του αρχείου
@@ -763,6 +963,7 @@ public class HelloController implements Initializable {
             }
         }
     }
+
     // Μέθοδος για συγχρονισμό του ListView
     private void refreshPlaylists() {
 
@@ -782,11 +983,20 @@ public class HelloController implements Initializable {
             e.printStackTrace();
         }
     }
+
     private void openArtistInformationWindow(String artistName) {
         try {
             // Φόρτωση του FXML αρχείου
             FXMLLoader loader = new FXMLLoader(getClass().getResource("artist-information.fxml"));
             Parent root = loader.load();
+
+
+            // Get the ArtistInformationController
+            ArtistInformationController artistInfoController = loader.getController();
+
+            // Pass the reference of HelloController to ArtistInformationController
+            artistInfoController.setHelloController(this);
+
 
             // Δημιουργία νέου Stage
             Stage stage = new Stage();
@@ -806,4 +1016,194 @@ public class HelloController implements Initializable {
         song.setPreviewUrl("https://www.deezer.com/preview"); // Προσωρινό preview URL για δοκιμές
         return song;
     }
+
+
+    //Artists Button
+
+    private Set<String> addedArtistNames;  // Set to track added artist names
+
+
+    public void addArtistToScrollPane(String artistName, Image artistImage) {
+        if (savedArtistsHBox != null) {
+            // Check if the artist has already been added
+            if (addedArtistNames != null && addedArtistNames.contains(artistName)) {
+                return;  // Skip if artist has already been added
+            }
+
+            // Create a VBox to hold the image and label
+            VBox artistVBox = new VBox();
+            artistVBox.setSpacing(10);  // Space between image and label
+            artistVBox.setStyle("-fx-alignment: center;");
+
+            // Create an ImageView for the artist's image
+            ImageView artistImageView = new ImageView(artistImage);
+            artistImageView.setFitWidth(200);
+            artistImageView.setFitHeight(200);
+            artistImageView.setPreserveRatio(true);
+
+            // Create a Label for the artist's name
+            Label artistLabel = new Label(artistName);
+            artistLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;");
+
+            // Add the ImageView and Label to the VBox
+            artistVBox.getChildren().addAll(artistImageView, artistLabel);
+
+            // Add the VBox to the HBox
+            savedArtistsHBox.getChildren().add(artistVBox);
+
+            // Track the artist to avoid duplicates
+            addedArtistNames.add(artistName);
+        } else {
+            System.out.println("savedArtistsHBox is null, cannot add artist.");
+        }
+    }
+
+    //Albums Button
+
+    public void loadAlbums(List<String> albumsList, Map<String, List<String>> albumSongsMap) {
+        try {
+            for (String albumInfo : albumsList) {
+                String[] parts = albumInfo.split(", ");
+                String title = parts[0].split(": ")[1];
+                String artist = parts[1].split(": ")[1];
+                String coverImageUrl = parts[2].split(": ")[1];
+
+                VBox albumItem = new VBox(10);
+                albumItem.setStyle("-fx-alignment: center; -fx-cursor: hand;");
+
+                Image coverImage = new Image(coverImageUrl, 200, 200, true, true);
+                ImageView imageView = new ImageView(coverImage);
+                imageView.setFitWidth(200);
+                imageView.setFitHeight(200);
+                imageView.setPreserveRatio(true);
+
+                Label albumLabel = new Label(artist + " - " + title);
+                albumLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10;");
+
+                albumItem.getChildren().addAll(imageView, albumLabel);
+
+                // Add click event listener
+                albumItem.setOnMouseClicked(event -> {
+                    List<String> songs = albumSongsMap.get(title);
+                    if (songs != null) {
+                        displaySongs(artist, title, songs);
+                    } else {
+                        System.out.println("No songs found for album: " + title);
+                    }
+                });
+
+                albumsContainer.getChildren().add(albumItem);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error loading albums into the UI: " + e.getMessage());
+        }
+    }
+
+
+
+    private void displaySongs(String artist, String albumTitle, List<String> songs) {
+        Stage songStage = new Stage();
+        songStage.setTitle("Songs of " + albumTitle + " by " + artist);
+
+        VBox songListContainer = new VBox(10);
+        songListContainer.setStyle("-fx-padding: 20; -fx-alignment: center; -fx-background-color: #2b2b2b;");
+
+        Label titleLabel = new Label("Songs from " + albumTitle);
+        titleLabel.setStyle("-fx-text-fill: white; -fx-font-size: 18px; -fx-padding: 10;");
+        songListContainer.getChildren().add(titleLabel);
+
+        for (String song : songs) {
+            Label songLabel = new Label(song);
+            songLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
+            songListContainer.getChildren().add(songLabel);
+        }
+
+        ScrollPane scrollPane = new ScrollPane(songListContainer);
+        scrollPane.setStyle("-fx-background: transparent; -fx-padding: 10;");
+        scrollPane.setFitToWidth(true);
+
+        Scene scene = new Scene(scrollPane, 400, 600);
+        songStage.setScene(scene);
+        songStage.show();
+    }
+
+    private void showError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    @FXML
+    private void handleMadeForYou() {
+        if (likedSongs.isEmpty()) {
+            showError("No liked songs available to generate recommendations.");
+            return;
+        }
+
+        Set<String> artistNames = likedSongs.stream()
+                .map(Song::getArtist)
+                .collect(Collectors.toSet());
+
+        List<Song> recommendedSongs = new ArrayList<>();
+        for (String artist : artistNames) {
+            try {
+                JsonArray artistTracks = APIDeezerInformation.fetchArtistTracks(artist);
+                // Limit to 4 tracks per artist
+                int trackLimit = 4;
+                for (int i = 0; i < artistTracks.size() && i < trackLimit; i++) {
+                    JsonObject trackObject = artistTracks.get(i).getAsJsonObject();
+                    Song song = new Song();
+                    song.setName(trackObject.get("title").getAsString());
+                    song.setArtist(trackObject.get("artist").getAsJsonObject().get("name").getAsString());
+                    song.setCover(trackObject.get("album").getAsJsonObject().get("cover").getAsString());
+                    song.setPreviewUrl(trackObject.get("preview").getAsString());
+                    recommendedSongs.add(song);
+                }
+            } catch (IOException e) {
+                System.err.println("Error fetching songs for artist: " + artist);
+                e.printStackTrace();
+            }
+        }
+
+        // Display only the limited recommended songs
+        loadSongs(recommendedSongs, madeForYouContainer);
+    }
+
+    private void setupScrollForwarding() {
+        for (Node child : mainVBox.getChildren()) {
+            if (child instanceof ScrollPane childScrollPane) {
+                childScrollPane.addEventFilter(ScrollEvent.SCROLL, event -> {
+                    boolean isEmpty = isChildScrollPaneEmpty(childScrollPane);
+                    double deltaY = event.getDeltaY();
+                    boolean atTop = childScrollPane.getVvalue() <= 0;
+                    boolean atBottom = childScrollPane.getVvalue() >= 1;
+
+                    // Forward the scroll event to the mainScrollPane if:
+                    // - The child ScrollPane is empty, OR
+                    // - The scroll is upwards (deltaY > 0) and the child is at the top, OR
+                    // - The scroll is downwards (deltaY < 0) and the child is at the bottom
+                    if (isEmpty || (deltaY > 0 && atTop) || (deltaY < 0 && atBottom)) {
+                        event.consume(); // Consume the event in the child ScrollPane
+                        mainScrollPane.fireEvent(event); // Forward the event to the mainScrollPane
+                    }
+                });
+            }
+        }
+    }
+
+    private boolean isChildScrollPaneEmpty(ScrollPane scrollPane) {
+        Node content = scrollPane.getContent();
+        if (content instanceof VBox vbox) {
+            return vbox.getChildren().isEmpty(); // Check if the VBox has no children
+        }
+        return content == null; // If no content is set, it's empty
+    }
+
+
+
+
+
 }
