@@ -9,8 +9,10 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Slider;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import model.Song;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -22,7 +24,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+
+import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.*;
 
 import javafx.fxml.Initializable;
@@ -46,14 +51,22 @@ import org.example.musicplayeruserinterfacewithjavafx.YoutubeAPI;
 import javafx.application.HostServices;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.*;
+import java.util.stream.Collectors;
 
 
 public class HelloController implements Initializable {
 
+
+
     @FXML public HBox likedSongsContainer;
     @FXML public ScrollPane mainScrollPane;
+    @FXML HBox madeForYouContainer;
     @FXML private HBox artistLabelAndButtonContainer;
+    @FXML private HBox madeForYouLabelAndButtonContainer;
     @FXML private Button artistActionButton;
     @FXML private HBox savedArtistsHBox;
     @FXML private ImageView albumCoverImage;
@@ -65,6 +78,7 @@ public class HelloController implements Initializable {
     @FXML private VBox searchResultsContainer;
     @FXML private Slider playbackSlider;
     @FXML private Button playPauseButton;
+    @FXML private Button madeForYouButton ;
     @FXML private Button nextButton;
     @FXML private Button prevButton;
     @FXML private Button btnnewplaylist;
@@ -92,6 +106,8 @@ public class HelloController implements Initializable {
     private ArtistInformationController artistInformationController;
 
     private ObservableList<String> playlistItems;
+
+
 
     @FXML
     private void handleSearch(ActionEvent event) {
@@ -247,7 +263,7 @@ public class HelloController implements Initializable {
         // Ανάλογα με το κείμενο του κουμπιού, επιλέγουμε το αντίστοιχο Label και ScrollPane
         switch (clickedButton.getText()) {
             case "Made For You":
-                targetLabel = labelMadeForYou;           // Το Label για το "Made For You"
+                targetLabel = madeForYouLabelAndButtonContainer;           // Το Label για το "Made For You"
                 targetScrollPane = scrollPaneMadeForYou; // Το ScrollPane για το "Made For You"
                 break;
             case "Recently Played":
@@ -535,6 +551,26 @@ public class HelloController implements Initializable {
 
         // Load albums into the UI with click listeners to show songs
         loadAlbums(albumsList, albumSongsMap);
+        // Made For You
+        madeForYouButton.setOnAction(event -> handleMadeForYou());
+
+        // Attach scroll event forwarding to all child ScrollPanes
+        setupScrollForwarding();
+
+        // Add a scroll event filter to the mainScrollPane
+        mainScrollPane.addEventFilter(ScrollEvent.SCROLL, event -> {
+            if (!event.isConsumed()) {
+                // Amount scrolled
+                double deltaY = event.getDeltaY();
+                // Adjust this factor to slow down scrolling (e.g., 0.5 for half speed)
+                double scrollSpeedFactor = 0.5;
+                // Current scroll position
+                double currentValue = mainScrollPane.getVvalue();
+                mainScrollPane.setVvalue(currentValue - (deltaY / mainScrollPane.getHeight()) * scrollSpeedFactor);
+                // Consume the event to prevent propagation
+                event.consume();
+            }
+        });
 
     }
 
@@ -1091,6 +1127,81 @@ public class HelloController implements Initializable {
         songStage.setScene(scene);
         songStage.show();
     }
+
+    private void showError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    @FXML
+    private void handleMadeForYou() {
+        if (likedSongs.isEmpty()) {
+            showError("No liked songs available to generate recommendations.");
+            return;
+        }
+
+        Set<String> artistNames = likedSongs.stream()
+                .map(Song::getArtist)
+                .collect(Collectors.toSet());
+
+        List<Song> recommendedSongs = new ArrayList<>();
+        for (String artist : artistNames) {
+            try {
+                JsonArray artistTracks = APIDeezerInformation.fetchArtistTracks(artist);
+                // Limit to 4 tracks per artist
+                int trackLimit = 4;
+                for (int i = 0; i < artistTracks.size() && i < trackLimit; i++) {
+                    JsonObject trackObject = artistTracks.get(i).getAsJsonObject();
+                    Song song = new Song();
+                    song.setName(trackObject.get("title").getAsString());
+                    song.setArtist(trackObject.get("artist").getAsJsonObject().get("name").getAsString());
+                    song.setCover(trackObject.get("album").getAsJsonObject().get("cover").getAsString());
+                    song.setPreviewUrl(trackObject.get("preview").getAsString());
+                    recommendedSongs.add(song);
+                }
+            } catch (IOException e) {
+                System.err.println("Error fetching songs for artist: " + artist);
+                e.printStackTrace();
+            }
+        }
+
+        // Display only the limited recommended songs
+        loadSongs(recommendedSongs, madeForYouContainer);
+    }
+
+    private void setupScrollForwarding() {
+        for (Node child : mainVBox.getChildren()) {
+            if (child instanceof ScrollPane childScrollPane) {
+                childScrollPane.addEventFilter(ScrollEvent.SCROLL, event -> {
+                    boolean isEmpty = isChildScrollPaneEmpty(childScrollPane);
+                    double deltaY = event.getDeltaY();
+                    boolean atTop = childScrollPane.getVvalue() <= 0;
+                    boolean atBottom = childScrollPane.getVvalue() >= 1;
+
+                    // Forward the scroll event to the mainScrollPane if:
+                    // - The child ScrollPane is empty, OR
+                    // - The scroll is upwards (deltaY > 0) and the child is at the top, OR
+                    // - The scroll is downwards (deltaY < 0) and the child is at the bottom
+                    if (isEmpty || (deltaY > 0 && atTop) || (deltaY < 0 && atBottom)) {
+                        event.consume(); // Consume the event in the child ScrollPane
+                        mainScrollPane.fireEvent(event); // Forward the event to the mainScrollPane
+                    }
+                });
+            }
+        }
+    }
+
+    private boolean isChildScrollPaneEmpty(ScrollPane scrollPane) {
+        Node content = scrollPane.getContent();
+        if (content instanceof VBox vbox) {
+            return vbox.getChildren().isEmpty(); // Check if the VBox has no children
+        }
+        return content == null; // If no content is set, it's empty
+    }
+
 
 
 

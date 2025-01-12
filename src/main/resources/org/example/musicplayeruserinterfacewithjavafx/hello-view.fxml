@@ -278,15 +278,19 @@
                     <HBox fx:id="savedArtistsHBox"  prefHeight="0.0" prefWidth="0.0" spacing="30.0" />
                   </content>
                 </ScrollPane>
+                <HBox fx:id="madeForYouLabelAndButtonContainer" alignment="CENTER_LEFT" spacing="10.0">
 
                 <Label fx:id="labelMadeForYou" text="Made For You" textFill="WHITE">
                   <font>
                     <Font size="15.0" />
                   </font>
                 </Label>
+                  <Button fx:id="madeForYouButton" text="Suggest Songs" />
+                </HBox>
                 <ScrollPane fx:id="scrollPaneMadeForYou" fitToWidth="true" minViewportHeight="270.0" prefHeight="264.0" prefWidth="1072.0" style="-fx-background-color: transparent;" stylesheets="@../../../css/style.css">
                   <content>
-                    <HBox prefHeight="0.0" prefWidth="0.0" spacing="30.0" />
+                    <HBox fx:id="madeForYouContainer" spacing="30.0" style="-fx-alignment: top-center; -fx-background-color: transparent;" />
+
                   </content>
                 </ScrollPane>
               </children>
