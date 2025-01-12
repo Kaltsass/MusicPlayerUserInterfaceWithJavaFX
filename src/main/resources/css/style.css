@@ -303,6 +303,14 @@
     -fx-text-fill: white;           /* Λευκό χρώμα για το κείμενο */
     -fx-font-size: 14px;
 }
+.list-view .list-cell:selected {
+    -fx-background-color: #52A447; /* Χρώμα φόντου του επιλεγμένου στοιχείου */
+    -fx-text-fill: white; /* Προαιρετικά: Χρώμα κειμένου του επιλεγμένου στοιχείου */
+}
+
+.list-view .list-cell:selected:focused {
+    -fx-background-color: #52A447; /* Διατήρηση του χρώματος όταν είναι επιλεγμένο και έχει focus */
+}
 
 /* TextFlow */
 .text-flow {

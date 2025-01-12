@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="890.0" prefWidth="1315.0" styleClass="primary_color" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.musicplayeruserinterfacewithjavafx.HelloController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="890.0" prefWidth="1315.0" styleClass="primary_color" stylesheets="@../../../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.musicplayeruserinterfacewithjavafx.HelloController">
   <left>
     <VBox prefHeight="200.0" prefWidth="235.0" spacing="20.0" stylesheets="@../../../css/style.css" BorderPane.alignment="CENTER">
       <children>
@@ -104,12 +104,13 @@
             <Button mnemonicParsing="false" onAction="#handleLeftButtonClick" text="Albums" />
             <Button mnemonicParsing="false" onAction="#handleLeftButtonClick" text="Artists" />
             <Button mnemonicParsing="false" onAction="#handleLeftButtonClick" text="Top Charts" />
+            <Button mnemonicParsing="false" onAction="#handleLeftButtonClick" text="Playlists" />
           </children>
           <padding>
             <Insets left="20.0" right="20.0" />
           </padding>
         </VBox>
-        <Label prefHeight="40.0" prefWidth="192.0" text="Playlists" textFill="#a1a1a1">
+        <Label onMouseClicked="#handleLeftButtonClick" prefHeight="40.0" prefWidth="192.0" text="Playlists" textFill="#a1a1a1">
           <padding>
             <Insets left="20.0" right="10.0" />
           </padding>
@@ -121,7 +122,7 @@
           <children>
             <ScrollPane layoutX="-1.0" layoutY="-7.0" prefHeight="194.0" prefWidth="238.0">
               <content>
-                <ListView fx:id="playlistListView" prefHeight="194.0" prefWidth="238.0" />
+                <ListView fx:id="playlistListView" onMouseClicked="#handlePlaylistSelection" prefHeight="194.0" prefWidth="238.0" />
               </content>
             </ScrollPane>
           </children>
@@ -180,7 +181,7 @@
             <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
             <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
               <children>
-                <Button fx:id="aboutUsButton"  layoutX="6.0" layoutY="11.0" mnemonicParsing="false" onAction="#handleAboutUsButtonClick" prefHeight="40.0" prefWidth="120.0" styleClass="custom-button" text="About Us" />
+                <Button fx:id="aboutUsButton" layoutX="6.0" layoutY="11.0" mnemonicParsing="false" onAction="#handleAboutUsButtonClick" prefHeight="40.0" prefWidth="120.0" styleClass="custom-button" text="About Us" />
               </children>
           </Pane>
 
@@ -216,7 +217,7 @@
             </Button>
           </children>
         </VBox>
-        <ScrollPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS" fx:id="mainScrollPane" vbarPolicy="ALWAYS" hbarPolicy="NEVER">
+        <ScrollPane fx:id="mainScrollPane" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
           <content>
             <VBox fx:id="mainVBox" prefHeight="570.0" prefWidth="1680.0" spacing="10.0">
               <children>
@@ -273,9 +274,9 @@
                 </Label>
                   <Button fx:id="artistActionButton" text="Artists Information" />
                 </HBox>
-                <ScrollPane fx:id="scrollPaneArtists" fitToWidth="true" minViewportHeight="270.0" prefHeight="264.0" prefWidth="1072.0" style="-fx-background-color: transparent;" stylesheets="@../../../css/style.css" >
+                <ScrollPane fx:id="scrollPaneArtists" fitToWidth="true" minViewportHeight="270.0" prefHeight="264.0" prefWidth="1072.0" style="-fx-background-color: transparent;" stylesheets="@../../../css/style.css">
                   <content>
-                    <HBox fx:id="savedArtistsHBox"  prefHeight="0.0" prefWidth="0.0" spacing="30.0" />
+                    <HBox fx:id="savedArtistsHBox" prefHeight="0.0" prefWidth="0.0" spacing="30.0" />
                   </content>
                 </ScrollPane>
                 <HBox fx:id="madeForYouLabelAndButtonContainer" alignment="CENTER_LEFT" spacing="10.0">
@@ -293,6 +294,16 @@
 
                   </content>
                 </ScrollPane>
+                        <Label fx:id="labelPlaylist" text="Playlist" textFill="WHITE">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <ScrollPane fx:id="scrollPanelPlaylist" fitToWidth="true" minViewportHeight="270.0" prefHeight="264.0" prefWidth="1072.0" style="-fx-background-color: transparent;" stylesheets="@../../../css/style.css">
+                           <content>
+                              <HBox fx:id="playlistSongsContainer" prefHeight="0.0" prefWidth="0.0" spacing="30.0" />
+                           </content>
+                        </ScrollPane>
               </children>
             </VBox>
           </content>
