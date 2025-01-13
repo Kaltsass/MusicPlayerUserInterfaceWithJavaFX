@@ -1210,36 +1210,67 @@ public class HelloController implements Initializable {
     public void loadAlbums(List<String> albumsList, Map<String, List<String>> albumSongsMap) {
         try {
             for (String albumInfo : albumsList) {
-                String[] parts = albumInfo.split(", ");
-                String title = parts[0].split(": ")[1];
-                String artist = parts[1].split(": ")[1];
-                String coverImageUrl = parts[2].split(": ")[1];
-
-                VBox albumItem = new VBox(10);
-                albumItem.setStyle("-fx-alignment: center; -fx-cursor: hand;");
-
-                Image coverImage = new Image(coverImageUrl, 200, 200, true, true);
-                ImageView imageView = new ImageView(coverImage);
-                imageView.setFitWidth(200);
-                imageView.setFitHeight(200);
-                imageView.setPreserveRatio(true);
-
-                Label albumLabel = new Label(artist + " - " + title);
-                albumLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10;");
-
-                albumItem.getChildren().addAll(imageView, albumLabel);
-
-                // Add click event listener
-                albumItem.setOnMouseClicked(event -> {
-                    List<String> songs = albumSongsMap.get(title);
-                    if (songs != null) {
-                        displaySongs(artist, title, songs);
-                    } else {
-                        System.out.println("No songs found for album: " + title);
+                try {
+                    // Validate and split albumInfo
+                    String[] parts = albumInfo.split(", ");
+                    if (parts.length < 3) {
+                        System.out.println("Invalid albumInfo format: " + albumInfo);
+                        continue; // Skip this albumInfo if the format is invalid
                     }
-                });
 
-                albumsContainer.getChildren().add(albumItem);
+                    // Extract title, artist, and coverImageUrl
+                    String[] titleParts = parts[0].split(": ");
+                    String[] artistParts = parts[1].split(": ");
+                    String[] coverParts = parts[2].split(": ");
+
+                    if (titleParts.length < 2 || artistParts.length < 2 || coverParts.length < 2) {
+                        System.out.println("Malformed albumInfo data: " + albumInfo);
+                        continue; // Skip if any part is malformed
+                    }
+
+                    String title = titleParts[1];
+                    String artist = artistParts[1];
+                    String coverImageUrl = coverParts[1];
+
+                    // Create UI elements
+                    VBox albumItem = new VBox(10);
+                    albumItem.setStyle("-fx-alignment: center; -fx-cursor: hand;");
+
+                    Image coverImage;
+                    try {
+                        coverImage = new Image(coverImageUrl, 200, 200, true, true);
+                    } catch (Exception imageException) {
+                        System.out.println("Failed to load cover image for: " + title);
+                        continue; // Skip this album if the image URL is invalid
+                    }
+
+                    ImageView imageView = new ImageView(coverImage);
+                    imageView.setFitWidth(200);
+                    imageView.setFitHeight(200);
+                    imageView.setPreserveRatio(true);
+
+                    Label albumLabel = new Label(artist + " - " + title);
+                    albumLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10;");
+
+                    albumItem.getChildren().addAll(imageView, albumLabel);
+
+                    // Add click event listener
+                    albumItem.setOnMouseClicked(event -> {
+                        List<String> songs = albumSongsMap.get(title);
+                        if (songs != null) {
+                            displaySongs(artist, title, songs);
+                        } else {
+                            System.out.println("No songs found for album: " + title);
+                        }
+                    });
+
+                    // Add the album item to the container
+                    albumsContainer.getChildren().add(albumItem);
+
+                } catch (Exception albumException) {
+                    System.out.println("Error processing albumInfo: " + albumInfo);
+                    albumException.printStackTrace();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1250,32 +1281,39 @@ public class HelloController implements Initializable {
 
 
     private void displaySongs(String artist, String albumTitle, List<String> songs) {
+        // Create a new stage (window) to display the list of songs
         Stage songStage = new Stage();
         songStage.setTitle("Songs of " + albumTitle + " by " + artist);
 
+        // Container for the song list with spacing and styling
         VBox songListContainer = new VBox(10);
         songListContainer.setStyle("-fx-padding: 20; -fx-alignment: center; -fx-background-color: #2b2b2b;");
 
+        // Add a title label for the song list
         Label titleLabel = new Label("Songs from " + albumTitle);
         titleLabel.setStyle("-fx-text-fill: white; -fx-font-size: 18px; -fx-padding: 10;");
         songListContainer.getChildren().add(titleLabel);
 
+        // Loop through each song and add it as a label to the container
         for (String song : songs) {
             Label songLabel = new Label(song);
             songLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
             songListContainer.getChildren().add(songLabel);
         }
 
+        // Add a scroll pane for the song list to handle overflow
         ScrollPane scrollPane = new ScrollPane(songListContainer);
         scrollPane.setStyle("-fx-background: transparent; -fx-padding: 10;");
         scrollPane.setFitToWidth(true);
 
+        // Set the scene for the stage and show it
         Scene scene = new Scene(scrollPane, 400, 600);
         songStage.setScene(scene);
         songStage.show();
     }
 
     private void showError(String message) {
+        // Show an error message in an alert dialog
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);
@@ -1285,37 +1323,47 @@ public class HelloController implements Initializable {
 
     @FXML
     private void handleMadeForYou() {
+        // Check if there are any liked songs; show an error if none exist
         if (likedSongs.isEmpty()) {
             showError("No liked songs available to generate recommendations.");
             return;
         }
 
+        // Extract unique artist names from the list of liked songs
         Set<String> artistNames = likedSongs.stream()
-                .map(Song::getArtist)
-                .collect(Collectors.toSet());
+                .map(Song::getArtist) // Get the artist name for each song
+                .collect(Collectors.toSet()); // Collect unique artist names
 
+        // Initialize a list to store recommended songs
         List<Song> recommendedSongs = new ArrayList<>();
         for (String artist : artistNames) {
             try {
+                // Fetch tracks for the artist using an API call
                 JsonArray artistTracks = APIDeezerInformation.fetchArtistTracks(artist);
-                // Limit to 4 tracks per artist
+
+                // Limit the number of tracks per artist to 4
                 int trackLimit = 4;
                 for (int i = 0; i < artistTracks.size() && i < trackLimit; i++) {
                     JsonObject trackObject = artistTracks.get(i).getAsJsonObject();
+
+                    // Create a new Song object and populate its details
                     Song song = new Song();
-                    song.setName(trackObject.get("title").getAsString());
-                    song.setArtist(trackObject.get("artist").getAsJsonObject().get("name").getAsString());
-                    song.setCover(trackObject.get("album").getAsJsonObject().get("cover").getAsString());
-                    song.setPreviewUrl(trackObject.get("preview").getAsString());
+                    song.setName(trackObject.get("title").getAsString()); // Set the song title
+                    song.setArtist(trackObject.get("artist").getAsJsonObject().get("name").getAsString()); // Set the artist name
+                    song.setCover(trackObject.get("album").getAsJsonObject().get("cover").getAsString()); // Set the album cover URL
+                    song.setPreviewUrl(trackObject.get("preview").getAsString()); // Set the song preview URL
+
+                    // Add the song to the list of recommended songs
                     recommendedSongs.add(song);
                 }
             } catch (IOException e) {
+                // Log an error if there is an issue fetching songs for the artist
                 System.err.println("Error fetching songs for artist: " + artist);
                 e.printStackTrace();
             }
         }
 
-        // Display only the limited recommended songs
+        // Display the recommended songs in the specified UI container
         loadSongs(recommendedSongs, madeForYouContainer);
     }
 
