@@ -53,6 +53,8 @@ public class APITopAlbums {
 
                 // Προσθήκη του album στη λίστα
                 albumsList.add("Album: " + albumTitle + ", Artist: " + artistName + ", Cover: " + coverImageUrl);
+
+
             }
         } catch (IOException e) {
             // Εκτύπωση στοίβας σφαλμάτων για περισσότερες πληροφορίες
@@ -65,73 +67,100 @@ public class APITopAlbums {
 
     // Fetch songs from the top 10 albums and return a map of album ID to song list
     public static Map<String, List<String>> fetchSongsFromTopAlbums(List<String> albumIds) {
+        // Create a map to store album titles and their corresponding song lists
         Map<String, List<String>> albumSongsMap = new HashMap<>();
 
+        // Loop through the list of album IDs to fetch details for each album
         for (String albumId : albumIds) {
+            // Construct the API URL to fetch album details
             String apiUrl = "https://api.deezer.com/album/" + albumId;
 
             try (Response response = client.newCall(new Request.Builder().url(apiUrl).build()).execute()) {
+                // Check if the API response was successful
                 if (!response.isSuccessful()) {
                     System.out.println("Failed to fetch songs for album ID: " + albumId);
-                    continue;
+                    continue; // Skip to the next album ID if the API call failed
                 }
 
+                // Parse the JSON response from the API
                 String jsonResponse = response.body().string();
                 JsonObject albumObject = JsonParser.parseString(jsonResponse).getAsJsonObject();
 
-                String albumTitle = albumObject.get("title").getAsString(); // Extract the album title
+                // Extract the album title from the JSON object
+                String albumTitle = albumObject.get("title").getAsString();
+
+                // Extract the tracks array from the album JSON object
                 JsonArray tracksArray = albumObject.getAsJsonObject("tracks").getAsJsonArray("data");
 
+                // Create a list to store song titles
                 List<String> songs = new ArrayList<>();
                 for (int i = 0; i < tracksArray.size(); i++) {
                     JsonObject track = tracksArray.get(i).getAsJsonObject();
-                    songs.add(track.get("title").getAsString());
+                    songs.add(track.get("title").getAsString()); // Add the song title to the list
                 }
 
-                albumSongsMap.put(albumTitle, songs); // Ensure the title matches exactly
+                // Add the album title and its corresponding songs to the map
+                albumSongsMap.put(albumTitle, songs);
             } catch (IOException e) {
+                // Print the stack trace if an exception occurs during the API call
                 e.printStackTrace();
             }
         }
 
+        // Return the map containing album titles and their song lists
         return albumSongsMap;
     }
 
     public static void main(String[] args) {
-        // Fetch top albums
+        // Fetch the list of top albums
         List<String> albums = fetchTopAlbums();
 
-        // Extract album IDs from the API response
+        // Create a list to store album IDs extracted from the API response
         List<String> albumIds = new ArrayList<>();
         try (Response response = client.newCall(new Request.Builder().url(API_URL).build()).execute()) {
+            // Check if the API response was successful
             if (response.isSuccessful()) {
+                // Parse the JSON response to extract album details
                 JsonObject jsonObject = JsonParser.parseString(response.body().string()).getAsJsonObject();
                 JsonArray albumsArray = jsonObject.getAsJsonArray("data");
+
+                // Loop through the albums array to extract album IDs
                 for (int i = 0; i < albumsArray.size(); i++) {
                     albumIds.add(albumsArray.get(i).getAsJsonObject().get("id").getAsString());
                 }
             }
         } catch (IOException e) {
+            // Print the stack trace if an exception occurs during the API call
             e.printStackTrace();
         }
 
-        // Fetch songs from the top 10 albums
+        // Fetch songs from the top 10 albums and store them in a map
         Map<String, List<String>> albumSongs = fetchSongsFromTopAlbums(albumIds);
-
     }
+
     public static List<String> getAlbumIds() {
+        // Create a list to store album IDs
         List<String> albumIds = new ArrayList<>();
+
         try (Response response = client.newCall(new Request.Builder().url(API_URL).build()).execute()) {
+            // Check if the API response was successful
             if (response.isSuccessful()) {
+                // Parse the JSON response to extract album details
                 JsonObject jsonObject = JsonParser.parseString(response.body().string()).getAsJsonObject();
                 JsonArray albumsArray = jsonObject.getAsJsonArray("data");
+
+                // Loop through the albums array to extract album IDs
                 for (int i = 0; i < albumsArray.size(); i++) {
                     albumIds.add(albumsArray.get(i).getAsJsonObject().get("id").getAsString());
                 }
             }
         } catch (IOException e) {
+            // Print the stack trace if an exception occurs during the API call
             e.printStackTrace();
         }
+
+        // Return the list of album IDs
         return albumIds;
     }
+
 }
